@@ -13,6 +13,10 @@ kotlin {
     }
 }
 
+tasks.test {
+    useJUnit()
+}
+
 dependencies {
     // Ktor Client
     implementation(libs.ktor.client.core)
@@ -22,4 +26,10 @@ dependencies {
 
     // Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Testing
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
 }
