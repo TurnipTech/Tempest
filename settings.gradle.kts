@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Tempest"
 include(":app")
 include(":core:network")
+include(":core:navigation")
