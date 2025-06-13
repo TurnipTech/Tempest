@@ -9,7 +9,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import org.junit.Before
 import org.junit.Test
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -18,8 +17,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
 class HttpRequestExecutorTest {
-    private lateinit var json: Json
-    private lateinit var httpRequestExecutor: HttpRequestExecutor
+    private val json = Json { ignoreUnknownKeys = true }
+    private val httpRequestExecutor = HttpRequestExecutor(json)
 
     @Serializable
     data class TestResponse(
@@ -27,32 +26,16 @@ class HttpRequestExecutorTest {
         val value: Int,
     )
 
-    @Before
-    fun setup() {
-        json = Json { ignoreUnknownKeys = true }
-        httpRequestExecutor = HttpRequestExecutor(json)
-    }
-
     @Test
     fun `should return failure with HttpException when response status is not successful`() =
         runTest {
-            // Given
-            val mockResponse = mockk<HttpResponse>()
-            val statusCode = HttpStatusCode.BadRequest
+            val mockResponse = createMockHttpResponse(HttpStatusCode.BadRequest)
 
-            every { mockResponse.status } returns statusCode
-            every { mockResponse.status.isSuccess() } returns false
-            every { mockResponse.status.value } returns 400
-            every { mockResponse.status.description } returns "Bad Request"
-
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { mockResponse },
-                )
+                ) { mockResponse }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.HttpException>(exception)
@@ -63,17 +46,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should return failure with ConnectionException when UnknownHostException occurs`() =
         runTest {
-            // Given
             val unknownHostException = UnknownHostException("Unable to resolve host")
 
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { throw unknownHostException },
-                )
+                ) { throw unknownHostException }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.ConnectionException>(exception)
@@ -84,17 +63,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should return failure with ConnectionException when SocketTimeoutException occurs`() =
         runTest {
-            // Given
             val timeoutException = SocketTimeoutException("Read timed out")
 
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { throw timeoutException },
-                )
+                ) { throw timeoutException }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.ConnectionException>(exception)
@@ -105,17 +80,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should return failure with ConnectionException when ConnectException occurs`() =
         runTest {
-            // Given
             val connectException = ConnectException("Connection refused")
 
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { throw connectException },
-                )
+                ) { throw connectException }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.ConnectionException>(exception)
@@ -126,17 +97,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should return failure with original exception when unknown exception occurs`() =
         runTest {
-            // Given
             val unknownException = RuntimeException("Something went wrong")
 
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { throw unknownException },
-                )
+                ) { throw unknownException }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertEquals(unknownException, exception)
@@ -145,23 +112,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should handle HTTP 500 Internal Server Error as failure`() =
         runTest {
-            // Given
-            val mockResponse = mockk<HttpResponse>()
-            val statusCode = HttpStatusCode.InternalServerError
+            val mockResponse = createMockHttpResponse(HttpStatusCode.InternalServerError)
 
-            every { mockResponse.status } returns statusCode
-            every { mockResponse.status.isSuccess() } returns false
-            every { mockResponse.status.value } returns 500
-            every { mockResponse.status.description } returns "Internal Server Error"
-
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { mockResponse },
-                )
+                ) { mockResponse }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.HttpException>(exception)
@@ -172,23 +129,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should handle HTTP 404 Not Found as failure`() =
         runTest {
-            // Given
-            val mockResponse = mockk<HttpResponse>()
-            val statusCode = HttpStatusCode.NotFound
+            val mockResponse = createMockHttpResponse(HttpStatusCode.NotFound)
 
-            every { mockResponse.status } returns statusCode
-            every { mockResponse.status.isSuccess() } returns false
-            every { mockResponse.status.value } returns 404
-            every { mockResponse.status.description } returns "Not Found"
-
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { mockResponse },
-                )
+                ) { mockResponse }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.HttpException>(exception)
@@ -199,23 +146,13 @@ class HttpRequestExecutorTest {
     @Test
     fun `should handle HTTP 401 Unauthorized as failure`() =
         runTest {
-            // Given
-            val mockResponse = mockk<HttpResponse>()
-            val statusCode = HttpStatusCode.Unauthorized
+            val mockResponse = createMockHttpResponse(HttpStatusCode.Unauthorized)
 
-            every { mockResponse.status } returns statusCode
-            every { mockResponse.status.isSuccess() } returns false
-            every { mockResponse.status.value } returns 401
-            every { mockResponse.status.description } returns "Unauthorized"
-
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { mockResponse },
-                )
+                ) { mockResponse }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertIs<NetworkException.HttpException>(exception)
@@ -226,19 +163,23 @@ class HttpRequestExecutorTest {
     @Test
     fun `should handle generic exception when JSON deserialization fails`() =
         runTest {
-            // Given
             val serializationException = RuntimeException("JSON parsing error")
 
-            // When
             val result =
                 httpRequestExecutor.executeRequest(
                     TestResponse.serializer(),
-                    { throw serializationException },
-                )
+                ) { throw serializationException }
 
-            // Then
             assert(result.isFailure)
             val exception = result.exceptionOrNull()
             assertEquals(serializationException, exception)
+        }
+
+    private fun createMockHttpResponse(statusCode: HttpStatusCode): HttpResponse =
+        mockk<HttpResponse>().apply {
+            every { status } returns statusCode
+            every { status.isSuccess() } returns statusCode.isSuccess()
+            every { status.value } returns statusCode.value
+            every { status.description } returns statusCode.description
         }
 }
