@@ -18,13 +18,7 @@ import io.ktor.client.HttpClient as KtorClientImpl
 
 internal class KtorHttpClient(
     private val config: NetworkConfig,
-    private val json: Json =
-        Json {
-            // TODO - add proper dependency injection
-            ignoreUnknownKeys = true
-            isLenient = true
-            encodeDefaults = false
-        },
+    private val json: Json,
     private val requestExecutor: HttpRequestExecutor,
 ) : HttpClient {
     private val ktorClient =
