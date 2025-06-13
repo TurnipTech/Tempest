@@ -43,6 +43,7 @@ dependencies {
     ktlintRuleset(libs.ktlint.compose)
 
     implementation(project(":core:network"))
+    implementation(project(":core:navigation"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
