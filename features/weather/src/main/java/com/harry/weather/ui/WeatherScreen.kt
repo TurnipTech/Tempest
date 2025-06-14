@@ -64,7 +64,6 @@ private fun WeatherContent(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Current weather section
         CurrentWeather(
             weatherDescription,
             formattedLocation,
@@ -73,7 +72,6 @@ private fun WeatherContent(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Today's forecast section
         if (todaysHourlyForecast.isNotEmpty()) {
             Text(
                 text = "Today's Forecast",
