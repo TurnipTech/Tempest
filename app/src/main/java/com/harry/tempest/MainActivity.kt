@@ -4,14 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.harry.tempest.ui.theme.TempestTheme
+import com.harry.weather.WEATHER_ROUTE
+import com.harry.weather.WeatherNavigationDestination
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +17,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TempestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding),
-                    )
-                }
+                TempestNavigation()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-    )
-}
+fun TempestNavigation() {
+    val navController = rememberNavController()
+    val weatherDestination = WeatherNavigationDestination()
 
-@Preview(showBackground = true)
-@Composable
-private fun GreetingPreview() {
-    TempestTheme {
-        Greeting("Android")
+    NavHost(
+        navController = navController,
+        startDestination = WEATHER_ROUTE,
+    ) {
+        with(weatherDestination) {
+            graph()
+        }
     }
 }
