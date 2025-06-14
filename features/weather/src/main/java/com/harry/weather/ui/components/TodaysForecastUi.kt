@@ -49,7 +49,8 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
                 style =
                     MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp),
+                        fontSize = 18.sp,
+                    ),
                 color = Color.White.copy(alpha = 0.9f),
                 modifier = Modifier.padding(bottom = 16.dp),
             )
@@ -78,7 +79,8 @@ fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = 
             style =
                 MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp),
+                    fontSize = 13.sp,
+                ),
             color = Color.White.copy(alpha = 0.7f),
         )
 
@@ -93,7 +95,8 @@ fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = 
             style =
                 MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp),
+                    fontSize = 16.sp,
+                ),
             color = Color.White,
         )
 
@@ -102,7 +105,8 @@ fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = 
             style =
                 MaterialTheme.typography.bodySmall.copy(
                     fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp),
+                    fontSize = 12.sp,
+                ),
             color = Color.White.copy(alpha = 0.6f),
         )
     }

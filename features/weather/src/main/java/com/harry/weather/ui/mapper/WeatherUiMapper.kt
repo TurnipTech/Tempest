@@ -52,7 +52,7 @@ class WeatherUiMapper {
 
     fun mapToSuccessState(weatherData: WeatherData, units: String): WeatherUiState.Success {
         val currentWeather = weatherData.currentWeather
-        val currentTimeSeconds = System.currentTimeMillis() / 1000 //todo - inject time function
+        val currentTimeSeconds = System.currentTimeMillis() / 1000 // todo - inject time function
         val timeOfDay =
             TimeOfDay.fromSolarData(
                 currentTimeSeconds = currentTimeSeconds,
