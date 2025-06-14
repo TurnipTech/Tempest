@@ -3,20 +3,25 @@ package com.harry.weather.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -24,18 +29,38 @@ import com.harry.weather.ui.model.HourlyWeatherUiModel
 
 @Composable
 fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifier = Modifier) {
-    Card(modifier) {
-        Text(
-            text = "Today's Forecast",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = 24.dp, top = 8.dp),
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors =
+            CardDefaults.cardColors(
+                containerColor = Color.White.copy(alpha = 0.15f),
+            ),
+        shape = RoundedCornerShape(16.dp),
+        elevation =
+            CardDefaults.cardElevation(
+                defaultElevation = 0.dp,
+            ),
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
         ) {
-            items(hourlyForecast) { hourlyWeather ->
-                HourlyWeatherItem(hourlyWeather = hourlyWeather)
+            Text(
+                text = "Today's Forecast",
+                style =
+                    MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp),
+                color = Color.White.copy(alpha = 0.9f),
+                modifier = Modifier.padding(bottom = 16.dp),
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(horizontal = 4.dp),
+            ) {
+                items(hourlyForecast) { hourlyWeather ->
+                    HourlyWeatherItem(hourlyWeather = hourlyWeather)
+                }
             }
         }
     }
@@ -44,32 +69,41 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
 @Composable
 fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.padding(12.dp),
+        modifier = modifier.padding(vertical = 8.dp, horizontal = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = hourlyWeather.formattedTime,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Medium,
+            style =
+                MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp),
+            color = Color.White.copy(alpha = 0.7f),
         )
 
         WeatherIcon(
             iconUrl = hourlyWeather.iconUrl,
             contentDescription = hourlyWeather.iconDescription,
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(40.dp),
         )
 
         Text(
             text = hourlyWeather.temperature,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
+            style =
+                MaterialTheme.typography.bodyMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp),
+            color = Color.White,
         )
 
         Text(
             text = hourlyWeather.precipitationProbability,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary,
+            style =
+                MaterialTheme.typography.bodySmall.copy(
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp),
+            color = Color.White.copy(alpha = 0.6f),
         )
     }
 }

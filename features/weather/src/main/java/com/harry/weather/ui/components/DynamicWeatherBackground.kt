@@ -66,7 +66,6 @@ private fun createDuskBrush(): Brush =
             ),
     )
 
-
 private fun createDayBrush(): Brush =
     Brush.verticalGradient(
         colorStops =
@@ -78,7 +77,6 @@ private fun createDayBrush(): Brush =
                 1.0f to Color(0xFFe1f5fe), // Pale blue horizon
             ),
     )
-
 
 private fun createNightBrush(): Brush =
     Brush.verticalGradient(

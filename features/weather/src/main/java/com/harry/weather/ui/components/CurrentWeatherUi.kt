@@ -3,7 +3,9 @@ package com.harry.weather.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
@@ -12,22 +14,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun CurrentWeather(description: String, locationName: String, currentTemp: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Location(modifier = Modifier, locationName)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Location(locationName = locationName)
+
         Text(
             text = currentTemp,
-            fontSize = 48.sp,
+            fontSize = 96.sp,
+            fontWeight = FontWeight.ExtraLight,
             color = Color.White,
+            lineHeight = 96.sp,
         )
+
         Text(
             text = description,
-            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White.copy(alpha = 0.85f),
         )
     }
 }
@@ -41,14 +53,16 @@ fun Location(modifier: Modifier = Modifier, locationName: String) {
     ) {
         Icon(
             imageVector = Icons.Default.LocationOn,
-            contentDescription = "Location", // todo - merge decendants
-            modifier = Modifier.size(8.dp),
-            tint = Color.White,
+            contentDescription = "Location",
+            modifier = Modifier.size(16.dp),
+            tint = Color.White.copy(alpha = 0.8f),
         )
+        Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = locationName,
-            fontSize = 8.sp,
-            color = Color.White,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.White.copy(alpha = 0.8f),
         )
     }
 }

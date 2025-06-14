@@ -1,5 +1,6 @@
 package com.harry.weather.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +14,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.components.CurrentWeather
@@ -34,13 +39,28 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
 
     when (state) {
         is WeatherUiState.Loading -> {
-            // Use day background as fallback during loading
             DynamicWeatherBackground(
                 timeOfDay = TimeOfDay.DAY,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("Loading", color = MaterialTheme.colorScheme.onSurface)
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Text(
+                            text = "Loading Weather",
+                            color = Color.White.copy(alpha = 0.9f),
+                            style =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 0.3.sp,
+                                ),
+                        )
+                    }
                 }
             }
         }
@@ -51,11 +71,35 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                 timeOfDay = TimeOfDay.DAY,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = (state as? WeatherUiState.Error)?.message ?: "",
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.padding(32.dp),
+                    ) {
+                        Text(
+                            text = "Unable to Load Weather",
+                            color = Color.White.copy(alpha = 0.9f),
+                            style =
+                                MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    letterSpacing = 0.3.sp,
+                                ),
+                        )
+                        Text(
+                            text = (state as? WeatherUiState.Error)?.message ?: "",
+                            color = Color.White.copy(alpha = 0.7f),
+                            style =
+                                MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 0.2.sp,
+                                ),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
         }
@@ -86,21 +130,27 @@ private fun WeatherContent(
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
         CurrentWeather(
-            weatherDescription,
-            formattedLocation,
-            formattedTemperature,
+            description = weatherDescription,
+            locationName = formattedLocation,
+            currentTemp = formattedTemperature,
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
         if (todaysHourlyForecast.isNotEmpty()) {
             TodaysForecast(
                 hourlyForecast = todaysHourlyForecast,
             )
         }
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
