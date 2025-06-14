@@ -10,5 +10,5 @@ data class WeatherOverviewResponseDto(
     @SerialName("tz") val timezone: String,
     @SerialName("date") val date: String,
     @SerialName("units") val units: String,
-    @SerialName("weather_overview") val weatherOverview: String
+    @SerialName("weather_overview") val weatherOverview: String,
 )

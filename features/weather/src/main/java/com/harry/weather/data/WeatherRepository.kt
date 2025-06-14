@@ -1,16 +1,11 @@
 package com.harry.weather.data
 
-import com.harry.network.client.HttpClient
-import com.harry.network.client.get
-import com.harry.weather.BuildConfig
-import com.harry.weather.data.dto.DailySummaryResponseDto
-import com.harry.weather.data.dto.HistoricalWeatherResponseDto
-import com.harry.weather.data.dto.WeatherOverviewResponseDto
-import com.harry.weather.data.dto.WeatherResponseDto
-import com.harry.weather.data.mapper.WeatherMapper
+import com.harry.weather.domain.model.DailySummary
+import com.harry.weather.domain.model.HistoricalWeather
+import com.harry.weather.domain.model.WeatherData
+import com.harry.weather.domain.model.WeatherOverview
 
 interface WeatherRepository {
-
     /**
      * Get current weather and forecasts for the specified location
      * @param latitude Latitude of the location
@@ -24,8 +19,8 @@ interface WeatherRepository {
         longitude: Double,
         excludeParts: List<String> = emptyList(),
         units: String = "metric",
-        language: String = "en"
-    ): Result<com.harry.weather.domain.model.WeatherData>
+        language: String = "en",
+    ): Result<WeatherData>
 
     /**
      * Get historical weather data for a specific timestamp
@@ -40,8 +35,8 @@ interface WeatherRepository {
         longitude: Double,
         timestamp: Long,
         units: String = "metric",
-        language: String = "en"
-    ): Result<com.harry.weather.domain.model.HistoricalWeather>
+        language: String = "en",
+    ): Result<HistoricalWeather>
 
     /**
      * Get daily weather summary for a specific date
@@ -56,8 +51,8 @@ interface WeatherRepository {
         longitude: Double,
         date: String,
         units: String = "metric",
-        timezone: String? = null
-    ): Result<com.harry.weather.domain.model.DailySummary>
+        timezone: String? = null,
+    ): Result<DailySummary>
 
     /**
      * Get AI-generated weather overview
@@ -70,113 +65,6 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         date: String? = null,
-        units: String = "metric"
-    ): Result<com.harry.weather.domain.model.WeatherOverview>
-}
-
-
-class WeatherRepositoryImpl(
-    private val client: HttpClient
-): WeatherRepository {
-
-    companion object {
-        private const val BASE_URL = "https://api.openweathermap.org/data/3.0/onecall"
-        private const val API_KEY = BuildConfig.OPEN_WEATHER_API_KEY // todo - set up to be provided in CI build job
-    }
-
-    override suspend fun getCurrentWeatherAndForecasts(
-        latitude: Double,
-        longitude: Double,
-        excludeParts: List<String>,
-        units: String,
-        language: String
-    ): Result<com.harry.weather.domain.model.WeatherData> {
-        val params = buildMap {
-            put("lat", latitude.toString())
-            put("lon", longitude.toString())
-            put("appid", API_KEY)
-            put("units", units)
-            put("lang", language)
-            if (excludeParts.isNotEmpty()) {
-                put("exclude", excludeParts.joinToString(","))
-            }
-        }
-
-        return client.get<WeatherResponseDto>(
-            endpoint = BASE_URL,
-            params = params
-        ).map { dto ->
-            WeatherMapper.mapToWeatherData(dto)
-        }
-    }
-
-    override suspend fun getHistoricalWeather(
-        latitude: Double,
-        longitude: Double,
-        timestamp: Long,
-        units: String,
-        language: String
-    ): Result<com.harry.weather.domain.model.HistoricalWeather> {
-        val params = mapOf(
-            "lat" to latitude.toString(),
-            "lon" to longitude.toString(),
-            "dt" to timestamp.toString(),
-            "appid" to API_KEY,
-            "units" to units,
-            "lang" to language
-        )
-
-        return client.get<HistoricalWeatherResponseDto>(
-            endpoint = "$BASE_URL/timemachine",
-            params = params
-        ).map { dto ->
-            WeatherMapper.mapToHistoricalWeather(dto)
-        }
-    }
-
-    override suspend fun getDailyWeatherSummary(
-        latitude: Double,
-        longitude: Double,
-        date: String,
-        units: String,
-        timezone: String?
-    ): Result<com.harry.weather.domain.model.DailySummary> {
-        val params = buildMap {
-            put("lat", latitude.toString())
-            put("lon", longitude.toString())
-            put("date", date)
-            put("appid", API_KEY)
-            put("units", units)
-            timezone?.let { put("tz", it) }
-        }
-
-        return client.get<DailySummaryResponseDto>(
-            endpoint = "$BASE_URL/day_summary",
-            params = params
-        ).map { dto ->
-            WeatherMapper.mapToDailySummary(dto)
-        }
-    }
-
-    override suspend fun getWeatherOverview(
-        latitude: Double,
-        longitude: Double,
-        date: String?,
-        units: String
-    ): Result<com.harry.weather.domain.model.WeatherOverview> {
-        val params = buildMap {
-            put("lat", latitude.toString())
-            put("lon", longitude.toString())
-            put("appid", API_KEY)
-            put("units", units)
-            date?.let { put("date", it) }
-        }
-
-        return client.get<WeatherOverviewResponseDto>(
-            endpoint = "$BASE_URL/overview",
-            params = params
-        ).map { dto ->
-            WeatherMapper.mapToWeatherOverview(dto)
-        }
-    }
+        units: String = "metric",
+    ): Result<WeatherOverview>
 }

@@ -13,7 +13,7 @@ data class WeatherResponseDto(
     @SerialName("minutely") val minutely: List<MinutelyDto>? = null,
     @SerialName("hourly") val hourly: List<HourlyDto>? = null,
     @SerialName("daily") val daily: List<DailyDto>? = null,
-    @SerialName("alerts") val alerts: List<AlertDto>? = null
+    @SerialName("alerts") val alerts: List<AlertDto>? = null,
 )
 
 @Serializable
@@ -34,13 +34,13 @@ data class CurrentWeatherDto(
     @SerialName("wind_gust") val windGust: Double? = null,
     @SerialName("weather") val weather: List<WeatherConditionDto>,
     @SerialName("rain") val rain: PrecipitationDto? = null,
-    @SerialName("snow") val snow: PrecipitationDto? = null
+    @SerialName("snow") val snow: PrecipitationDto? = null,
 )
 
 @Serializable
 data class MinutelyDto(
     @SerialName("dt") val dateTime: Long,
-    @SerialName("precipitation") val precipitation: Double
+    @SerialName("precipitation") val precipitation: Double,
 )
 
 @Serializable
@@ -60,7 +60,7 @@ data class HourlyDto(
     @SerialName("pop") val probabilityOfPrecipitation: Double,
     @SerialName("weather") val weather: List<WeatherConditionDto>,
     @SerialName("rain") val rain: PrecipitationDto? = null,
-    @SerialName("snow") val snow: PrecipitationDto? = null
+    @SerialName("snow") val snow: PrecipitationDto? = null,
 )
 
 @Serializable
@@ -85,7 +85,7 @@ data class DailyDto(
     @SerialName("pop") val probabilityOfPrecipitation: Double,
     @SerialName("rain") val rain: Double? = null,
     @SerialName("snow") val snow: Double? = null,
-    @SerialName("uvi") val uvIndex: Double
+    @SerialName("uvi") val uvIndex: Double,
 )
 
 @Serializable
@@ -95,7 +95,7 @@ data class DailyTemperatureDto(
     @SerialName("max") val max: Double,
     @SerialName("night") val night: Double,
     @SerialName("eve") val evening: Double,
-    @SerialName("morn") val morning: Double
+    @SerialName("morn") val morning: Double,
 )
 
 @Serializable
@@ -103,7 +103,7 @@ data class DailyFeelsLikeDto(
     @SerialName("day") val day: Double,
     @SerialName("night") val night: Double,
     @SerialName("eve") val evening: Double,
-    @SerialName("morn") val morning: Double
+    @SerialName("morn") val morning: Double,
 )
 
 @Serializable
@@ -111,12 +111,12 @@ data class WeatherConditionDto(
     @SerialName("id") val id: Int,
     @SerialName("main") val main: String,
     @SerialName("description") val description: String,
-    @SerialName("icon") val icon: String
+    @SerialName("icon") val icon: String,
 )
 
 @Serializable
 data class PrecipitationDto(
-    @SerialName("1h") val oneHour: Double
+    @SerialName("1h") val oneHour: Double,
 )
 
 @Serializable
@@ -126,5 +126,5 @@ data class AlertDto(
     @SerialName("start") val start: Long,
     @SerialName("end") val end: Long,
     @SerialName("description") val description: String,
-    @SerialName("tags") val tags: List<String>
+    @SerialName("tags") val tags: List<String>,
 )

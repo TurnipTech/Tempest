@@ -5,13 +5,13 @@ data class WeatherData(
     val currentWeather: CurrentWeather?,
     val hourlyForecast: List<HourlyWeather>?,
     val dailyForecast: List<DailyWeather>?,
-    val alerts: List<WeatherAlert>?
+    val alerts: List<WeatherAlert>?,
 )
 
 data class Location(
     val latitude: Double,
     val longitude: Double,
-    val timezone: String
+    val timezone: String,
 )
 
 data class CurrentWeather(
@@ -25,7 +25,7 @@ data class CurrentWeather(
     val uvIndex: Double,
     val cloudiness: Int,
     val visibility: Int,
-    val condition: WeatherCondition
+    val condition: WeatherCondition,
 )
 
 data class HourlyWeather(
@@ -37,7 +37,7 @@ data class HourlyWeather(
     val windSpeed: Double,
     val uvIndex: Double,
     val probabilityOfPrecipitation: Double,
-    val condition: WeatherCondition
+    val condition: WeatherCondition,
 )
 
 data class DailyWeather(
@@ -50,14 +50,14 @@ data class DailyWeather(
     val uvIndex: Double,
     val probabilityOfPrecipitation: Double,
     val condition: WeatherCondition,
-    val summary: String?
+    val summary: String?,
 )
 
 data class WeatherCondition(
     val id: Int,
     val main: String,
     val description: String,
-    val iconCode: String
+    val iconCode: String,
 )
 
 data class WeatherAlert(
@@ -65,5 +65,5 @@ data class WeatherAlert(
     val event: String,
     val startTime: Long,
     val endTime: Long,
-    val description: String
+    val description: String,
 )

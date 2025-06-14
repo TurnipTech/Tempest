@@ -4,23 +4,22 @@ import com.harry.weather.data.dto.*
 import com.harry.weather.domain.model.*
 
 object WeatherMapper {
-
-    fun mapToWeatherData(dto: WeatherResponseDto): WeatherData {
-        return WeatherData(
-            location = Location(
-                latitude = dto.latitude,
-                longitude = dto.longitude,
-                timezone = dto.timezone
-            ),
+    fun mapToWeatherData(dto: WeatherResponseDto): WeatherData =
+        WeatherData(
+            location =
+                Location(
+                    latitude = dto.latitude,
+                    longitude = dto.longitude,
+                    timezone = dto.timezone,
+                ),
             currentWeather = dto.current?.let { mapToCurrentWeather(it) },
             hourlyForecast = dto.hourly?.map { mapToHourlyWeather(it) },
             dailyForecast = dto.daily?.map { mapToDailyWeather(it) },
-            alerts = dto.alerts?.map { mapToWeatherAlert(it) }
+            alerts = dto.alerts?.map { mapToWeatherAlert(it) },
         )
-    }
 
-    private fun mapToCurrentWeather(dto: CurrentWeatherDto): CurrentWeather {
-        return CurrentWeather(
+    private fun mapToCurrentWeather(dto: CurrentWeatherDto): CurrentWeather =
+        CurrentWeather(
             dateTime = dto.dateTime,
             temperature = dto.temperature,
             feelsLike = dto.feelsLike,
@@ -31,12 +30,11 @@ object WeatherMapper {
             uvIndex = dto.uvIndex,
             cloudiness = dto.cloudiness,
             visibility = dto.visibility,
-            condition = mapToWeatherCondition(dto.weather.first())
+            condition = mapToWeatherCondition(dto.weather.first()),
         )
-    }
 
-    private fun mapToHourlyWeather(dto: HourlyDto): HourlyWeather {
-        return HourlyWeather(
+    private fun mapToHourlyWeather(dto: HourlyDto): HourlyWeather =
+        HourlyWeather(
             dateTime = dto.dateTime,
             temperature = dto.temperature,
             feelsLike = dto.feelsLike,
@@ -45,12 +43,11 @@ object WeatherMapper {
             windSpeed = dto.windSpeed,
             uvIndex = dto.uvIndex,
             probabilityOfPrecipitation = dto.probabilityOfPrecipitation,
-            condition = mapToWeatherCondition(dto.weather.first())
+            condition = mapToWeatherCondition(dto.weather.first()),
         )
-    }
 
-    private fun mapToDailyWeather(dto: DailyDto): DailyWeather {
-        return DailyWeather(
+    private fun mapToDailyWeather(dto: DailyDto): DailyWeather =
+        DailyWeather(
             dateTime = dto.dateTime,
             temperatureHigh = dto.temperature.max,
             temperatureLow = dto.temperature.min,
@@ -60,42 +57,39 @@ object WeatherMapper {
             uvIndex = dto.uvIndex,
             probabilityOfPrecipitation = dto.probabilityOfPrecipitation,
             condition = mapToWeatherCondition(dto.weather.first()),
-            summary = dto.summary
+            summary = dto.summary,
         )
-    }
 
-    private fun mapToWeatherCondition(dto: WeatherConditionDto): WeatherCondition {
-        return WeatherCondition(
+    private fun mapToWeatherCondition(dto: WeatherConditionDto): WeatherCondition =
+        WeatherCondition(
             id = dto.id,
             main = dto.main,
             description = dto.description,
-            iconCode = dto.icon
+            iconCode = dto.icon,
         )
-    }
 
-    private fun mapToWeatherAlert(dto: AlertDto): WeatherAlert {
-        return WeatherAlert(
+    private fun mapToWeatherAlert(dto: AlertDto): WeatherAlert =
+        WeatherAlert(
             senderName = dto.senderName,
             event = dto.event,
             startTime = dto.start,
             endTime = dto.end,
-            description = dto.description
+            description = dto.description,
         )
-    }
 
-    fun mapToHistoricalWeather(dto: HistoricalWeatherResponseDto): HistoricalWeather {
-        return HistoricalWeather(
-            location = Location(
-                latitude = dto.latitude,
-                longitude = dto.longitude,
-                timezone = dto.timezone
-            ),
-            data = dto.data.map { mapToHistoricalWeatherData(it) }
+    fun mapToHistoricalWeather(dto: HistoricalWeatherResponseDto): HistoricalWeather =
+        HistoricalWeather(
+            location =
+                Location(
+                    latitude = dto.latitude,
+                    longitude = dto.longitude,
+                    timezone = dto.timezone,
+                ),
+            data = dto.data.map { mapToHistoricalWeatherData(it) },
         )
-    }
 
-    private fun mapToHistoricalWeatherData(dto: HistoricalWeatherDto): HistoricalWeatherData {
-        return HistoricalWeatherData(
+    private fun mapToHistoricalWeatherData(dto: HistoricalWeatherDto): HistoricalWeatherData =
+        HistoricalWeatherData(
             dateTime = dto.dateTime,
             temperature = dto.temperature,
             feelsLike = dto.feelsLike,
@@ -103,43 +97,43 @@ object WeatherMapper {
             pressure = dto.pressure,
             windSpeed = dto.windSpeed,
             uvIndex = dto.uvIndex,
-            condition = mapToWeatherCondition(dto.weather.first())
+            condition = mapToWeatherCondition(dto.weather.first()),
         )
-    }
 
-    fun mapToDailySummary(dto: DailySummaryResponseDto): DailySummary {
-        return DailySummary(
-            location = Location(
-                latitude = dto.latitude,
-                longitude = dto.longitude,
-                timezone = dto.timezone
-            ),
+    fun mapToDailySummary(dto: DailySummaryResponseDto): DailySummary =
+        DailySummary(
+            location =
+                Location(
+                    latitude = dto.latitude,
+                    longitude = dto.longitude,
+                    timezone = dto.timezone,
+                ),
             date = dto.date,
-            temperatureRange = TemperatureRange(
-                min = dto.temperature.min,
-                max = dto.temperature.max,
-                morning = dto.temperature.morning,
-                afternoon = dto.temperature.afternoon,
-                evening = dto.temperature.evening,
-                night = dto.temperature.night
-            ),
+            temperatureRange =
+                TemperatureRange(
+                    min = dto.temperature.min,
+                    max = dto.temperature.max,
+                    morning = dto.temperature.morning,
+                    afternoon = dto.temperature.afternoon,
+                    evening = dto.temperature.evening,
+                    night = dto.temperature.night,
+                ),
             humidity = dto.humidity.afternoon,
             pressure = dto.pressure.afternoon,
             maxWindSpeed = dto.wind.max.speed,
             totalPrecipitation = dto.precipitation.total,
-            cloudCover = dto.cloudCover.afternoon
+            cloudCover = dto.cloudCover.afternoon,
         )
-    }
 
-    fun mapToWeatherOverview(dto: WeatherOverviewResponseDto): WeatherOverview {
-        return WeatherOverview(
-            location = Location(
-                latitude = dto.latitude,
-                longitude = dto.longitude,
-                timezone = dto.timezone
-            ),
+    fun mapToWeatherOverview(dto: WeatherOverviewResponseDto): WeatherOverview =
+        WeatherOverview(
+            location =
+                Location(
+                    latitude = dto.latitude,
+                    longitude = dto.longitude,
+                    timezone = dto.timezone,
+                ),
             date = dto.date,
-            overview = dto.weatherOverview
+            overview = dto.weatherOverview,
         )
-    }
 }

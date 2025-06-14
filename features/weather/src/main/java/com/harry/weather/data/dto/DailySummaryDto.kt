@@ -15,22 +15,22 @@ data class DailySummaryResponseDto(
     @SerialName("precipitation") val precipitation: PrecipitationSummaryDto,
     @SerialName("temperature") val temperature: TemperatureSummaryDto,
     @SerialName("pressure") val pressure: PressureDto,
-    @SerialName("wind") val wind: WindSummaryDto
+    @SerialName("wind") val wind: WindSummaryDto,
 )
 
 @Serializable
 data class CloudCoverDto(
-    @SerialName("afternoon") val afternoon: Int
+    @SerialName("afternoon") val afternoon: Int,
 )
 
 @Serializable
 data class HumidityDto(
-    @SerialName("afternoon") val afternoon: Int
+    @SerialName("afternoon") val afternoon: Int,
 )
 
 @Serializable
 data class PrecipitationSummaryDto(
-    @SerialName("total") val total: Double
+    @SerialName("total") val total: Double,
 )
 
 @Serializable
@@ -40,21 +40,21 @@ data class TemperatureSummaryDto(
     @SerialName("afternoon") val afternoon: Double,
     @SerialName("night") val night: Double,
     @SerialName("evening") val evening: Double,
-    @SerialName("morning") val morning: Double
+    @SerialName("morning") val morning: Double,
 )
 
 @Serializable
 data class PressureDto(
-    @SerialName("afternoon") val afternoon: Int
+    @SerialName("afternoon") val afternoon: Int,
 )
 
 @Serializable
 data class WindSummaryDto(
-    @SerialName("max") val max: MaxWindDto
+    @SerialName("max") val max: MaxWindDto,
 )
 
 @Serializable
 data class MaxWindDto(
     @SerialName("speed") val speed: Double,
-    @SerialName("direction") val direction: Int
+    @SerialName("direction") val direction: Int,
 )

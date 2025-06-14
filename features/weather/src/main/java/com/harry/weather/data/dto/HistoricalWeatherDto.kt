@@ -9,7 +9,7 @@ data class HistoricalWeatherResponseDto(
     @SerialName("lon") val longitude: Double,
     @SerialName("timezone") val timezone: String,
     @SerialName("timezone_offset") val timezoneOffset: Int,
-    @SerialName("data") val data: List<HistoricalWeatherDto>
+    @SerialName("data") val data: List<HistoricalWeatherDto>,
 )
 
 @Serializable
@@ -30,5 +30,5 @@ data class HistoricalWeatherDto(
     @SerialName("wind_gust") val windGust: Double? = null,
     @SerialName("weather") val weather: List<WeatherConditionDto>,
     @SerialName("rain") val rain: PrecipitationDto? = null,
-    @SerialName("snow") val snow: PrecipitationDto? = null
+    @SerialName("snow") val snow: PrecipitationDto? = null,
 )
