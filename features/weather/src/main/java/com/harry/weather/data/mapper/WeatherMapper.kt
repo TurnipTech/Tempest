@@ -1,7 +1,27 @@
 package com.harry.weather.data.mapper
 
-import com.harry.weather.data.dto.*
-import com.harry.weather.domain.model.*
+import com.harry.weather.data.dto.AlertDto
+import com.harry.weather.data.dto.CurrentWeatherDto
+import com.harry.weather.data.dto.DailyDto
+import com.harry.weather.data.dto.DailySummaryResponseDto
+import com.harry.weather.data.dto.HistoricalWeatherDto
+import com.harry.weather.data.dto.HistoricalWeatherResponseDto
+import com.harry.weather.data.dto.HourlyDto
+import com.harry.weather.data.dto.WeatherConditionDto
+import com.harry.weather.data.dto.WeatherOverviewResponseDto
+import com.harry.weather.data.dto.WeatherResponseDto
+import com.harry.weather.domain.model.CurrentWeather
+import com.harry.weather.domain.model.DailySummary
+import com.harry.weather.domain.model.DailyWeather
+import com.harry.weather.domain.model.HistoricalWeather
+import com.harry.weather.domain.model.HistoricalWeatherData
+import com.harry.weather.domain.model.HourlyWeather
+import com.harry.weather.domain.model.Location
+import com.harry.weather.domain.model.TemperatureRange
+import com.harry.weather.domain.model.WeatherAlert
+import com.harry.weather.domain.model.WeatherCondition
+import com.harry.weather.domain.model.WeatherData
+import com.harry.weather.domain.model.WeatherOverview
 
 object WeatherMapper {
     fun mapToWeatherData(dto: WeatherResponseDto): WeatherData =
