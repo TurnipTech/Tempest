@@ -24,51 +24,53 @@ import com.harry.weather.ui.model.HourlyWeatherUiModel
 
 @Composable
 fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifier = Modifier) {
-    LazyRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-    ) {
-        items(hourlyForecast) { hourlyWeather ->
-            HourlyWeatherItem(hourlyWeather = hourlyWeather)
+    Card(modifier) {
+        Text(
+            text = "Today's Forecast",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(start = 24.dp, top = 8.dp),
+        )
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+        ) {
+            items(hourlyForecast) { hourlyWeather ->
+                HourlyWeatherItem(hourlyWeather = hourlyWeather)
+            }
         }
     }
 }
 
 @Composable
 fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
+    Column(
+        modifier = Modifier.padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Text(
-                text = hourlyWeather.formattedTime,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Medium,
-            )
+        Text(
+            text = hourlyWeather.formattedTime,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Medium,
+        )
 
-            WeatherIcon(
-                iconUrl = hourlyWeather.iconUrl,
-                contentDescription = hourlyWeather.iconDescription,
-                modifier = Modifier.size(32.dp),
-            )
+        WeatherIcon(
+            iconUrl = hourlyWeather.iconUrl,
+            contentDescription = hourlyWeather.iconDescription,
+            modifier = Modifier.size(32.dp),
+        )
 
-            Text(
-                text = hourlyWeather.temperature,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-            )
+        Text(
+            text = hourlyWeather.temperature,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+        )
 
-            Text(
-                text = hourlyWeather.precipitationProbability,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
+        Text(
+            text = hourlyWeather.precipitationProbability,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+        )
     }
 }
 

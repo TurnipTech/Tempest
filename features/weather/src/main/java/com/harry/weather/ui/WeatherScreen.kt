@@ -61,7 +61,7 @@ private fun WeatherContent(
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CurrentWeather(
@@ -73,11 +73,6 @@ private fun WeatherContent(
         Spacer(modifier = Modifier.height(32.dp))
 
         if (todaysHourlyForecast.isNotEmpty()) {
-            Text(
-                text = "Today's Forecast",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 16.dp),
-            )
             TodaysForecast(
                 hourlyForecast = todaysHourlyForecast,
             )
