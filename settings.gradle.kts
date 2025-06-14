@@ -23,3 +23,4 @@ rootProject.name = "Tempest"
 include(":app")
 include(":core:network")
 include(":core:navigation")
+include(":features:weather")
