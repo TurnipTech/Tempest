@@ -2,6 +2,7 @@ package com.harry.tempest
 
 import android.app.Application
 import com.harry.network.di.networkModule
+import com.harry.weather.di.weatherModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -15,6 +16,7 @@ class TempestApplication : Application() {
             androidContext(this@TempestApplication)
             modules(
                 networkModule,
+                weatherModule,
             )
         }
     }
