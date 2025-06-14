@@ -1,0 +1,21 @@
+package com.harry.weather.ui.model
+
+import com.harry.weather.domain.model.WeatherData
+
+sealed class WeatherUiState {
+
+    data object Loading : WeatherUiState()
+
+    data class Success(
+        val weatherData: WeatherData,
+        val formattedTemperature: String,
+        val formattedLocation: String,
+        val weatherDescription: String,
+        val lastUpdated: String,
+    ) : WeatherUiState()
+
+    data class Error(
+        val message: String,
+        val canRetry: Boolean = true,
+    ) : WeatherUiState()
+}
