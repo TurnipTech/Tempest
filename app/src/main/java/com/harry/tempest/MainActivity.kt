@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.harry.tempest.ui.theme.TempestTheme
-import com.harry.weather.WEATHER_ROUTE
 import com.harry.weather.WeatherNavigationDestination
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +29,7 @@ fun TempestNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = WEATHER_ROUTE,
+        startDestination = weatherDestination.route,
     ) {
         with(weatherDestination) {
             graph()
