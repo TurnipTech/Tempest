@@ -5,6 +5,8 @@ import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.ui.model.HourlyWeatherUiModel
 import com.harry.weather.ui.model.WeatherUiState
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -52,12 +54,12 @@ class WeatherUiMapper {
 
     fun mapToSuccessState(weatherData: WeatherData, units: String): WeatherUiState.Success {
         val currentWeather = weatherData.currentWeather
-        val currentTimeSeconds = System.currentTimeMillis() / 1000 // todo - inject time function
+        val currentTime = Clock.System.now()
         val timeOfDay =
             TimeOfDay.fromSolarData(
-                currentTimeSeconds = currentTimeSeconds,
-                sunriseSeconds = currentWeather?.sunrise,
-                sunsetSeconds = currentWeather?.sunset,
+                currentTime = currentTime,
+                sunrise = currentWeather?.sunrise?.let { Instant.fromEpochSeconds(it) },
+                sunset = currentWeather?.sunset?.let { Instant.fromEpochSeconds(it) },
             )
 
         return WeatherUiState.Success(
