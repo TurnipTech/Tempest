@@ -2,6 +2,7 @@
 
 package com.harry.weather.ui.mapper
 
+import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
 import com.harry.weather.ui.WeatherViewModel
@@ -54,6 +55,7 @@ class WeatherViewModelTest {
             weatherDescription = "Sunny",
             lastUpdated = "Updated 10:30",
             todaysHourlyForecast = emptyList(),
+            timeOfDay = TimeOfDay.DAY,
         )
 
     private val viewModel =

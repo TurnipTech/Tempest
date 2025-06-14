@@ -41,6 +41,8 @@ object WeatherMapper {
     private fun mapToCurrentWeather(dto: CurrentWeatherDto): CurrentWeather =
         CurrentWeather(
             dateTime = dto.dateTime,
+            sunrise = dto.sunrise,
+            sunset = dto.sunset,
             temperature = dto.temperature,
             feelsLike = dto.feelsLike,
             humidity = dto.humidity,

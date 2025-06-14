@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,8 +20,15 @@ import androidx.compose.ui.unit.sp
 fun CurrentWeather(description: String, locationName: String, currentTemp: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Location(modifier = Modifier, locationName)
-        Text(text = currentTemp, fontSize = 48.sp)
-        Text(text = description)
+        Text(
+            text = currentTemp,
+            fontSize = 48.sp,
+            color = Color.White,
+        )
+        Text(
+            text = description,
+            color = Color.White,
+        )
     }
 }
 
@@ -34,9 +42,14 @@ fun Location(modifier: Modifier = Modifier, locationName: String) {
         Icon(
             imageVector = Icons.Default.LocationOn,
             contentDescription = "Location", // todo - merge decendants
-            Modifier.size(8.dp),
+            modifier = Modifier.size(8.dp),
+            tint = Color.White,
         )
-        Text(text = locationName, fontSize = 8.sp)
+        Text(
+            text = locationName,
+            fontSize = 8.sp,
+            color = Color.White,
+        )
     }
 }
 

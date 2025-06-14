@@ -16,6 +16,8 @@ data class Location(
 
 data class CurrentWeather(
     val dateTime: Long,
+    val sunrise: Long?,
+    val sunset: Long?,
     val temperature: Double,
     val feelsLike: Double,
     val humidity: Int,
