@@ -3,7 +3,6 @@ package com.harry.weather.ui.model
 import com.harry.weather.domain.model.WeatherData
 
 sealed class WeatherUiState {
-
     data object Loading : WeatherUiState()
 
     data class Success(
@@ -12,6 +11,7 @@ sealed class WeatherUiState {
         val formattedLocation: String,
         val weatherDescription: String,
         val lastUpdated: String,
+        val todaysHourlyForecast: List<HourlyWeatherUiModel>,
     ) : WeatherUiState()
 
     data class Error(

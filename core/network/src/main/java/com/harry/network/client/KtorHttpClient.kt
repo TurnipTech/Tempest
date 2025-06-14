@@ -38,7 +38,7 @@ internal class KtorHttpClient(
     override suspend fun <T> get(serializer: KSerializer<T>, endpoint: String, params: Map<String, String>): Result<T> =
         requestExecutor.executeRequest(serializer) {
             ktorClient.get {
-                url("${config.baseUrl}/$endpoint")
+                url(endpoint)
                 params.forEach { (key, value) ->
                     parameter(key, value)
                 }
@@ -48,7 +48,7 @@ internal class KtorHttpClient(
     override suspend fun <T> post(serializer: KSerializer<T>, endpoint: String, body: Any?): Result<T> =
         requestExecutor.executeRequest(serializer) {
             ktorClient.post {
-                url("${config.baseUrl}/$endpoint")
+                url(endpoint)
                 contentType(ContentType.Application.Json)
                 body?.let { setBody(it) }
             }
@@ -57,7 +57,7 @@ internal class KtorHttpClient(
     override suspend fun <T> put(serializer: KSerializer<T>, endpoint: String, body: Any?): Result<T> =
         requestExecutor.executeRequest(serializer) {
             ktorClient.put {
-                url("${config.baseUrl}/$endpoint")
+                url(endpoint)
                 contentType(ContentType.Application.Json)
                 body?.let { setBody(it) }
             }
@@ -66,7 +66,7 @@ internal class KtorHttpClient(
     override suspend fun <T> delete(serializer: KSerializer<T>, endpoint: String): Result<T> =
         requestExecutor.executeRequest(serializer) {
             ktorClient.delete {
-                url("${config.baseUrl}/$endpoint")
+                url(endpoint)
             }
         }
 

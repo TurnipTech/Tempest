@@ -31,5 +31,5 @@ val networkModule =
             )
         }
 
-        single { NetworkConfig("") }
+        single { NetworkConfig(timeoutMillis = 10_000L, connectTimeoutMillis = 10_000L) }
     }
