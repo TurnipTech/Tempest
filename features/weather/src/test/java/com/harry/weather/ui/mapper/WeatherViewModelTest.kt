@@ -9,16 +9,26 @@ import com.harry.weather.ui.model.WeatherUiState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class WeatherViewModelTest {
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase = mockk(relaxed = true)
     private val weatherUiMapper: WeatherUiMapper = mockk(relaxed = true)
+    private val testDispatcher = UnconfinedTestDispatcher()
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+    }
 
     private val testLocation =
         com.harry.weather.domain.model.Location(
