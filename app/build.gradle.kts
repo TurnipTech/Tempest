@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,6 +18,19 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Load API key from local.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        buildConfigField(
+            "String",
+            "OPEN_WEATHER_API_KEY",
+            "\"${localProperties.getProperty("OPEN_WEATHER_API_KEY") ?: ""}\"",
+        )
     }
 
     buildTypes {
@@ -37,6 +52,9 @@ android {
     buildFeatures {
         compose = true
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -44,6 +62,7 @@ dependencies {
 
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:location"))
     implementation(project(":features:weather"))
     implementation(project(":features:search_location"))
 

@@ -12,31 +12,29 @@ import com.harry.weather.domain.model.HistoricalWeather
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.domain.model.WeatherOverview
 
+private const val BASE_URL = "https://api.openweathermap.org/data/3.0/onecall"
+
+// API parameter names
+private const val PARAM_LATITUDE = "lat"
+private const val PARAM_LONGITUDE = "lon"
+private const val PARAM_APP_ID = "appid"
+private const val PARAM_UNITS = "units"
+private const val PARAM_LANGUAGE = "lang"
+private const val PARAM_EXCLUDE = "exclude"
+private const val PARAM_TIMESTAMP = "dt"
+private const val PARAM_DATE = "date"
+private const val PARAM_TIMEZONE = "tz"
+
+// API endpoint paths
+private const val ENDPOINT_TIMEMACHINE = "/timemachine"
+private const val ENDPOINT_DAY_SUMMARY = "/day_summary"
+private const val ENDPOINT_OVERVIEW = "/overview"
+
 internal class OpenWeatherMapRepository(
     private val client: HttpClient,
     private val mapper: WeatherMapper,
     private val apiKey: String,
 ) : WeatherRepository {
-    companion object {
-        private const val BASE_URL = "https://api.openweathermap.org/data/3.0/onecall"
-
-        // API parameter names
-        private const val PARAM_LATITUDE = "lat"
-        private const val PARAM_LONGITUDE = "lon"
-        private const val PARAM_APP_ID = "appid"
-        private const val PARAM_UNITS = "units"
-        private const val PARAM_LANGUAGE = "lang"
-        private const val PARAM_EXCLUDE = "exclude"
-        private const val PARAM_TIMESTAMP = "dt"
-        private const val PARAM_DATE = "date"
-        private const val PARAM_TIMEZONE = "tz"
-
-        // API endpoint paths
-        private const val ENDPOINT_TIMEMACHINE = "/timemachine"
-        private const val ENDPOINT_DAY_SUMMARY = "/day_summary"
-        private const val ENDPOINT_OVERVIEW = "/overview"
-    }
-
     override suspend fun getCurrentWeatherAndForecasts(
         latitude: Double,
         longitude: Double,

@@ -7,24 +7,22 @@ import com.harry.location.domain.repository.LocationRepository
 import com.harry.network.client.HttpClient
 import com.harry.network.client.get
 
+private const val GEOCODING_BASE_URL = "https://api.openweathermap.org/geo/1.0"
+private const val DIRECT_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/direct"
+private const val REVERSE_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/reverse"
+
+// API parameter names
+private const val PARAM_QUERY = "q"
+private const val PARAM_LATITUDE = "lat"
+private const val PARAM_LONGITUDE = "lon"
+private const val PARAM_LIMIT = "limit"
+private const val PARAM_APP_ID = "appid"
+
 internal class OpenWeatherMapLocationRepository(
     private val client: HttpClient,
     private val mapper: LocationMapper,
     private val apiKey: String,
 ) : LocationRepository {
-    companion object {
-        private const val GEOCODING_BASE_URL = "https://api.openweathermap.org/geo/1.0"
-        private const val DIRECT_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/direct"
-        private const val REVERSE_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/reverse"
-
-        // API parameter names
-        private const val PARAM_QUERY = "q"
-        private const val PARAM_LATITUDE = "lat"
-        private const val PARAM_LONGITUDE = "lon"
-        private const val PARAM_LIMIT = "limit"
-        private const val PARAM_APP_ID = "appid"
-    }
-
     override suspend fun searchLocations(query: String, limit: Int): Result<LocationSearchResult> {
         val params =
             mapOf(
