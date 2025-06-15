@@ -3,7 +3,7 @@ package com.harry.tempest
 import android.app.Application
 import com.harry.location.di.locationModule
 import com.harry.network.di.networkModule
-import com.harry.weather.BuildConfig
+import com.harry.tempest.BuildConfig
 import com.harry.weather.di.weatherModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
