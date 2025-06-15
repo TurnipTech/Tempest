@@ -1,6 +1,6 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
 }
 
@@ -17,6 +17,7 @@ kotlin {
 
 dependencies {
     implementation(project(":core:network"))
+    implementation(project(":core:storage"))
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)

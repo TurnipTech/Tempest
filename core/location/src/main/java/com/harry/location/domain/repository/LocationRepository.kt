@@ -1,5 +1,6 @@
 package com.harry.location.domain.repository
 
+import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.LocationSearchResult
 
 /**
@@ -28,4 +29,8 @@ interface LocationRepository {
         longitude: Double,
         limit: Int = 1,
     ): Result<LocationSearchResult>
+
+    suspend fun getStoredLocation(): Location?
+
+    suspend fun setLocation(location: Location)
 }
