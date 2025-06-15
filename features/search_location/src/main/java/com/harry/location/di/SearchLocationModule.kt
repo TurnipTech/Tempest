@@ -6,10 +6,11 @@ import com.harry.location.ui.mapper.SearchLocationUiMapper
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val searchLocationModule = module {
-    single { SearchLocationUiMapper() }
-    
-    factory { SearchLocationsUseCase(locationRepository = get()) }
-    
-    viewModel { SearchLocationViewModel(searchLocationsUseCase = get(), searchLocationUiMapper = get()) }
-}
+val searchLocationModule =
+    module {
+        single { SearchLocationUiMapper() }
+
+        factory { SearchLocationsUseCase(locationRepository = get()) }
+
+        viewModel { SearchLocationViewModel(searchLocationsUseCase = get(), searchLocationUiMapper = get()) }
+    }
