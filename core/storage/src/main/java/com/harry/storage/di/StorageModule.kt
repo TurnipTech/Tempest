@@ -12,22 +12,23 @@ import org.koin.dsl.module
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
 
-val storageModule = module {
-    single<DataStore<Preferences>> { 
-        androidContext().dataStore 
-    }
-    
-    single<Json> {
-        Json {
-            ignoreUnknownKeys = true
-            encodeDefaults = true
+val storageModule =
+    module {
+        single<DataStore<Preferences>> {
+            androidContext().dataStore
+        }
+
+        single<Json> {
+            Json {
+                ignoreUnknownKeys = true
+                encodeDefaults = true
+            }
+        }
+
+        single<Storage> {
+            DataStoreStorage(
+                dataStore = get(),
+                json = get(),
+            )
         }
     }
-    
-    single<Storage> { 
-        DataStoreStorage(
-            dataStore = get(),
-            json = get()
-        )
-    }
-}
