@@ -12,6 +12,7 @@ fun locationModule(apiKey: String) =
                 client = get(),
                 mapper = get(),
                 apiKey = apiKey,
+                storage = get(),
             )
         }
 

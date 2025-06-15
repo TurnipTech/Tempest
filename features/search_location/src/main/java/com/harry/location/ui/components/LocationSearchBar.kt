@@ -32,14 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.location.ui.model.SearchResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationSearchBar(
     modifier: Modifier = Modifier,
-    onLocationSelected: (String) -> Unit = {},
+    onLocationSelected: (SearchResult) -> Unit = {},
     onSearchQueryChange: (String) -> Unit = {},
-    searchResults: List<String> = emptyList(),
+    searchResults: List<SearchResult> = emptyList(),
     isLoading: Boolean = false,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
@@ -54,11 +55,8 @@ fun LocationSearchBar(
                     onSearchQueryChange(newQuery)
                     expanded = newQuery.isNotEmpty()
                 },
-                onSearch = { searchQuery ->
+                onSearch = {
                     expanded = false
-                    if (searchQuery.isNotBlank()) {
-                        onLocationSelected(searchQuery)
-                    }
                 },
                 expanded = expanded,
                 onExpandedChange = { expanded = it },
@@ -145,7 +143,7 @@ fun LocationSearchBar(
                     ListItem(
                         headlineContent = {
                             Text(
-                                location,
+                                location.displayName,
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
@@ -162,7 +160,7 @@ fun LocationSearchBar(
                             Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    query = location
+                                    query = location.displayName
                                     expanded = false
                                     onLocationSelected(location)
                                 },
@@ -193,11 +191,11 @@ private fun LocationSearchBarPreview() {
     LocationSearchBar(
         searchResults =
             listOf(
-                "London, UK",
-                "London, Ontario, Canada",
-                "New London, CT, USA",
-                "Paris, France",
-                "Paris, TX, USA",
+                SearchResult("London, UK", "London", 51.5074, -0.1278, "United Kingdom"),
+                SearchResult("London, Ontario, Canada", "London", 42.9849, -81.2453, "Canada", "Ontario"),
+                SearchResult("New London, CT, USA", "New London", 41.3556, -72.0995, "United States", "Connecticut"),
+                SearchResult("Paris, France", "Paris", 48.8566, 2.3522, "France"),
+                SearchResult("Paris, TX, USA", "Paris", 33.6609, -95.5555, "United States", "Texas"),
             ),
         isLoading = false,
     )

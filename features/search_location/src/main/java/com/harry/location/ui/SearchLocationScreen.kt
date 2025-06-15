@@ -44,7 +44,7 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
     ) {
         val searchResults =
             when (val state = uiState) {
-                is SearchLocationUiState.Success -> state.locations.map { it.displayName }
+                is SearchLocationUiState.Success -> state.locations
                 else -> emptyList()
             }
 
@@ -52,6 +52,7 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
             onSearchQueryChange = { query ->
                 viewModel.searchLocations(query)
             },
+            onLocationSelected = viewModel::onLocationSelected,
             searchResults = searchResults,
             isLoading = uiState is SearchLocationUiState.Loading,
             modifier =
@@ -89,7 +90,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                             .fillMaxSize()
                             .padding(horizontal = 32.dp),
                 ) {
-                    // Graphic illustration
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -113,7 +113,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                             }
                         }
 
-                        // Small decorative icons
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(24.dp),
                         ) {
@@ -154,7 +153,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                         }
                     }
 
-                    // Text content
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp),

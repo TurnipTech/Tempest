@@ -5,6 +5,7 @@ package com.harry.location.ui
 import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.LocationSearchResult
 import com.harry.location.domain.usecase.SearchLocationsUseCase
+import com.harry.location.domain.usecase.SetLocationUseCase
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
@@ -26,6 +27,7 @@ import org.junit.Test
 
 class SearchLocationViewModelTest {
     private val searchLocationsUseCase: SearchLocationsUseCase = mockk(relaxed = true)
+    private val setLocationUseCase: SetLocationUseCase = mockk(relaxed = true)
     private val searchLocationUiMapper: SearchLocationUiMapper = mockk(relaxed = true)
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -46,8 +48,11 @@ class SearchLocationViewModelTest {
     private val testSearchResult =
         SearchResult(
             displayName = "London, England, GB",
+            name = "London",
             latitude = 51.5074,
             longitude = -0.1278,
+            country = "GB",
+            state = "England",
         )
 
     private val testLocationSearchResult =
@@ -59,6 +64,7 @@ class SearchLocationViewModelTest {
     private val viewModel =
         SearchLocationViewModel(
             searchLocationsUseCase = searchLocationsUseCase,
+            setLocationUseCase = setLocationUseCase,
             searchLocationUiMapper = searchLocationUiMapper,
         )
 
