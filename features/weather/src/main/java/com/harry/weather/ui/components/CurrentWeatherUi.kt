@@ -1,5 +1,6 @@
 package com.harry.weather.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,17 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun CurrentWeather(description: String, locationName: String, currentTemp: String) {
+fun CurrentWeather(
+    description: String,
+    locationName: String,
+    currentTemp: String,
+    onLocationClick: () -> Unit = {},
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Location(locationName = locationName)
+        Location(
+            locationName = locationName,
+            onLocationClick = onLocationClick,
+        )
 
         Text(
             text = currentTemp,
@@ -45,9 +55,9 @@ fun CurrentWeather(description: String, locationName: String, currentTemp: Strin
 }
 
 @Composable
-fun Location(modifier: Modifier = Modifier, locationName: String) {
+fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClick: () -> Unit = {}) {
     Row(
-        modifier = modifier,
+        modifier = modifier.clickable { onLocationClick() },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -63,6 +73,7 @@ fun Location(modifier: Modifier = Modifier, locationName: String) {
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = Color.White.copy(alpha = 0.8f),
+            textDecoration = TextDecoration.Underline,
         )
     }
 }

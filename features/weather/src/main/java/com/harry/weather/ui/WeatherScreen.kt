@@ -28,7 +28,7 @@ import com.harry.weather.ui.model.WeatherUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
+fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSearch: () -> Unit = {}) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     when (state) {
@@ -110,6 +110,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                     formattedLocation = currentState.formattedLocation,
                     formattedTemperature = currentState.formattedTemperature,
                     todaysHourlyForecast = currentState.todaysHourlyForecast,
+                    onLocationClick = onNavigateToSearch,
                 )
             }
         }
@@ -122,6 +123,7 @@ private fun WeatherContent(
     formattedLocation: String,
     formattedTemperature: String,
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
+    onLocationClick: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -136,6 +138,7 @@ private fun WeatherContent(
             description = weatherDescription,
             locationName = formattedLocation,
             currentTemp = formattedTemperature,
+            onLocationClick = onLocationClick,
         )
 
         Spacer(modifier = Modifier.height(64.dp))

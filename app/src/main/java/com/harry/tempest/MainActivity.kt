@@ -18,6 +18,7 @@ import com.harry.location.SearchLocationNavigationDestination
 import com.harry.location.domain.model.StartDestination
 import com.harry.tempest.ui.theme.TempestTheme
 import com.harry.weather.WeatherNavigationDestination
+import com.harry.weather.WeatherRoute
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -51,8 +52,15 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
         }
         else -> {
             val startDestination =
-                when (startDestinationType) {
-                    is StartDestination.Weather -> weatherDestination.route
+                when (val destination = startDestinationType) {
+                    is StartDestination.Weather ->
+                        WeatherRoute(
+                            name = destination.location.name,
+                            latitude = destination.location.latitude,
+                            longitude = destination.location.longitude,
+                            country = destination.location.country,
+                            state = destination.location.state,
+                        )
                     is StartDestination.SearchLocation -> searchLocationDestination.route
                     null -> searchLocationDestination.route // This case won't be reached due to outer when
                 }
@@ -67,11 +75,28 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
                             is StartDestination.Weather -> destination.location
                             else -> null
                         }
-                    graph(location = location)
+                    graph(
+                        location = location,
+                        onNavigateToSearch = {
+                            navController.navigate(searchLocationDestination.route)
+                        },
+                    )
                 }
                 with(searchLocationDestination) {
                     graph(onNavigateToWeather = { location ->
-                        navController.navigate(weatherDestination.route)
+                        val weatherRoute =
+                            WeatherRoute(
+                                name = location.name,
+                                latitude = location.latitude,
+                                longitude = location.longitude,
+                                country = location.country,
+                                state = location.state,
+                            )
+                        navController.navigate(weatherRoute) {
+                            popUpTo(weatherDestination.route) {
+                                inclusive = true
+                            }
+                        }
                     })
                 }
             }
