@@ -1,5 +1,6 @@
 package com.harry.weather.ui.model
 
+import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 
 sealed class WeatherUiState {
@@ -12,6 +13,7 @@ sealed class WeatherUiState {
         val weatherDescription: String,
         val lastUpdated: String,
         val todaysHourlyForecast: List<HourlyWeatherUiModel>,
+        val timeOfDay: TimeOfDay,
     ) : WeatherUiState()
 
     data class Error(

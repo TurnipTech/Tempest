@@ -137,6 +137,8 @@ class WeatherUiMapperTest {
     ): CurrentWeather =
         CurrentWeather(
             dateTime = System.currentTimeMillis() / 1000,
+            sunrise = 1640678400L,
+            sunset = 1640714400L,
             temperature = temperature,
             feelsLike = 24.0,
             humidity = 65,
