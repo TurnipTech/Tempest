@@ -31,7 +31,7 @@ fun TempestNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = weatherDestination.route,
+        startDestination = searchLocationDestination.route,
     ) {
         with(weatherDestination) {
             graph()
