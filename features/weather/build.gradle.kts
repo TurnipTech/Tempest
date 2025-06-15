@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -16,23 +14,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        // Load API key from local.properties
-        val localProperties = Properties()
-        val localPropertiesFile = rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            localProperties.load(localPropertiesFile.inputStream())
-        }
-
-        buildConfigField(
-            "String",
-            "OPEN_WEATHER_API_KEY",
-            "\"${localProperties.getProperty("OPEN_WEATHER_API_KEY") ?: ""}\"",
-        )
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 
     buildTypes {
