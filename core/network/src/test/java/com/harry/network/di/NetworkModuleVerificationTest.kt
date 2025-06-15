@@ -5,7 +5,7 @@ import org.koin.test.verify.verify
 
 class NetworkModuleVerificationTest {
     @Test
-    fun `should verify Koin network module configuration`() {
+    fun `verify network module`() {
         networkModule.verify()
     }
 }
