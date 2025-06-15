@@ -2,6 +2,7 @@
 
 package com.harry.tempest
 
+import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.StartDestination
 import com.harry.location.domain.usecase.GetStartDestinationUseCase
 import io.mockk.coEvery
@@ -25,22 +26,31 @@ class TempestViewModelTest {
     }
 
     @Test
-    fun `should set start destination to WEATHER when use case returns WEATHER`() = runTest {
-        coEvery { getStartDestinationUseCase() } returns StartDestination.WEATHER
+    fun `should set start destination to Weather when use case returns Weather`() =
+        runTest {
+            val location =
+                Location(
+                    name = "Test City",
+                    latitude = 53.8,
+                    longitude = 1.76,
+                    country = "GB",
+                )
+            coEvery { getStartDestinationUseCase() } returns StartDestination.Weather(location)
 
-        val viewModel = TempestViewModel(getStartDestinationUseCase)
-        advanceUntilIdle()
+            val viewModel = TempestViewModel(getStartDestinationUseCase)
+            advanceUntilIdle()
 
-        assertEquals(StartDestination.WEATHER, viewModel.startDestination.value)
-    }
+            assertEquals(StartDestination.Weather(location), viewModel.startDestination.value)
+        }
 
     @Test
-    fun `should set start destination to SEARCH_LOCATION when use case returns SEARCH_LOCATION`() = runTest {
-        coEvery { getStartDestinationUseCase() } returns StartDestination.SEARCH_LOCATION
+    fun `should set start destination to SearchLocation when use case returns SearchLocation`() =
+        runTest {
+            coEvery { getStartDestinationUseCase() } returns StartDestination.SearchLocation
 
-        val viewModel = TempestViewModel(getStartDestinationUseCase)
-        advanceUntilIdle()
+            val viewModel = TempestViewModel(getStartDestinationUseCase)
+            advanceUntilIdle()
 
-        assertEquals(StartDestination.SEARCH_LOCATION, viewModel.startDestination.value)
-    }
+            assertEquals(StartDestination.SearchLocation, viewModel.startDestination.value)
+        }
 }

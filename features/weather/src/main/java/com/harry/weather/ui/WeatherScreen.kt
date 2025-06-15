@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,11 +30,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        // todo - temporarily hardcoded until location search etc added
-        viewModel.loadWeather(latitude = 53.8, longitude = 1.76)
-    }
 
     when (state) {
         is WeatherUiState.Loading -> {

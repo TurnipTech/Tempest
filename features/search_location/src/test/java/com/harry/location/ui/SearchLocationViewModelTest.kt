@@ -310,28 +310,30 @@ class SearchLocationViewModelTest {
         }
 
     @Test
-    fun `onLocationSelected should navigate to weather when location is stored successfully`() = runTest {
-        every { searchLocationUiMapper.mapToLocation(testSearchResult) } returns testLocation
-        coEvery { setLocationUseCase(testLocation) } returns Result.success(Unit)
+    fun `onLocationSelected should navigate to weather when location is stored successfully`() =
+        runTest {
+            every { searchLocationUiMapper.mapToLocation(testSearchResult) } returns testLocation
+            coEvery { setLocationUseCase(testLocation) } returns Result.success(Unit)
 
-        viewModel.onLocationSelected(testSearchResult)
-        advanceUntilIdle()
+            viewModel.onLocationSelected(testSearchResult)
+            advanceUntilIdle()
 
-        val expectedState = SearchLocationUiState.NavigateToWeather(testLocation)
-        assertEquals(expectedState, viewModel.uiState.value)
-        coVerify(exactly = 1) { setLocationUseCase(testLocation) }
-    }
+            val expectedState = SearchLocationUiState.NavigateToWeather(testLocation)
+            assertEquals(expectedState, viewModel.uiState.value)
+            coVerify(exactly = 1) { setLocationUseCase(testLocation) }
+        }
 
     @Test
-    fun `onLocationSelected should not navigate when location storage fails`() = runTest {
-        every { searchLocationUiMapper.mapToLocation(testSearchResult) } returns testLocation
-        coEvery { setLocationUseCase(testLocation) } returns Result.failure(Exception("Storage failed"))
+    fun `onLocationSelected should not navigate when location storage fails`() =
+        runTest {
+            every { searchLocationUiMapper.mapToLocation(testSearchResult) } returns testLocation
+            coEvery { setLocationUseCase(testLocation) } returns Result.failure(Exception("Storage failed"))
 
-        val initialState = viewModel.uiState.value
-        viewModel.onLocationSelected(testSearchResult)
-        advanceUntilIdle()
+            val initialState = viewModel.uiState.value
+            viewModel.onLocationSelected(testSearchResult)
+            advanceUntilIdle()
 
-        assertEquals(initialState, viewModel.uiState.value)
-        coVerify(exactly = 1) { setLocationUseCase(testLocation) }
-    }
+            assertEquals(initialState, viewModel.uiState.value)
+            coVerify(exactly = 1) { setLocationUseCase(testLocation) }
+        }
 }

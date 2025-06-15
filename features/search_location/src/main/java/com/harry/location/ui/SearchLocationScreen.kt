@@ -28,12 +28,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.harry.location.domain.model.Location
 import com.harry.location.ui.components.LocationSearchBar
 import com.harry.location.ui.model.SearchLocationUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel(), onNavigateToWeather: () -> Unit = {}) {
+fun SearchLocationScreen(
+    viewModel: SearchLocationViewModel = koinViewModel(),
+    onNavigateToWeather: (Location) -> Unit = {},
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
@@ -175,7 +179,7 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel(), o
             }
             is SearchLocationUiState.NavigateToWeather -> {
                 LaunchedEffect(state.location) {
-                    onNavigateToWeather()
+                    onNavigateToWeather(state.location)
                 }
             }
             else -> {} // todo - neaten up this (split ui up and make use of the different states)

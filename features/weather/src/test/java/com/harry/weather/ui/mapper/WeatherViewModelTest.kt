@@ -2,6 +2,7 @@
 
 package com.harry.weather.ui.mapper
 
+import com.harry.location.domain.model.Location
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
@@ -31,16 +32,24 @@ class WeatherViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    private val testLocation =
+    private val testLocationData =
         com.harry.weather.domain.model.Location(
             latitude = 0.10,
             longitude = 1.10,
             timezone = "Europe/London",
         )
 
+    private val testLocation =
+        Location(
+            name = "Test City",
+            latitude = 0.10,
+            longitude = 1.10,
+            country = "GB",
+        )
+
     private val testWeatherData =
         WeatherData(
-            location = testLocation,
+            location = testLocationData,
             currentWeather = mockk(),
             hourlyForecast = emptyList(),
             dailyForecast = emptyList(),
@@ -58,14 +67,8 @@ class WeatherViewModelTest {
             timeOfDay = TimeOfDay.DAY,
         )
 
-    private val viewModel =
-        WeatherViewModel(
-            getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-            weatherUiMapper = weatherUiMapper,
-        )
-
     @Test
-    fun `should be in Loading state when fetching current weather`() =
+    fun `should be in Loading state initially when fetching current weather`() =
         runTest {
             val expected = WeatherUiState.Loading
 
@@ -74,7 +77,12 @@ class WeatherViewModelTest {
                 Result.success(mockk())
             }
 
-            viewModel.loadWeather(0.11, 0.11)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceTimeBy(100)
 
             assertEquals(expected, viewModel.uiState.value)
@@ -93,11 +101,14 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception(errorMessage))
 
-            viewModel.loadWeather(0.11, 0.11)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceUntilIdle()
 
-            println("Expected: $expected")
-            println("Actual: ${viewModel.uiState.value}")
             assertEquals(expected, viewModel.uiState.value)
         }
 
@@ -113,7 +124,12 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception())
 
-            viewModel.loadWeather(0.11, 0.11)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceUntilIdle()
 
             assertEquals(expected, viewModel.uiState.value)
@@ -124,56 +140,39 @@ class WeatherViewModelTest {
         runTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.success(testWeatherData)
-            coEvery { weatherUiMapper.mapToSuccessState(testWeatherData, "metric") } returns testSuccessState
+            coEvery { weatherUiMapper.mapToSuccessState(testWeatherData, "metric", testLocation.name) } returns
+                testSuccessState
 
-            viewModel.loadWeather(0.11, 0.11)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceUntilIdle()
 
             assertEquals(testSuccessState, viewModel.uiState.value)
         }
 
     @Test
-    fun `should call getCurrentWeatherUseCase with correct parameters`() =
+    fun `should call getCurrentWeatherUseCase with location coordinates`() =
         runTest {
-            val latitude = 51.5074
-            val longitude = -0.1278
-            val units = "imperial"
-            val language = "es"
-
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.success(testWeatherData)
-            coEvery { weatherUiMapper.mapToSuccessState(any(), any()) } returns testSuccessState
+            coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            viewModel.loadWeather(latitude, longitude, units, language)
-            advanceUntilIdle()
-
-            coVerify(exactly = 1) {
-                getCurrentWeatherUseCase.invoke(
-                    latitude = latitude,
-                    longitude = longitude,
-                    units = units,
-                    language = language,
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
                 )
-            }
-        }
-
-    @Test
-    fun `should call getCurrentWeatherUseCase with default parameters when not provided`() =
-        runTest {
-            val latitude = 51.5074
-            val longitude = -0.1278
-
-            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
-                Result.success(testWeatherData)
-            coEvery { weatherUiMapper.mapToSuccessState(any(), any()) } returns testSuccessState
-
-            viewModel.loadWeather(latitude, longitude)
             advanceUntilIdle()
 
             coVerify(exactly = 1) {
                 getCurrentWeatherUseCase.invoke(
-                    latitude = latitude,
-                    longitude = longitude,
+                    latitude = testLocation.latitude,
+                    longitude = testLocation.longitude,
                     units = "metric",
                     language = "en",
                 )
@@ -183,17 +182,20 @@ class WeatherViewModelTest {
     @Test
     fun `should call weatherUiMapper when getCurrentWeatherUseCase succeeds`() =
         runTest {
-            val units = "imperial"
-
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.success(testWeatherData)
-            coEvery { weatherUiMapper.mapToSuccessState(any(), any()) } returns testSuccessState
+            coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            viewModel.loadWeather(0.11, 0.11, units)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceUntilIdle()
 
             coVerify(exactly = 1) {
-                weatherUiMapper.mapToSuccessState(testWeatherData, units)
+                weatherUiMapper.mapToSuccessState(testWeatherData, "metric", testLocation.name)
             }
         }
 
@@ -203,11 +205,16 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception("Error"))
 
-            viewModel.loadWeather(0.11, 0.11)
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                )
             advanceUntilIdle()
 
             coVerify(exactly = 0) {
-                weatherUiMapper.mapToSuccessState(any(), any())
+                weatherUiMapper.mapToSuccessState(any(), any(), any())
             }
         }
 }

@@ -8,24 +8,26 @@ import org.junit.Test
 class SearchLocationUiMapperTest {
     private val mapper = SearchLocationUiMapper()
 
-    private val testLocation = Location(
-        name = "London",
-        latitude = 51.5074,
-        longitude = -0.1278,
-        country = "United Kingdom",
-        state = "England",
-        localNames = mapOf("en" to "London", "fr" to "Londres")
-    )
+    private val testLocation =
+        Location(
+            name = "London",
+            latitude = 51.5074,
+            longitude = -0.1278,
+            country = "United Kingdom",
+            state = "England",
+            localNames = mapOf("en" to "London", "fr" to "Londres"),
+        )
 
-    private val testSearchResult = SearchResult(
-        displayName = "London, England, United Kingdom",
-        name = "London",
-        latitude = 51.5074,
-        longitude = -0.1278,
-        country = "United Kingdom",
-        state = "England",
-        localNames = mapOf("en" to "London", "fr" to "Londres")
-    )
+    private val testSearchResult =
+        SearchResult(
+            displayName = "London, England, United Kingdom",
+            name = "London",
+            latitude = 51.5074,
+            longitude = -0.1278,
+            country = "United Kingdom",
+            state = "England",
+            localNames = mapOf("en" to "London", "fr" to "Londres"),
+        )
 
     @Test
     fun `mapToSearchResult should map domain Location to UI SearchResult`() {

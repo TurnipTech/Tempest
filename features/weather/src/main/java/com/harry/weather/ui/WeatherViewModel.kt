@@ -11,29 +11,34 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(
+    private val location: com.harry.location.domain.model.Location,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
     private val weatherUiMapper: WeatherUiMapper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
 
-    fun loadWeather(
-        latitude: Double,
-        longitude: Double,
-        units: String = "metric",
-        language: String = "en",
-    ) {
+    init {
+        loadWeather()
+    }
+
+    private fun loadWeather(units: String = "metric", language: String = "en") {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
 
             getCurrentWeatherUseCase(
-                latitude = latitude,
-                longitude = longitude,
+                latitude = location.latitude,
+                longitude = location.longitude,
                 units = units,
                 language = language,
             ).fold(
                 onSuccess = { weatherData ->
-                    _uiState.value = weatherUiMapper.mapToSuccessState(weatherData, units)
+                    _uiState.value =
+                        weatherUiMapper.mapToSuccessState(
+                            weatherData = weatherData,
+                            units = units,
+                            locationName = location.name,
+                        )
                 },
                 onFailure = { error ->
                     _uiState.value =

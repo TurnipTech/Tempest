@@ -1,5 +1,6 @@
 package com.harry.weather.di
 
+import com.harry.location.domain.model.Location
 import com.harry.weather.data.OpenWeatherMapRepository
 import com.harry.weather.data.WeatherRepository
 import com.harry.weather.data.mapper.WeatherMapper
@@ -25,5 +26,11 @@ fun weatherModule(apiKey: String) =
 
         factory { GetCurrentWeatherUseCase(repository = get()) }
 
-        viewModel { WeatherViewModel(getCurrentWeatherUseCase = get(), weatherUiMapper = get()) }
+        viewModel { (location: Location) ->
+            WeatherViewModel(
+                location = location,
+                getCurrentWeatherUseCase = get(),
+                weatherUiMapper = get(),
+            )
+        }
     }

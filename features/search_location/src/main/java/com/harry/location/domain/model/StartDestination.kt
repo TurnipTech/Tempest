@@ -1,6 +1,9 @@
 package com.harry.location.domain.model
 
-enum class StartDestination {
-    SEARCH_LOCATION,
-    WEATHER,
+sealed interface StartDestination {
+    data object SearchLocation : StartDestination
+
+    data class Weather(
+        val location: Location,
+    ) : StartDestination
 }
