@@ -11,7 +11,7 @@ import com.harry.storage.Storage
 import com.harry.storage.get
 import com.harry.storage.getNullable
 import com.harry.storage.put
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.first
 
 private const val GEOCODING_BASE_URL = "https://api.openweathermap.org/geo/1.0"
 private const val DIRECT_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/direct"
@@ -73,7 +73,7 @@ internal class LocationRepositoryImpl(
     }
 
     override suspend fun getStoredLocation(): Location? =
-        storage.getNullable<Location>(key = STORED_LOCATION_KEY).single()
+        storage.getNullable<Location>(key = STORED_LOCATION_KEY).first()
 
     override suspend fun setLocation(location: Location) {
         storage.put(key = STORED_LOCATION_KEY, location)

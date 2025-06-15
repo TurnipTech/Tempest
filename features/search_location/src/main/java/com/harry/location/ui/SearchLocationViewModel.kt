@@ -83,7 +83,11 @@ class SearchLocationViewModel(
     fun onLocationSelected(searchResult: SearchResult) {
         viewModelScope.launch {
             val location = searchLocationUiMapper.mapToLocation(searchResult)
-            setLocationUseCase(location)
+            val result = setLocationUseCase(location)
+
+            if (result.isSuccess) {
+                _uiState.value = SearchLocationUiState.NavigateToWeather(location)
+            }
         }
     }
 }

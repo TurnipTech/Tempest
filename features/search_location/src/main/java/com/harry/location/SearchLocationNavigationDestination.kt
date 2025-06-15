@@ -12,8 +12,12 @@ class SearchLocationNavigationDestination : NavigationDestination {
         get() = SEARCH_LOCATION_ROUTE
 
     override fun NavGraphBuilder.graph() {
+        graph(onNavigateToWeather = {})
+    }
+
+    fun NavGraphBuilder.graph(onNavigateToWeather: () -> Unit) {
         composableDestination(this@SearchLocationNavigationDestination.route) {
-            SearchLocationScreen()
+            SearchLocationScreen(onNavigateToWeather = onNavigateToWeather)
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,7 @@ import com.harry.location.ui.model.SearchLocationUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
+fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel(), onNavigateToWeather: () -> Unit = {}) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
@@ -172,7 +173,12 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                     }
                 }
             }
-            else -> {}
+            is SearchLocationUiState.NavigateToWeather -> {
+                LaunchedEffect(state.location) {
+                    onNavigateToWeather()
+                }
+            }
+            else -> {} // todo - neaten up this (split ui up and make use of the different states)
         }
     }
 }

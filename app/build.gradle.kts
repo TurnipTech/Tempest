@@ -63,6 +63,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":core:location"))
+    implementation(project(":core:storage"))
     implementation(project(":features:weather"))
     implementation(project(":features:search_location"))
 

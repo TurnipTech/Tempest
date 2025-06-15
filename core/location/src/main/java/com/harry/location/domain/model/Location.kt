@@ -1,5 +1,8 @@
 package com.harry.location.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Location(
     val name: String,
     val localNames: Map<String, String> = emptyMap(),
