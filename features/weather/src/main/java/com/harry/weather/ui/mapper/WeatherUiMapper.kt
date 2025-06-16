@@ -71,6 +71,8 @@ class WeatherUiMapper {
             formattedTemperature = formatTemperature(currentWeather?.temperature, units),
             formattedLocation = locationName,
             weatherDescription = formatWeatherDescription(currentWeather?.condition?.description),
+            currentWeatherIconUrl = createIconUrl(currentWeather?.condition?.iconCode ?: ""),
+            currentWeatherIconDescription = currentWeather?.condition?.description ?: NO_DATA_AVAILABLE,
             lastUpdated = formatLastUpdated(),
             todaysHourlyForecast = mapTodaysHourlyForecast(weatherData.hourlyForecast ?: emptyList()),
             weeklyForecast = mapWeeklyForecast(weatherData.dailyForecast ?: emptyList(), units),
