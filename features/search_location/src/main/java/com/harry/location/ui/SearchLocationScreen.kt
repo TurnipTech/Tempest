@@ -30,13 +30,10 @@ fun SearchLocationScreen(
     var query by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    when (val state = uiState) {
-        is SearchLocationUiState.NavigateToWeather -> {
-            LaunchedEffect(state.location) {
-                onNavigateToWeather(state.location)
-            }
+    (uiState as? SearchLocationUiState.NavigateToWeather)?.let { state ->
+        LaunchedEffect(state.location) {
+            onNavigateToWeather(state.location)
         }
-        else -> {}
     }
 
     Column(
