@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -77,7 +80,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier.padding(32.dp),
                     ) {
                         Text(
@@ -99,6 +102,27 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                                 ),
                             textAlign = TextAlign.Center,
                         )
+                        if ((state as? WeatherUiState.Error)?.canRetry == true) {
+                            Button(
+                                onClick = { viewModel.retry() },
+                                modifier = Modifier.sizeIn(minWidth = 64.dp, minHeight = 40.dp),
+                                colors =
+                                    ButtonDefaults.buttonColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    ),
+                                elevation =
+                                    ButtonDefaults.buttonElevation(
+                                        defaultElevation = 4.dp,
+                                        pressedElevation = 8.dp,
+                                    ),
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.retry),
+                                    style = MaterialTheme.typography.labelLarge,
+                                )
+                            }
+                        }
                     }
                 }
             }

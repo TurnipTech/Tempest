@@ -24,6 +24,10 @@ class WeatherViewModel(
         loadWeather()
     }
 
+    fun retry() {
+        loadWeather()
+    }
+
     private fun loadWeather(units: String = "metric", language: String = "en") {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading

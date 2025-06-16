@@ -3,6 +3,7 @@
     <!-- Weather Screen -->
     <string name="loading_weather">Loading Weather</string>
     <string name="unable_to_load_weather">Unable to Load Weather</string>
+    <string name="retry">Retry</string>
     
     <!-- Forecast Titles -->
     <string name="twenty_four_hour_forecast">24 Hour Forecast</string>
