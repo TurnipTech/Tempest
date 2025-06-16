@@ -1,5 +1,6 @@
 package com.harry.weather.data
 
+import com.harry.weather.domain.WeatherConstants
 import com.harry.weather.domain.model.DailySummary
 import com.harry.weather.domain.model.HistoricalWeather
 import com.harry.weather.domain.model.WeatherData
@@ -18,8 +19,8 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         excludeParts: List<String> = emptyList(),
-        units: String = "metric", // todo - make const as well as the other hardcoded ones
-        language: String = "en",
+        units: String = WeatherConstants.METRIC_UNIT,
+        language: String = WeatherConstants.DEFAULT_LANGUAGE,
     ): Result<WeatherData>
 
     /**
@@ -34,8 +35,8 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         timestamp: Long,
-        units: String = "metric",
-        language: String = "en",
+        units: String = WeatherConstants.METRIC_UNIT,
+        language: String = WeatherConstants.DEFAULT_LANGUAGE,
     ): Result<HistoricalWeather>
 
     /**
@@ -50,7 +51,7 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         date: String,
-        units: String = "metric",
+        units: String = WeatherConstants.METRIC_UNIT,
         timezone: String? = null,
     ): Result<DailySummary>
 
@@ -65,6 +66,6 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         date: String? = null,
-        units: String = "metric",
+        units: String = WeatherConstants.METRIC_UNIT,
     ): Result<WeatherOverview>
 }
