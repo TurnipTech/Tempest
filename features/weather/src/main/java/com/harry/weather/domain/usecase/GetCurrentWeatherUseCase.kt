@@ -16,7 +16,7 @@ class GetCurrentWeatherUseCase(
         repository.getCurrentWeatherAndForecasts(
             latitude = latitude,
             longitude = longitude,
-            excludeParts = emptyList(), // todo - work out parts of forecast not needed
+            excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
             units = units,
             language = language,
         )

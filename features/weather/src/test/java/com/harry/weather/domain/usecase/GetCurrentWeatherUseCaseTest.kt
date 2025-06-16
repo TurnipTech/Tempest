@@ -1,6 +1,7 @@
 package com.harry.weather.domain.usecase
 
 import com.harry.weather.data.WeatherRepository
+import com.harry.weather.domain.WeatherConstants
 import com.harry.weather.domain.model.WeatherData
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -29,7 +30,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = units,
                     language = language,
                 )
@@ -56,7 +57,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = units,
                     language = language,
                 )
@@ -79,7 +80,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = "metric",
                     language = "en",
                 )
@@ -91,7 +92,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = "metric",
                     language = "en",
                 )
@@ -112,7 +113,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = units,
                     language = language,
                 )
@@ -124,7 +125,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = units,
                     language = language,
                 )
@@ -133,7 +134,7 @@ class GetCurrentWeatherUseCaseTest {
         }
 
     @Test
-    fun `should pass empty excludeParts list to repository`() =
+    fun `should exclude minutely data from repository call`() =
         runTest {
             val latitude = 51.5074
             val longitude = -0.1278
@@ -155,7 +156,7 @@ class GetCurrentWeatherUseCaseTest {
                 repository.getCurrentWeatherAndForecasts(
                     latitude = latitude,
                     longitude = longitude,
-                    excludeParts = emptyList(),
+                    excludeParts = listOf(WeatherConstants.EXCLUDE_MINUTELY),
                     units = "metric",
                     language = "en",
                 )
