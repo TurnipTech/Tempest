@@ -1,5 +1,6 @@
 package com.harry.weather.ui.mapper
 
+import com.harry.weather.R
 import com.harry.weather.domain.model.DailyWeather
 import com.harry.weather.domain.model.HourlyWeather
 import com.harry.weather.domain.model.TimeOfDay
@@ -15,17 +16,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Temperature constants
-private const val TEMPERATURE_NOT_AVAILABLE = "N/A"
-
 // Unit type constants
 private const val IMPERIAL_UNIT = "imperial"
 private const val STANDARD_UNIT = "standard"
 private const val METRIC_UNIT = "metric"
 
-// Text constants //todo - use android resources for text constants
-private const val NO_DATA_AVAILABLE = "No data available"
-private const val UPDATED_PREFIX = "Updated "
+// Non-localizable constants
 private const val PERCENTAGE_SYMBOL = "%"
 
 // Time and date constants
@@ -48,7 +44,9 @@ enum class IconSize(
     LARGE("@4x.png"),
 }
 
-class WeatherUiMapper {
+class WeatherUiMapper(
+    private val resourceProvider: ResourceProvider,
+) {
     enum class TemperatureUnit(
         val unitString: String,
         val symbol: String,
@@ -81,7 +79,8 @@ class WeatherUiMapper {
             formattedLocation = locationName,
             weatherDescription = formatWeatherDescription(currentWeather?.condition?.description),
             currentWeatherIconUrl = createIconUrl(currentWeather?.condition?.iconCode ?: "", IconSize.LARGE),
-            currentWeatherIconDescription = currentWeather?.condition?.description ?: NO_DATA_AVAILABLE,
+            currentWeatherIconDescription =
+                currentWeather?.condition?.description ?: resourceProvider.getString(R.string.no_data_available),
             lastUpdated = formatLastUpdated(),
             todaysHourlyForecast =
                 mapTodaysHourlyForecast(
@@ -103,16 +102,16 @@ class WeatherUiMapper {
             val temperatureUnit = TemperatureUnit.fromUnitString(units)
             "${temperature.toInt()}${temperatureUnit.symbol}"
         } else {
-            TEMPERATURE_NOT_AVAILABLE
+            resourceProvider.getString(R.string.temperature_not_available)
         }
 
     private fun formatWeatherDescription(description: String?): String =
         description?.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase() else it.toString()
-        } ?: NO_DATA_AVAILABLE
+        } ?: resourceProvider.getString(R.string.no_data_available)
 
     private fun formatLastUpdated(): String =
-        "$UPDATED_PREFIX${
+        "${resourceProvider.getString(R.string.updated_prefix)}${
             SimpleDateFormat(
                 TIME_FORMAT_PATTERN,
                 Locale.getDefault(),

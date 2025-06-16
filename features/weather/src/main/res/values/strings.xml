@@ -14,4 +14,9 @@
     <string name="temperature_low_icon">↓</string>
     <string name="temperature_high_description">High temperature</string>
     <string name="temperature_low_description">Low temperature</string>
+    
+    <!-- Mapper Text Constants -->
+    <string name="no_data_available">No data available</string>
+    <string name="updated_prefix">Updated </string>
+    <string name="temperature_not_available">N/A</string>
 </resources>

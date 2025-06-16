@@ -6,6 +6,8 @@ import com.harry.weather.data.WeatherRepository
 import com.harry.weather.data.mapper.WeatherMapper
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
 import com.harry.weather.ui.WeatherViewModel
+import com.harry.weather.ui.mapper.AndroidResourceProvider
+import com.harry.weather.ui.mapper.ResourceProvider
 import com.harry.weather.ui.mapper.WeatherUiMapper
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -22,7 +24,9 @@ fun weatherModule(apiKey: String) =
 
         single { WeatherMapper }
 
-        single { WeatherUiMapper() }
+        single<ResourceProvider> { AndroidResourceProvider(context = get()) }
+
+        single { WeatherUiMapper(resourceProvider = get()) }
 
         factory { GetCurrentWeatherUseCase(repository = get()) }
 

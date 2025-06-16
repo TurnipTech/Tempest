@@ -1,18 +1,27 @@
 package com.harry.weather.ui.mapper
 
+import com.harry.weather.R
 import com.harry.weather.domain.model.CurrentWeather
 import com.harry.weather.domain.model.DailyWeather
 import com.harry.weather.domain.model.HourlyWeather
 import com.harry.weather.domain.model.Location
 import com.harry.weather.domain.model.WeatherCondition
 import com.harry.weather.domain.model.WeatherData
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WeatherUiMapperTest {
-    private val mapper = WeatherUiMapper()
+    private val mockResourceProvider =
+        mockk<ResourceProvider> {
+            every { getString(R.string.no_data_available) } returns "No data available"
+            every { getString(R.string.updated_prefix) } returns "Updated "
+            every { getString(R.string.temperature_not_available) } returns "N/A"
+        }
+    private val mapper = WeatherUiMapper(mockResourceProvider)
 
     @Test
     fun `mapToSuccessState with valid data returns correct UI state`() {

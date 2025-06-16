@@ -4,8 +4,10 @@ package com.harry.location.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.harry.location.R
 import com.harry.location.domain.usecase.SearchLocationsUseCase
 import com.harry.location.domain.usecase.SetLocationUseCase
+import com.harry.location.ui.mapper.ResourceProvider
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
@@ -29,6 +31,7 @@ class SearchLocationViewModel(
     private val searchLocationsUseCase: SearchLocationsUseCase,
     private val setLocationUseCase: SetLocationUseCase,
     private val searchLocationUiMapper: SearchLocationUiMapper,
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<SearchLocationUiState>(SearchLocationUiState.Idle)
     val uiState: StateFlow<SearchLocationUiState> = _uiState.asStateFlow()
@@ -54,8 +57,10 @@ class SearchLocationViewModel(
                                 query = searchResult.query,
                             )
                         } else {
-                            SearchLocationUiState.Error( // todo - use android resources for this defaulted message
-                                message = result.exceptionOrNull()?.message ?: "Unknown error occurred",
+                            SearchLocationUiState.Error(
+                                message =
+                                    result.exceptionOrNull()?.message
+                                        ?: resourceProvider.getString(R.string.error_unknown),
                                 query = query,
                             )
                         }
