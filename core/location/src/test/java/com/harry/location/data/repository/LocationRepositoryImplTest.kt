@@ -4,6 +4,7 @@ import com.harry.location.data.dto.GeocodingLocationDto
 import com.harry.location.data.mapper.LocationMapper
 import com.harry.location.domain.model.LocationSearchResult
 import com.harry.network.client.HttpClient
+import com.harry.storage.Storage
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -15,16 +16,18 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class OpenWeatherMapLocationRepositoryTest {
+class LocationRepositoryImplTest {
     private val client: HttpClient = mockk(relaxed = true)
     private val mapper: LocationMapper = mockk(relaxed = true)
+    private val storage: Storage = mockk(relaxed = true)
     private val apiKey = "test_api_key"
 
     private val repository =
-        OpenWeatherMapLocationRepository(
+        LocationRepositoryImpl(
             client = client,
             mapper = mapper,
             apiKey = apiKey,
+            storage = storage,
         )
 
     private val testQuery = "London"

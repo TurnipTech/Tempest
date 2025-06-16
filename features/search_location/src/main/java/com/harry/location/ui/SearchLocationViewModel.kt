@@ -5,8 +5,10 @@ package com.harry.location.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harry.location.domain.usecase.SearchLocationsUseCase
+import com.harry.location.domain.usecase.SetLocationUseCase
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
+import com.harry.location.ui.model.SearchResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,12 +20,14 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 private const val SEARCH_DEBOUNCE_MS = 300L
 private const val MIN_QUERY_SIZE = 2
 
 class SearchLocationViewModel(
     private val searchLocationsUseCase: SearchLocationsUseCase,
+    private val setLocationUseCase: SetLocationUseCase,
     private val searchLocationUiMapper: SearchLocationUiMapper,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<SearchLocationUiState>(SearchLocationUiState.Idle)
@@ -74,5 +78,16 @@ class SearchLocationViewModel(
 
     fun clearSearch() {
         _uiState.value = SearchLocationUiState.Idle
+    }
+
+    fun onLocationSelected(searchResult: SearchResult) {
+        viewModelScope.launch {
+            val location = searchLocationUiMapper.mapToLocation(searchResult)
+            val result = setLocationUseCase(location)
+
+            if (result.isSuccess) {
+                _uiState.value = SearchLocationUiState.NavigateToWeather(location)
+            }
+        }
     }
 }

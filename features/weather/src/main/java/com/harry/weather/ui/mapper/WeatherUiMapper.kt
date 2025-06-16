@@ -52,7 +52,7 @@ class WeatherUiMapper {
         }
     }
 
-    fun mapToSuccessState(weatherData: WeatherData, units: String): WeatherUiState.Success {
+    fun mapToSuccessState(weatherData: WeatherData, units: String, locationName: String): WeatherUiState.Success {
         val currentWeather = weatherData.currentWeather
         val currentTime = Clock.System.now()
         val timeOfDay =
@@ -65,7 +65,7 @@ class WeatherUiMapper {
         return WeatherUiState.Success(
             weatherData = weatherData,
             formattedTemperature = formatTemperature(currentWeather?.temperature, units),
-            formattedLocation = formatLocation(weatherData.location.latitude, weatherData.location.longitude),
+            formattedLocation = locationName,
             weatherDescription = formatWeatherDescription(currentWeather?.condition?.description),
             lastUpdated = formatLastUpdated(),
             todaysHourlyForecast = mapTodaysHourlyForecast(weatherData.hourlyForecast ?: emptyList()),
@@ -80,8 +80,6 @@ class WeatherUiMapper {
         } else {
             TEMPERATURE_NOT_AVAILABLE
         }
-
-    private fun formatLocation(latitude: Double, longitude: Double): String = "$latitude, $longitude"
 
     private fun formatWeatherDescription(description: String?): String =
         description?.replaceFirstChar {

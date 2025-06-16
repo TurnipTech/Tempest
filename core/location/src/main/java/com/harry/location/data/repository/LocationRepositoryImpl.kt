@@ -2,14 +2,21 @@ package com.harry.location.data.repository
 
 import com.harry.location.data.dto.GeocodingLocationDto
 import com.harry.location.data.mapper.LocationMapper
+import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.LocationSearchResult
 import com.harry.location.domain.repository.LocationRepository
 import com.harry.network.client.HttpClient
 import com.harry.network.client.get
+import com.harry.storage.Storage
+import com.harry.storage.get
+import com.harry.storage.getNullable
+import com.harry.storage.put
+import kotlinx.coroutines.flow.first
 
 private const val GEOCODING_BASE_URL = "https://api.openweathermap.org/geo/1.0"
 private const val DIRECT_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/direct"
 private const val REVERSE_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/reverse"
+private const val STORED_LOCATION_KEY = "stored_location"
 
 // API parameter names
 private const val PARAM_QUERY = "q"
@@ -18,10 +25,11 @@ private const val PARAM_LONGITUDE = "lon"
 private const val PARAM_LIMIT = "limit"
 private const val PARAM_APP_ID = "appid"
 
-internal class OpenWeatherMapLocationRepository(
+internal class LocationRepositoryImpl(
     private val client: HttpClient,
     private val mapper: LocationMapper,
     private val apiKey: String,
+    private val storage: Storage,
 ) : LocationRepository {
     override suspend fun searchLocations(query: String, limit: Int): Result<LocationSearchResult> {
         val params =
@@ -62,5 +70,12 @@ internal class OpenWeatherMapLocationRepository(
             ).map { dtos ->
                 mapper.mapToLocationSearchResult(dtos, coordinateQuery)
             }
+    }
+
+    override suspend fun getStoredLocation(): Location? =
+        storage.getNullable<Location>(key = STORED_LOCATION_KEY).first()
+
+    override suspend fun setLocation(location: Location) {
+        storage.put(key = STORED_LOCATION_KEY, location)
     }
 }

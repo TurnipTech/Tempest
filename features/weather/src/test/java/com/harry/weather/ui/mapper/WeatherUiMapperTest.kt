@@ -18,11 +18,11 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData()
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertNotNull(result)
         assertEquals("22°C", result.formattedTemperature)
-        assertEquals("40.7128, -74.006", result.formattedLocation)
+        assertEquals("New York", result.formattedLocation)
         assertEquals("Clear sky", result.weatherDescription)
         assertTrue(result.lastUpdated.contains("Updated"))
         assertEquals(2, result.todaysHourlyForecast.size)
@@ -33,7 +33,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData()
         val units = "imperial"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals("22°F", result.formattedTemperature)
     }
@@ -43,7 +43,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData()
         val units = "standard"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals("22K", result.formattedTemperature)
     }
@@ -53,7 +53,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData(currentWeather = null)
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals("N/A", result.formattedTemperature)
         assertEquals("No data available", result.weatherDescription)
@@ -72,7 +72,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData(hourlyForecast = hourlyForecast)
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals(2, result.todaysHourlyForecast.size)
     }
@@ -87,7 +87,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData(hourlyForecast = hourlyForecast)
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals(12, result.todaysHourlyForecast.size)
     }
@@ -97,7 +97,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData()
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         val firstHourly = result.todaysHourlyForecast.first()
         assertTrue(firstHourly.formattedTime.matches(Regex("\\d{2}:\\d{2}")))
@@ -114,7 +114,7 @@ class WeatherUiMapperTest {
         val weatherData = createWeatherData(currentWeather = currentWeather)
         val units = "metric"
 
-        val result = mapper.mapToSuccessState(weatherData, units)
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals("Clear sky", result.weatherDescription)
     }

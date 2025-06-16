@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +28,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.harry.location.domain.model.Location
 import com.harry.location.ui.components.LocationSearchBar
 import com.harry.location.ui.model.SearchLocationUiState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
+fun SearchLocationScreen(
+    viewModel: SearchLocationViewModel = koinViewModel(),
+    onNavigateToWeather: (Location) -> Unit = {},
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
@@ -44,7 +49,7 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
     ) {
         val searchResults =
             when (val state = uiState) {
-                is SearchLocationUiState.Success -> state.locations.map { it.displayName }
+                is SearchLocationUiState.Success -> state.locations
                 else -> emptyList()
             }
 
@@ -52,6 +57,7 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
             onSearchQueryChange = { query ->
                 viewModel.searchLocations(query)
             },
+            onLocationSelected = viewModel::onLocationSelected,
             searchResults = searchResults,
             isLoading = uiState is SearchLocationUiState.Loading,
             modifier =
@@ -89,7 +95,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                             .fillMaxSize()
                             .padding(horizontal = 32.dp),
                 ) {
-                    // Graphic illustration
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -113,7 +118,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                             }
                         }
 
-                        // Small decorative icons
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(24.dp),
                         ) {
@@ -154,7 +158,6 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                         }
                     }
 
-                    // Text content
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -174,7 +177,12 @@ fun SearchLocationScreen(viewModel: SearchLocationViewModel = koinViewModel()) {
                     }
                 }
             }
-            else -> {}
+            is SearchLocationUiState.NavigateToWeather -> {
+                LaunchedEffect(state.location) {
+                    onNavigateToWeather(state.location)
+                }
+            }
+            else -> {} // todo - neaten up this (split ui up and make use of the different states)
         }
     }
 }

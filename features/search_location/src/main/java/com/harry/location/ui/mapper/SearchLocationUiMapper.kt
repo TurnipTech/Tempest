@@ -9,10 +9,24 @@ class SearchLocationUiMapper {
 
         return SearchResult(
             displayName = displayName,
+            name = location.name,
             latitude = location.latitude,
             longitude = location.longitude,
+            country = location.country,
+            state = location.state,
+            localNames = location.localNames,
         )
     }
 
     fun mapToSearchResults(locations: List<Location>): List<SearchResult> = locations.map { mapToSearchResult(it) }
+
+    fun mapToLocation(searchResult: SearchResult): Location =
+        Location(
+            name = searchResult.name,
+            localNames = searchResult.localNames,
+            latitude = searchResult.latitude,
+            longitude = searchResult.longitude,
+            country = searchResult.country,
+            state = searchResult.state,
+        )
 }

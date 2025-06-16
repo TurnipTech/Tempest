@@ -4,6 +4,8 @@ import android.app.Application
 import com.harry.location.di.locationModule
 import com.harry.location.di.searchLocationModule
 import com.harry.network.di.networkModule
+import com.harry.storage.di.storageModule
+import com.harry.tempest.di.appModule
 import com.harry.weather.di.weatherModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,9 +23,11 @@ class TempestApplication : Application() {
             androidContext(this@TempestApplication)
             modules(
                 networkModule,
+                storageModule,
                 weatherModule,
                 locationModule,
                 searchLocationModule,
+                appModule,
             )
         }
     }
