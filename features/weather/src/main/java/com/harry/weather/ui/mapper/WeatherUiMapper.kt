@@ -21,7 +21,7 @@ private const val IMPERIAL_UNIT = "imperial"
 private const val STANDARD_UNIT = "standard"
 private const val METRIC_UNIT = "metric"
 
-// Text constants
+// Text constants //todo - use android resources for text constants
 private const val NO_DATA_AVAILABLE = "No data available"
 private const val UPDATED_PREFIX = "Updated "
 private const val PERCENTAGE_SYMBOL = "%"

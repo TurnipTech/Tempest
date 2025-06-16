@@ -18,7 +18,7 @@ interface WeatherRepository {
         latitude: Double,
         longitude: Double,
         excludeParts: List<String> = emptyList(),
-        units: String = "metric",
+        units: String = "metric",//todo - make const as well as the other hardcoded ones
         language: String = "en",
     ): Result<WeatherData>
 
