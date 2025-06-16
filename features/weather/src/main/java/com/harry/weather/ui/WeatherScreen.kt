@@ -23,6 +23,8 @@ import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.components.CurrentWeather
 import com.harry.weather.ui.components.DynamicWeatherBackground
 import com.harry.weather.ui.components.TodaysForecast
+import com.harry.weather.ui.components.WeeklyForecast
+import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import org.koin.androidx.compose.koinViewModel
@@ -110,6 +112,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                     formattedLocation = currentState.formattedLocation,
                     formattedTemperature = currentState.formattedTemperature,
                     todaysHourlyForecast = currentState.todaysHourlyForecast,
+                    weeklyForecast = currentState.weeklyForecast,
                     onLocationClick = onNavigateToSearch,
                 )
             }
@@ -123,6 +126,7 @@ private fun WeatherContent(
     formattedLocation: String,
     formattedTemperature: String,
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
+    weeklyForecast: List<DailyWeatherUiModel>,
     onLocationClick: () -> Unit = {},
 ) {
     Column(
@@ -148,6 +152,15 @@ private fun WeatherContent(
                 hourlyForecast = todaysHourlyForecast,
             )
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        if (weeklyForecast.isNotEmpty()) {
+            WeeklyForecast(
+                weeklyForecast = weeklyForecast,
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 }

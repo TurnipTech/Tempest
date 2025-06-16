@@ -1,8 +1,10 @@
 package com.harry.weather.ui.mapper
 
+import com.harry.weather.domain.model.DailyWeather
 import com.harry.weather.domain.model.HourlyWeather
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
+import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import kotlinx.datetime.Clock
@@ -26,11 +28,13 @@ private const val PERCENTAGE_SYMBOL = "%"
 
 // Time and date constants
 private const val TIME_FORMAT_PATTERN = "HH:mm"
+private const val DAY_FORMAT_PATTERN = "EEE"
 private const val SECONDS_IN_DAY = 24 * 60 * 60
 private const val MILLISECONDS_CONVERSION_FACTOR = 1000L
 
 // Forecast constants
 private const val MAX_HOURLY_FORECAST_ITEMS = 12
+private const val MAX_DAILY_FORECAST_ITEMS = 7
 
 // Icon URL constants
 private const val ICON_BASE_URL = "https://openweathermap.org/img/wn/"
@@ -69,6 +73,7 @@ class WeatherUiMapper {
             weatherDescription = formatWeatherDescription(currentWeather?.condition?.description),
             lastUpdated = formatLastUpdated(),
             todaysHourlyForecast = mapTodaysHourlyForecast(weatherData.hourlyForecast ?: emptyList()),
+            weeklyForecast = mapWeeklyForecast(weatherData.dailyForecast ?: emptyList(), units),
             timeOfDay = timeOfDay,
         )
     }
@@ -123,4 +128,26 @@ class WeatherUiMapper {
     }
 
     private fun createIconUrl(iconCode: String): String = "$ICON_BASE_URL$iconCode$ICON_SIZE_SUFFIX"
+
+    private fun mapWeeklyForecast(dailyForecast: List<DailyWeather>, units: String): List<DailyWeatherUiModel> =
+        dailyForecast
+            .take(MAX_DAILY_FORECAST_ITEMS)
+            .map { dailyWeather ->
+                mapToDailyWeatherUiModel(dailyWeather, units)
+            }
+
+    private fun mapToDailyWeatherUiModel(dailyWeather: DailyWeather, units: String): DailyWeatherUiModel =
+        DailyWeatherUiModel(
+            formattedDay = formatDay(dailyWeather.dateTime),
+            temperatureHigh = formatTemperature(dailyWeather.temperatureHigh, units),
+            temperatureLow = formatTemperature(dailyWeather.temperatureLow, units),
+            iconUrl = createIconUrl(dailyWeather.condition.iconCode),
+            iconDescription = dailyWeather.condition.description,
+        )
+
+    private fun formatDay(timestamp: Long): String {
+        val date = Date(timestamp * MILLISECONDS_CONVERSION_FACTOR)
+        val formatter = SimpleDateFormat(DAY_FORMAT_PATTERN, Locale.getDefault())
+        return formatter.format(date)
+    }
 }

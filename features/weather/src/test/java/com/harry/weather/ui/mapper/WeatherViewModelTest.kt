@@ -66,6 +66,7 @@ class WeatherViewModelTest {
             weatherDescription = "Sunny",
             lastUpdated = "Updated 10:30",
             todaysHourlyForecast = emptyList(),
+            weeklyForecast = emptyList(),
             timeOfDay = TimeOfDay.DAY,
         )
 
