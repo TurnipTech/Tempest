@@ -65,4 +65,10 @@ dependencies {
     testImplementation(libs.koin.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android) {
+        exclude(group = "org.junit.jupiter")
+    }
+    androidTestImplementation(libs.coil.test)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

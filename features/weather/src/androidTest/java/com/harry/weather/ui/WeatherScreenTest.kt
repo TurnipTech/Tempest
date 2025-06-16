@@ -1,0 +1,266 @@
+package com.harry.weather.ui
+
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.test.platform.app.InstrumentationRegistry
+import com.harry.weather.domain.model.TimeOfDay
+import com.harry.weather.ui.model.DailyWeatherUiModel
+import com.harry.weather.ui.model.HourlyWeatherUiModel
+import com.harry.weather.ui.model.WeatherUiState
+import com.harry.weather.util.ImageLoadingTestUtil
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+
+class WeatherScreenTest {
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    @Before
+    fun setUp() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        ImageLoadingTestUtil.setupFakeImageLoader(context)
+    }
+
+    @Test
+    fun weatherScreen_loadingState_displaysLoadingText() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setLoadingState()
+            assertLoadingTextIsDisplayed()
+        }
+    }
+
+    @Test
+    fun weatherScreen_errorState_displaysErrorMessage() {
+        val errorMessage = "Network error occurred"
+
+        WeatherScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            assertErrorTextIsDisplayed()
+            assertErrorMessageIsDisplayed(errorMessage)
+        }
+    }
+
+    @Test
+    fun weatherScreen_successState_displaysWeatherContent() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessState()
+            assertTemperatureIsDisplayed("22°C")
+            assertLocationIsDisplayed("New York")
+            assertDescriptionIsDisplayed("Clear sky")
+            assertWeatherIconIsDisplayed("clear sky")
+        }
+    }
+
+    @Test
+    fun weatherScreen_successState_withHourlyForecast_displaysTodaysForecast() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessStateWithHourlyForecast()
+            scrollToTodaysForecast()
+            assertTodaysForecastIsDisplayed()
+        }
+    }
+
+    @Test
+    fun weatherScreen_successState_withWeeklyForecast_displaysWeeklyForecast() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessStateWithWeeklyForecast()
+            scrollToWeeklyForecast()
+            assertWeeklyForecastIsDisplayed()
+        }
+    }
+
+    @Test
+    fun weatherScreen_successState_noForecasts_displaysOnlyCurrentWeather() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessStateWithEmptyForecasts()
+            assertTemperatureIsDisplayed("22°C")
+            assertLocationIsDisplayed("New York")
+        }
+    }
+
+    @Test
+    fun weatherScreen_locationClick_triggersNavigationCallback() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessState()
+            clickLocation()
+            verifyNavigationToSearchWasCalled()
+        }
+    }
+
+    @Test
+    fun weatherScreen_successState_contentIsScrollable() {
+        WeatherScreenRobot(composeTestRule).apply {
+            setSuccessStateWithAllData()
+            assertContentIsScrollable()
+        }
+    }
+}
+
+class WeatherScreenRobot(
+    private val composeTestRule: ComposeContentTestRule,
+) {
+    private fun createMockSuccessState(
+        temperature: String = "22°C",
+        location: String = "New York",
+        description: String = "Clear sky",
+        iconDescription: String = "clear sky",
+        hourlyForecast: List<HourlyWeatherUiModel> = emptyList(),
+        weeklyForecast: List<DailyWeatherUiModel> = emptyList(),
+    ) = WeatherUiState.Success(
+        weatherData = mockk(),
+        formattedTemperature = temperature,
+        formattedLocation = location,
+        weatherDescription = description,
+        currentWeatherIconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+        currentWeatherIconDescription = iconDescription,
+        lastUpdated = "Updated 10:30",
+        todaysHourlyForecast = hourlyForecast,
+        weeklyForecast = weeklyForecast,
+        timeOfDay = TimeOfDay.DAY,
+    )
+
+    private fun createMockHourlyForecast() =
+        listOf(
+            HourlyWeatherUiModel(
+                formattedTime = "14:00",
+                temperature = "22°",
+                iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+                iconDescription = "clear sky",
+                precipitationProbability = "20%",
+            ),
+            HourlyWeatherUiModel(
+                formattedTime = "15:00",
+                temperature = "25°",
+                iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
+                iconDescription = "few clouds",
+                precipitationProbability = "10%",
+            ),
+        )
+
+    private fun createMockWeeklyForecast() =
+        listOf(
+            DailyWeatherUiModel(
+                formattedDay = "Mon",
+                temperatureHigh = "25°C",
+                temperatureLow = "15°C",
+                iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+                iconDescription = "clear sky",
+            ),
+            DailyWeatherUiModel(
+                formattedDay = "Tue",
+                temperatureHigh = "23°C",
+                temperatureLow = "13°C",
+                iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
+                iconDescription = "few clouds",
+            ),
+        )
+
+    private val onNavigateToSearch: () -> Unit = mockk(relaxed = true)
+
+    private fun setupScreen(state: WeatherUiState): WeatherScreenRobot {
+        composeTestRule.setContent {
+            MaterialTheme {
+                WeatherScreen(
+                    viewModel =
+                        mockk {
+                            every { uiState } returns MutableStateFlow(state)
+                        },
+                    onNavigateToSearch = onNavigateToSearch,
+                )
+            }
+        }
+        return this
+    }
+
+    fun setLoadingState(): WeatherScreenRobot = setupScreen(WeatherUiState.Loading)
+
+    fun setErrorState(message: String): WeatherScreenRobot = setupScreen(WeatherUiState.Error(message = message))
+
+    fun setSuccessState(): WeatherScreenRobot = setupScreen(createMockSuccessState())
+
+    fun setSuccessStateWithHourlyForecast(): WeatherScreenRobot =
+        setupScreen(createMockSuccessState(hourlyForecast = createMockHourlyForecast()))
+
+    fun setSuccessStateWithWeeklyForecast(): WeatherScreenRobot =
+        setupScreen(createMockSuccessState(weeklyForecast = createMockWeeklyForecast()))
+
+    fun setSuccessStateWithEmptyForecasts(): WeatherScreenRobot = setupScreen(createMockSuccessState())
+
+    fun setSuccessStateWithAllData(): WeatherScreenRobot =
+        setupScreen(
+            createMockSuccessState(
+                hourlyForecast = createMockHourlyForecast(),
+                weeklyForecast = createMockWeeklyForecast(),
+            ),
+        )
+
+    fun clickLocation() {
+        composeTestRule.onNodeWithText("New York").performClick()
+    }
+
+    fun scrollToTodaysForecast() {
+        composeTestRule.onNodeWithText("24 Hour Forecast").performScrollTo()
+    }
+
+    fun scrollToWeeklyForecast() {
+        composeTestRule.onNodeWithText("Mon").performScrollTo()
+    }
+
+    fun assertLoadingTextIsDisplayed() {
+        composeTestRule.onNodeWithText("Loading Weather").assertIsDisplayed()
+    }
+
+    fun assertErrorTextIsDisplayed() {
+        composeTestRule.onNodeWithText("Unable to Load Weather").assertIsDisplayed()
+    }
+
+    fun assertErrorMessageIsDisplayed(message: String) {
+        composeTestRule.onNodeWithText(message).assertIsDisplayed()
+    }
+
+    fun assertTemperatureIsDisplayed(temperature: String) {
+        composeTestRule.onNodeWithText(temperature).assertIsDisplayed()
+    }
+
+    fun assertLocationIsDisplayed(location: String) {
+        composeTestRule.onNodeWithText(location).assertIsDisplayed()
+    }
+
+    fun assertDescriptionIsDisplayed(description: String) {
+        composeTestRule.onNodeWithText(description).assertIsDisplayed()
+    }
+
+    fun assertWeatherIconIsDisplayed(iconDescription: String) {
+        composeTestRule.onNodeWithContentDescription(iconDescription).assertIsDisplayed()
+    }
+
+    fun assertTodaysForecastIsDisplayed() {
+        composeTestRule.onNodeWithText("24 Hour Forecast").assertIsDisplayed()
+    }
+
+    fun assertWeeklyForecastIsDisplayed() {
+        composeTestRule.onNodeWithText("Mon").assertIsDisplayed()
+    }
+
+    fun assertContentIsScrollable() {
+        // Test scrollability by scrolling to different sections
+        composeTestRule.onNodeWithText("22°C").assertIsDisplayed()
+        composeTestRule.onNodeWithText("24 Hour Forecast").performScrollTo().assertIsDisplayed()
+        composeTestRule.onNodeWithText("Mon").performScrollTo().assertIsDisplayed()
+    }
+
+    fun verifyNavigationToSearchWasCalled() {
+        verify { onNavigateToSearch() }
+    }
+}
