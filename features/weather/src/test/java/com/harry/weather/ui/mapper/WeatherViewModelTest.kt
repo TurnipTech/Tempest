@@ -226,4 +226,91 @@ class WeatherViewModelTest {
                 weatherUiMapper.mapToSuccessState(any(), any(), any())
             }
         }
+
+    @Test
+    fun `should use stored location when location parameter is null and stored location exists`() =
+        runTest {
+            val storedLocation = testLocation
+            coEvery { getStoredLocationUseCase.invoke() } returns storedLocation
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.success(testWeatherData)
+            coEvery { weatherUiMapper.mapToSuccessState(testWeatherData, "metric", storedLocation.name) } returns
+                testSuccessState
+
+            val viewModel =
+                WeatherViewModel(
+                    location = null,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            assertEquals(testSuccessState, viewModel.uiState.value)
+            coVerify(exactly = 1) {
+                getStoredLocationUseCase.invoke()
+            }
+            coVerify(exactly = 1) {
+                getCurrentWeatherUseCase.invoke(
+                    latitude = storedLocation.latitude,
+                    longitude = storedLocation.longitude,
+                    units = "metric",
+                    language = "en",
+                )
+            }
+        }
+
+    @Test
+    fun `should be in Error state when location parameter is null and no stored location exists`() =
+        runTest {
+            val expected =
+                WeatherUiState.Error(
+                    message = "No location available",
+                    canRetry = false,
+                )
+
+            coEvery { getStoredLocationUseCase.invoke() } returns null
+
+            val viewModel =
+                WeatherViewModel(
+                    location = null,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            assertEquals(expected, viewModel.uiState.value)
+            coVerify(exactly = 1) {
+                getStoredLocationUseCase.invoke()
+            }
+            coVerify(exactly = 0) {
+                getCurrentWeatherUseCase.invoke(any(), any(), any(), any())
+            }
+            coVerify(exactly = 0) {
+                weatherUiMapper.mapToSuccessState(any(), any(), any())
+            }
+        }
+
+    @Test
+    fun `should not call getStoredLocationUseCase when location parameter is provided`() =
+        runTest {
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.success(testWeatherData)
+            coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
+
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            assertEquals(testSuccessState, viewModel.uiState.value)
+            coVerify(exactly = 0) {
+                getStoredLocationUseCase.invoke()
+            }
+        }
 }
