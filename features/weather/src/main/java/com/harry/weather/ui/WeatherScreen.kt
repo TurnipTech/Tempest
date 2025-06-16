@@ -30,6 +30,7 @@ import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.components.CurrentWeather
 import com.harry.weather.ui.components.DynamicWeatherBackground
 import com.harry.weather.ui.components.TodaysForecast
+import com.harry.weather.ui.components.WeatherLoadingSkeleton
 import com.harry.weather.ui.components.WeeklyForecast
 import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
@@ -46,25 +47,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                 timeOfDay = TimeOfDay.DAY,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.loading_weather),
-                            color = Color.White.copy(alpha = 0.9f),
-                            style =
-                                MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Medium,
-                                    letterSpacing = 0.3.sp,
-                                ),
-                        )
-                    }
-                }
+                WeatherLoadingSkeleton()
             }
         }
 
