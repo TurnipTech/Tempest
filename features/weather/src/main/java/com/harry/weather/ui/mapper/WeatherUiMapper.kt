@@ -1,6 +1,7 @@
 package com.harry.weather.ui.mapper
 
 import com.harry.weather.R
+import com.harry.weather.domain.WeatherConstants
 import com.harry.weather.domain.model.DailyWeather
 import com.harry.weather.domain.model.HourlyWeather
 import com.harry.weather.domain.model.TimeOfDay
@@ -16,10 +17,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// Unit type constants
-private const val IMPERIAL_UNIT = "imperial"
-private const val STANDARD_UNIT = "standard"
-private const val METRIC_UNIT = "metric"
+// Unit type constants (using shared domain constants)
+private val IMPERIAL_UNIT = WeatherConstants.IMPERIAL_UNIT
+private val STANDARD_UNIT = WeatherConstants.STANDARD_UNIT
+private val METRIC_UNIT = WeatherConstants.METRIC_UNIT
 
 // Non-localizable constants
 private const val PERCENTAGE_SYMBOL = "%"
