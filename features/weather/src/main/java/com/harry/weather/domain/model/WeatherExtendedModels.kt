@@ -1,6 +1,8 @@
 package com.harry.weather.domain.model
 
-// todo - shall we remove unused bits of data?
+// Note: These models are currently unused in the UI layer and use cases.
+// They are only referenced in the data layer (repositories, mappers, DTOs, tests).
+// Consider removing if these features are not planned for future implementation.
 data class HistoricalWeather(
     val location: Location,
     val data: List<HistoricalWeatherData>,
