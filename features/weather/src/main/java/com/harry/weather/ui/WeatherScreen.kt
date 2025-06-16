@@ -115,6 +115,8 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                     weatherDescription = currentState.weatherDescription,
                     formattedLocation = currentState.formattedLocation,
                     formattedTemperature = currentState.formattedTemperature,
+                    currentWeatherIconUrl = currentState.currentWeatherIconUrl,
+                    currentWeatherIconDescription = currentState.currentWeatherIconDescription,
                     todaysHourlyForecast = currentState.todaysHourlyForecast,
                     weeklyForecast = currentState.weeklyForecast,
                     onLocationClick = onNavigateToSearch,
@@ -129,6 +131,8 @@ private fun WeatherContent(
     weatherDescription: String,
     formattedLocation: String,
     formattedTemperature: String,
+    currentWeatherIconUrl: String,
+    currentWeatherIconDescription: String,
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
     weeklyForecast: List<DailyWeatherUiModel>,
     onLocationClick: () -> Unit = {},
@@ -147,6 +151,8 @@ private fun WeatherContent(
             description = weatherDescription,
             locationName = formattedLocation,
             currentTemp = formattedTemperature,
+            iconUrl = currentWeatherIconUrl,
+            iconDescription = currentWeatherIconDescription,
             onLocationClick = onLocationClick,
         )
 

@@ -64,6 +64,8 @@ class WeatherViewModelTest {
             formattedTemperature = "20°C",
             formattedLocation = "0.1, 1.1",
             weatherDescription = "Sunny",
+            currentWeatherIconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+            currentWeatherIconDescription = "clear sky",
             lastUpdated = "Updated 10:30",
             todaysHourlyForecast = emptyList(),
             weeklyForecast = emptyList(),

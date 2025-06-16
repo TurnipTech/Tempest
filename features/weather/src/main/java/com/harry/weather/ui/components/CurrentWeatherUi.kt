@@ -10,22 +10,29 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 
 @Composable
 fun CurrentWeather(
     description: String,
     locationName: String,
     currentTemp: String,
+    iconUrl: String,
+    iconDescription: String,
     onLocationClick: () -> Unit = {},
 ) {
     Column(
@@ -35,6 +42,17 @@ fun CurrentWeather(
         Location(
             locationName = locationName,
             onLocationClick = onLocationClick,
+        )
+
+        AsyncImage(
+            model =
+                ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(iconUrl)
+                    .crossfade(true)
+                    .build(),
+            contentDescription = iconDescription,
+            modifier = Modifier.size(120.dp),
         )
 
         Text(
@@ -81,5 +99,13 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
 @Preview
 @Composable
 fun CurrentWeatherPreview() {
-    CurrentWeather(description = "broken clouds", locationName = "Bradford", currentTemp = "22°")
+    MaterialTheme {
+        CurrentWeather(
+            description = "broken clouds",
+            locationName = "Bradford",
+            currentTemp = "22°",
+            iconUrl = "https://openweathermap.org/img/wn/04d@2x.png",
+            iconDescription = "broken clouds",
+        )
+    }
 }

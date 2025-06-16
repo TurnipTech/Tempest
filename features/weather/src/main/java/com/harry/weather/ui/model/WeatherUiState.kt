@@ -11,6 +11,8 @@ sealed class WeatherUiState {
         val formattedTemperature: String,
         val formattedLocation: String,
         val weatherDescription: String,
+        val currentWeatherIconUrl: String,
+        val currentWeatherIconDescription: String,
         val lastUpdated: String,
         val todaysHourlyForecast: List<HourlyWeatherUiModel>,
         val weeklyForecast: List<DailyWeatherUiModel>,

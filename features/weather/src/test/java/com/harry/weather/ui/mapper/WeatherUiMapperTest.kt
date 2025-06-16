@@ -25,6 +25,8 @@ class WeatherUiMapperTest {
         assertEquals("22°C", result.formattedTemperature)
         assertEquals("New York", result.formattedLocation)
         assertEquals("Clear sky", result.weatherDescription)
+        assertEquals("https://openweathermap.org/img/wn/01d@2x.png", result.currentWeatherIconUrl)
+        assertEquals("clear sky", result.currentWeatherIconDescription)
         assertTrue(result.lastUpdated.contains("Updated"))
         assertEquals(2, result.todaysHourlyForecast.size)
         assertEquals(3, result.weeklyForecast.size)
@@ -59,6 +61,8 @@ class WeatherUiMapperTest {
 
         assertEquals("N/A", result.formattedTemperature)
         assertEquals("No data available", result.weatherDescription)
+        assertEquals("https://openweathermap.org/img/wn/@2x.png", result.currentWeatherIconUrl)
+        assertEquals("No data available", result.currentWeatherIconDescription)
     }
 
     @Test
@@ -119,6 +123,19 @@ class WeatherUiMapperTest {
         val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
         assertEquals("Clear sky", result.weatherDescription)
+    }
+
+    @Test
+    fun `current weather icon URL is generated correctly for different icon codes`() {
+        val condition = WeatherCondition(200, "Thunderstorm", "thunderstorm with light rain", "11d")
+        val currentWeather = createCurrentWeather(condition = condition)
+        val weatherData = createWeatherData(currentWeather = currentWeather)
+        val units = "metric"
+
+        val result = mapper.mapToSuccessState(weatherData, units, "New York")
+
+        assertEquals("https://openweathermap.org/img/wn/11d@2x.png", result.currentWeatherIconUrl)
+        assertEquals("thunderstorm with light rain", result.currentWeatherIconDescription)
     }
 
     @Test
