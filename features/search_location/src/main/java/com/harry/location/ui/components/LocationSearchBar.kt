@@ -1,6 +1,5 @@
 package com.harry.location.ui.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ColumnScope
@@ -40,7 +39,7 @@ fun LocationSearchBarComponent(
 ) {
     val animatedPadding by animateDpAsState(
         targetValue = if (expanded) 0.dp else 16.dp,
-        label = "searchBarPadding"
+        label = "searchBarPadding",
     )
     SearchBar(
         inputField = {
@@ -86,9 +85,10 @@ fun LocationSearchBarComponent(
         },
         expanded = expanded,
         onExpandedChange = onExpandedChange,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = animatedPadding),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = animatedPadding),
         windowInsets = SearchBarDefaults.windowInsets,
         colors = SearchBarDefaults.colors(),
         content = content,

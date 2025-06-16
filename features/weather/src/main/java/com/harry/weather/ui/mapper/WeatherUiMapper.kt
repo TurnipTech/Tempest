@@ -38,7 +38,13 @@ private const val MAX_DAILY_FORECAST_ITEMS = 7
 
 // Icon URL constants
 private const val ICON_BASE_URL = "https://openweathermap.org/img/wn/"
-private const val ICON_SIZE_SUFFIX = "@2x.png"
+
+enum class IconSize(
+    val suffix: String,
+) {
+    MEDIUM("@2x.png"),
+    LARGE("@4x.png"),
+}
 
 class WeatherUiMapper {
     enum class TemperatureUnit(
@@ -71,7 +77,7 @@ class WeatherUiMapper {
             formattedTemperature = formatTemperature(currentWeather?.temperature, units),
             formattedLocation = locationName,
             weatherDescription = formatWeatherDescription(currentWeather?.condition?.description),
-            currentWeatherIconUrl = createIconUrl(currentWeather?.condition?.iconCode ?: ""),
+            currentWeatherIconUrl = createIconUrl(currentWeather?.condition?.iconCode ?: "", IconSize.LARGE),
             currentWeatherIconDescription = currentWeather?.condition?.description ?: NO_DATA_AVAILABLE,
             lastUpdated = formatLastUpdated(),
             todaysHourlyForecast = mapTodaysHourlyForecast(weatherData.hourlyForecast ?: emptyList()),
@@ -118,7 +124,7 @@ class WeatherUiMapper {
         HourlyWeatherUiModel(
             formattedTime = formatTime(hourlyWeather.dateTime),
             temperature = "${hourlyWeather.temperature.toInt()}°",
-            iconUrl = createIconUrl(hourlyWeather.condition.iconCode),
+            iconUrl = createIconUrl(hourlyWeather.condition.iconCode, IconSize.MEDIUM),
             iconDescription = hourlyWeather.condition.description,
             precipitationProbability = "${hourlyWeather.probabilityOfPrecipitation.toInt()}$PERCENTAGE_SYMBOL",
         )
@@ -129,7 +135,7 @@ class WeatherUiMapper {
         return formatter.format(date)
     }
 
-    private fun createIconUrl(iconCode: String): String = "$ICON_BASE_URL$iconCode$ICON_SIZE_SUFFIX"
+    private fun createIconUrl(iconCode: String, size: IconSize): String = "$ICON_BASE_URL$iconCode${size.suffix}"
 
     private fun mapWeeklyForecast(dailyForecast: List<DailyWeather>, units: String): List<DailyWeatherUiModel> =
         dailyForecast
@@ -143,7 +149,7 @@ class WeatherUiMapper {
             formattedDay = formatDay(dailyWeather.dateTime),
             temperatureHigh = formatTemperature(dailyWeather.temperatureHigh, units),
             temperatureLow = formatTemperature(dailyWeather.temperatureLow, units),
-            iconUrl = createIconUrl(dailyWeather.condition.iconCode),
+            iconUrl = createIconUrl(dailyWeather.condition.iconCode, IconSize.MEDIUM),
             iconDescription = dailyWeather.condition.description,
         )
 
