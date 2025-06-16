@@ -107,52 +107,54 @@ private fun WeatherSuccessScreenDayPreview() {
             formattedTemperature = "22°C",
             currentWeatherIconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
             currentWeatherIconDescription = "clear sky",
-            todaysHourlyForecast = listOf(
-                HourlyWeatherUiModel(
-                    formattedTime = "14:00",
-                    temperature = "22°",
-                    iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
-                    iconDescription = "clear sky",
-                    precipitationProbability = "0%",
+            todaysHourlyForecast =
+                listOf(
+                    HourlyWeatherUiModel(
+                        formattedTime = "14:00",
+                        temperature = "22°",
+                        iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+                        iconDescription = "clear sky",
+                        precipitationProbability = "0%",
+                    ),
+                    HourlyWeatherUiModel(
+                        formattedTime = "15:00",
+                        temperature = "24°",
+                        iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+                        iconDescription = "clear sky",
+                        precipitationProbability = "5%",
+                    ),
+                    HourlyWeatherUiModel(
+                        formattedTime = "16:00",
+                        temperature = "26°",
+                        iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
+                        iconDescription = "few clouds",
+                        precipitationProbability = "10%",
+                    ),
                 ),
-                HourlyWeatherUiModel(
-                    formattedTime = "15:00",
-                    temperature = "24°",
-                    iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
-                    iconDescription = "clear sky",
-                    precipitationProbability = "5%",
+            weeklyForecast =
+                listOf(
+                    DailyWeatherUiModel(
+                        formattedDay = "Mon",
+                        temperatureHigh = "25°C",
+                        temperatureLow = "15°C",
+                        iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
+                        iconDescription = "clear sky",
+                    ),
+                    DailyWeatherUiModel(
+                        formattedDay = "Tue",
+                        temperatureHigh = "23°C",
+                        temperatureLow = "13°C",
+                        iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
+                        iconDescription = "few clouds",
+                    ),
+                    DailyWeatherUiModel(
+                        formattedDay = "Wed",
+                        temperatureHigh = "21°C",
+                        temperatureLow = "11°C",
+                        iconUrl = "https://openweathermap.org/img/wn/03d@2x.png",
+                        iconDescription = "scattered clouds",
+                    ),
                 ),
-                HourlyWeatherUiModel(
-                    formattedTime = "16:00",
-                    temperature = "26°",
-                    iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
-                    iconDescription = "few clouds",
-                    precipitationProbability = "10%",
-                ),
-            ),
-            weeklyForecast = listOf(
-                DailyWeatherUiModel(
-                    formattedDay = "Mon",
-                    temperatureHigh = "25°C",
-                    temperatureLow = "15°C",
-                    iconUrl = "https://openweathermap.org/img/wn/01d@2x.png",
-                    iconDescription = "clear sky",
-                ),
-                DailyWeatherUiModel(
-                    formattedDay = "Tue",
-                    temperatureHigh = "23°C",
-                    temperatureLow = "13°C",
-                    iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
-                    iconDescription = "few clouds",
-                ),
-                DailyWeatherUiModel(
-                    formattedDay = "Wed",
-                    temperatureHigh = "21°C",
-                    temperatureLow = "11°C",
-                    iconUrl = "https://openweathermap.org/img/wn/03d@2x.png",
-                    iconDescription = "scattered clouds",
-                ),
-            ),
             timeOfDay = TimeOfDay.DAY,
             onLocationClick = {},
         )
@@ -169,31 +171,33 @@ private fun WeatherSuccessScreenNightPreview() {
             formattedTemperature = "18°C",
             currentWeatherIconUrl = "https://openweathermap.org/img/wn/01n@2x.png",
             currentWeatherIconDescription = "clear sky",
-            todaysHourlyForecast = listOf(
-                HourlyWeatherUiModel(
-                    formattedTime = "22:00",
-                    temperature = "18°",
-                    iconUrl = "https://openweathermap.org/img/wn/01n@2x.png",
-                    iconDescription = "clear sky",
-                    precipitationProbability = "0%",
+            todaysHourlyForecast =
+                listOf(
+                    HourlyWeatherUiModel(
+                        formattedTime = "22:00",
+                        temperature = "18°",
+                        iconUrl = "https://openweathermap.org/img/wn/01n@2x.png",
+                        iconDescription = "clear sky",
+                        precipitationProbability = "0%",
+                    ),
+                    HourlyWeatherUiModel(
+                        formattedTime = "23:00",
+                        temperature = "16°",
+                        iconUrl = "https://openweathermap.org/img/wn/01n@2x.png",
+                        iconDescription = "clear sky",
+                        precipitationProbability = "0%",
+                    ),
                 ),
-                HourlyWeatherUiModel(
-                    formattedTime = "23:00",
-                    temperature = "16°",
-                    iconUrl = "https://openweathermap.org/img/wn/01n@2x.png",
-                    iconDescription = "clear sky",
-                    precipitationProbability = "0%",
+            weeklyForecast =
+                listOf(
+                    DailyWeatherUiModel(
+                        formattedDay = "Tomorrow",
+                        temperatureHigh = "22°C",
+                        temperatureLow = "12°C",
+                        iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
+                        iconDescription = "few clouds",
+                    ),
                 ),
-            ),
-            weeklyForecast = listOf(
-                DailyWeatherUiModel(
-                    formattedDay = "Tomorrow",
-                    temperatureHigh = "22°C",
-                    temperatureLow = "12°C",
-                    iconUrl = "https://openweathermap.org/img/wn/02d@2x.png",
-                    iconDescription = "few clouds",
-                ),
-            ),
             timeOfDay = TimeOfDay.NIGHT,
             onLocationClick = {},
         )

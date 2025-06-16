@@ -1,8 +1,8 @@
 package com.harry.weather.ui
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -311,7 +311,7 @@ class WeatherScreenRobot(
     }
 
     fun assertRetryButtonIsNotDisplayed() {
-        composeTestRule.onNodeWithText("Retry").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Retry").assertIsNotDisplayed()
     }
 
     fun verifyNavigationToSearchWasCalled() {
