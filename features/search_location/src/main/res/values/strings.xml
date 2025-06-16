@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Search -->
+    <string name="search_placeholder">Search for a location…</string>
+    <string name="search_content_description">Search</string>
+    <string name="clear_content_description">Clear</string>
+
+    <!-- Loading -->
+    <string name="searching_locations">Searching locations…</string>
+
+    <!-- Empty State -->
+    <string name="no_locations_found">No locations found</string>
+
+    <!-- Welcome -->
+    <string name="welcome_title">Find Location</string>
+    <string name="welcome_subtitle">Search for cities worldwide</string>
+
+    <!-- Error -->
+    <string name="error_unable_to_search">Unable to search locations: %1$s</string>
+
+    <!-- Content Descriptions -->
+    <string name="location_icon_description">Location</string>
+</resources>
