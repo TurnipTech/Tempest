@@ -5,7 +5,7 @@
     <string name="unable_to_load_weather">Unable to Load Weather</string>
     
     <!-- Forecast Titles -->
-    <string name="todays_forecast">Today\'s Forecast</string>
+    <string name="twenty_four_hour_forecast">24 Hour Forecast</string>
     <string name="seven_day_forecast">7-Day Forecast</string>
     
     <!-- Temperature Labels -->

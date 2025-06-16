@@ -47,7 +47,7 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
             modifier = Modifier.padding(20.dp),
         ) {
             Text(
-                text = stringResource(R.string.todays_forecast),
+                text = stringResource(R.string.twenty_four_hour_forecast),
                 style =
                     MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,

@@ -80,10 +80,10 @@ class WeatherUiMapperTest {
     }
 
     @Test
-    fun `mapToSuccessState limits hourly forecast to 12 items`() {
+    fun `mapToSuccessState limits hourly forecast to 24 items`() {
         val currentTime = System.currentTimeMillis() / 1000
         val hourlyForecast =
-            (1..15).map { hour ->
+            (1..30).map { hour ->
                 createHourlyWeather(currentTime + (hour * 3600))
             }
         val weatherData = createWeatherData(hourlyForecast = hourlyForecast)
@@ -91,7 +91,7 @@ class WeatherUiMapperTest {
 
         val result = mapper.mapToSuccessState(weatherData, units, "New York")
 
-        assertEquals(12, result.todaysHourlyForecast.size)
+        assertEquals(24, result.todaysHourlyForecast.size)
     }
 
     @Test

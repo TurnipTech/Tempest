@@ -33,7 +33,7 @@ private const val SECONDS_IN_DAY = 24 * 60 * 60
 private const val MILLISECONDS_CONVERSION_FACTOR = 1000L
 
 // Forecast constants
-private const val MAX_HOURLY_FORECAST_ITEMS = 12
+private const val MAX_HOURLY_FORECAST_ITEMS = 24
 private const val MAX_DAILY_FORECAST_ITEMS = 7
 
 // Icon URL constants
