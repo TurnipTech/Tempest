@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.location.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +44,7 @@ fun LocationSearchBarComponent(
                 onExpandedChange = onExpandedChange,
                 placeholder = {
                     Text(
-                        "Search for a location...",
+                        stringResource(R.string.search_placeholder),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -50,7 +52,7 @@ fun LocationSearchBarComponent(
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,
-                        contentDescription = "Search",
+                        contentDescription = stringResource(R.string.search_content_description),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
@@ -65,7 +67,7 @@ fun LocationSearchBarComponent(
                             ) {
                                 Icon(
                                     Icons.Default.Clear,
-                                    contentDescription = "Clear",
+                                    contentDescription = stringResource(R.string.clear_content_description),
                                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
