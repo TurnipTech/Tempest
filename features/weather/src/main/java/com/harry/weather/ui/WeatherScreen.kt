@@ -16,11 +16,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.harry.weather.R
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.components.CurrentWeather
 import com.harry.weather.ui.components.DynamicWeatherBackground
@@ -50,7 +52,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Text(
-                            text = "Loading Weather",
+                            text = stringResource(R.string.loading_weather),
                             color = Color.White.copy(alpha = 0.9f),
                             style =
                                 MaterialTheme.typography.titleMedium.copy(
@@ -79,7 +81,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                         modifier = Modifier.padding(32.dp),
                     ) {
                         Text(
-                            text = "Unable to Load Weather",
+                            text = stringResource(R.string.unable_to_load_weather),
                             color = Color.White.copy(alpha = 0.9f),
                             style =
                                 MaterialTheme.typography.titleMedium.copy(

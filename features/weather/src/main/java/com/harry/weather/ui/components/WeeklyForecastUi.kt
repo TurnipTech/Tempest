@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.harry.weather.R
 import com.harry.weather.ui.model.DailyWeatherUiModel
 
 @Composable
@@ -39,7 +41,7 @@ fun WeeklyForecast(weeklyForecast: List<DailyWeatherUiModel>, modifier: Modifier
             modifier = Modifier.padding(20.dp),
         ) {
             Text(
-                text = "7-Day Forecast",
+                text = stringResource(R.string.seven_day_forecast),
                 style =
                     MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold,
@@ -85,29 +87,57 @@ fun DailyWeatherItem(dailyWeather: DailyWeatherUiModel, modifier: Modifier = Mod
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f),
         ) {
-            Text(
-                text = dailyWeather.temperatureHigh,
-                style =
-                    MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 16.sp,
-                    ),
-                color = Color.White,
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.temperature_high_icon),
+                    style =
+                        MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                        ),
+                    color = Color.White.copy(alpha = 0.8f),
+                )
+                Text(
+                    text = dailyWeather.temperatureHigh,
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp,
+                        ),
+                    color = Color.White,
+                )
+            }
 
-            Text(
-                text = dailyWeather.temperatureLow,
-                style =
-                    MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                    ),
-                color = Color.White.copy(alpha = 0.7f),
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.temperature_low_icon),
+                    style =
+                        MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp,
+                        ),
+                    color = Color.White.copy(alpha = 0.6f),
+                )
+                Text(
+                    text = dailyWeather.temperatureLow,
+                    style =
+                        MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp,
+                        ),
+                    color = Color.White.copy(alpha = 0.7f),
+                )
+            }
         }
     }
 }
