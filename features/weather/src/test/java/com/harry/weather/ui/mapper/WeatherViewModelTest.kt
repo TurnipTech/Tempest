@@ -3,6 +3,7 @@
 package com.harry.weather.ui.mapper
 
 import com.harry.location.domain.model.Location
+import com.harry.location.domain.usecase.GetStoredLocationUseCase
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
@@ -25,6 +26,7 @@ import org.junit.Test
 class WeatherViewModelTest {
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase = mockk(relaxed = true)
     private val weatherUiMapper: WeatherUiMapper = mockk(relaxed = true)
+    private val getStoredLocationUseCase: GetStoredLocationUseCase = mockk(relaxed = true)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -82,6 +84,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceTimeBy(100)
 
@@ -106,6 +109,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 
@@ -129,6 +133,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 
@@ -148,6 +153,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 
@@ -166,6 +172,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 
@@ -191,6 +198,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 
@@ -210,6 +218,7 @@ class WeatherViewModelTest {
                     location = testLocation,
                     getCurrentWeatherUseCase = getCurrentWeatherUseCase,
                     weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
                 )
             advanceUntilIdle()
 

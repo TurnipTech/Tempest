@@ -3,6 +3,7 @@ package com.harry.location.di
 import com.harry.location.data.mapper.LocationMapper
 import com.harry.location.data.repository.LocationRepositoryImpl
 import com.harry.location.domain.repository.LocationRepository
+import com.harry.location.domain.usecase.GetStoredLocationUseCase
 import org.koin.dsl.module
 
 fun locationModule(apiKey: String) =
@@ -17,4 +18,6 @@ fun locationModule(apiKey: String) =
         }
 
         single { LocationMapper }
+
+        factory { GetStoredLocationUseCase(locationRepository = get()) }
     }

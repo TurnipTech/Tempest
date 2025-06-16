@@ -2,6 +2,7 @@ package com.harry.weather.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.harry.location.domain.usecase.GetStoredLocationUseCase
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
 import com.harry.weather.ui.mapper.WeatherUiMapper
 import com.harry.weather.ui.model.WeatherUiState
@@ -11,9 +12,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(
-    private val location: com.harry.location.domain.model.Location,
+    private val location: com.harry.location.domain.model.Location?,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
     private val weatherUiMapper: WeatherUiMapper,
+    private val getStoredLocationUseCase: GetStoredLocationUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
@@ -26,9 +28,20 @@ class WeatherViewModel(
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
 
+            val currentLocation = location ?: getStoredLocationUseCase()
+
+            if (currentLocation == null) {
+                _uiState.value =
+                    WeatherUiState.Error(
+                        message = "No location available",
+                        canRetry = false,
+                    )
+                return@launch
+            }
+
             getCurrentWeatherUseCase(
-                latitude = location.latitude,
-                longitude = location.longitude,
+                latitude = currentLocation.latitude,
+                longitude = currentLocation.longitude,
                 units = units,
                 language = language,
             ).fold(
@@ -37,7 +50,7 @@ class WeatherViewModel(
                         weatherUiMapper.mapToSuccessState(
                             weatherData = weatherData,
                             units = units,
-                            locationName = location.name,
+                            locationName = currentLocation.name,
                         )
                 },
                 onFailure = { error ->

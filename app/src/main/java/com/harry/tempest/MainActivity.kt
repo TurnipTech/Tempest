@@ -53,14 +53,7 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
         else -> {
             val startDestination =
                 when (val destination = startDestinationType) {
-                    is StartDestination.Weather ->
-                        WeatherRoute(
-                            name = destination.location.name,
-                            latitude = destination.location.latitude,
-                            longitude = destination.location.longitude,
-                            country = destination.location.country,
-                            state = destination.location.state,
-                        )
+                    is StartDestination.Weather -> weatherDestination.route
                     is StartDestination.SearchLocation -> searchLocationDestination.route
                     null -> searchLocationDestination.route // This case won't be reached due to outer when
                 }

@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.harry.location.domain.model.Location
 import com.harry.navigation.NavigationDestination
+import com.harry.navigation.composableDestination
 import com.harry.weather.ui.WeatherScreen
 import com.harry.weather.ui.WeatherViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -21,7 +22,7 @@ class WeatherNavigationDestination : NavigationDestination {
     fun NavGraphBuilder.graph(location: Location?, onNavigateToSearch: () -> Unit = {}) {
         composable<WeatherRoute> {
             val route = it.toRoute<WeatherRoute>()
-            val location =
+            val routeLocation =
                 Location(
                     name = route.name,
                     latitude = route.latitude,
@@ -29,6 +30,15 @@ class WeatherNavigationDestination : NavigationDestination {
                     country = route.country,
                     state = route.state,
                 )
+            val viewModel: WeatherViewModel = koinViewModel { parametersOf(routeLocation) }
+            WeatherScreen(
+                viewModel = viewModel,
+                onNavigateToSearch = onNavigateToSearch,
+            )
+        }
+
+        // Add a simple route for initial navigation without parameters
+        composableDestination(this@WeatherNavigationDestination.route) {
             val viewModel: WeatherViewModel = koinViewModel { parametersOf(location) }
             WeatherScreen(
                 viewModel = viewModel,

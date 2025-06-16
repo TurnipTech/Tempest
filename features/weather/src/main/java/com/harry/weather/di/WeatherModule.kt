@@ -26,11 +26,12 @@ fun weatherModule(apiKey: String) =
 
         factory { GetCurrentWeatherUseCase(repository = get()) }
 
-        viewModel { (location: Location) ->
+        viewModel { (location: Location?) ->
             WeatherViewModel(
                 location = location,
                 getCurrentWeatherUseCase = get(),
                 weatherUiMapper = get(),
+                getStoredLocationUseCase = get(),
             )
         }
     }
