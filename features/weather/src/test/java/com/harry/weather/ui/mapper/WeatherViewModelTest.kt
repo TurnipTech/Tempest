@@ -316,4 +316,105 @@ class WeatherViewModelTest {
                 getStoredLocationUseCase.invoke()
             }
         }
+
+    @Test
+    fun `retry should call getCurrentWeatherUseCase again when invoked`() =
+        runTest {
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.success(testWeatherData)
+            coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
+
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            // Call retry
+            viewModel.retry()
+            advanceUntilIdle()
+
+            // Should have been called twice (once during init, once during retry)
+            coVerify(exactly = 2) {
+                getCurrentWeatherUseCase.invoke(
+                    latitude = testLocation.latitude,
+                    longitude = testLocation.longitude,
+                    units = "metric",
+                    language = "en",
+                )
+            }
+        }
+
+    @Test
+    fun `retry should transition from Error to Loading then Success when successful`() =
+        runTest {
+            val errorMessage = "Network error"
+
+            // First call fails, second call succeeds
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returnsMany
+                listOf(
+                    Result.failure(Exception(errorMessage)),
+                    Result.success(testWeatherData),
+                )
+            coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
+
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            // Should be in error state after initial load
+            assertEquals(
+                WeatherUiState.Error(message = errorMessage, canRetry = true),
+                viewModel.uiState.value,
+            )
+
+            // Call retry and verify final state
+            viewModel.retry()
+            advanceUntilIdle()
+
+            // Should now be in success state after retry
+            assertEquals(testSuccessState, viewModel.uiState.value)
+        }
+
+    @Test
+    fun `retry should transition from Error to Loading then Error again when failed`() =
+        runTest {
+            val errorMessage = "Network error"
+
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.failure(Exception(errorMessage))
+
+            val viewModel =
+                WeatherViewModel(
+                    location = testLocation,
+                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+                    weatherUiMapper = weatherUiMapper,
+                    getStoredLocationUseCase = getStoredLocationUseCase,
+                )
+            advanceUntilIdle()
+
+            // Should be in error state after initial load
+            assertEquals(
+                WeatherUiState.Error(message = errorMessage, canRetry = true),
+                viewModel.uiState.value,
+            )
+
+            // Call retry and verify final state
+            viewModel.retry()
+            advanceUntilIdle()
+
+            // Should be back in error state after retry fails
+            assertEquals(
+                WeatherUiState.Error(message = errorMessage, canRetry = true),
+                viewModel.uiState.value,
+            )
+        }
 }

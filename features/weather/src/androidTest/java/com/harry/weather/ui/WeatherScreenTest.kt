@@ -1,6 +1,7 @@
 package com.harry.weather.ui
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -105,6 +106,41 @@ class WeatherScreenTest {
             assertContentIsScrollable()
         }
     }
+
+    @Test
+    fun weatherScreen_errorStateWithRetry_displaysRetryButton() {
+        val errorMessage = "Network error occurred"
+
+        WeatherScreenRobot(composeTestRule).apply {
+            setErrorStateWithRetry(errorMessage)
+            assertErrorTextIsDisplayed()
+            assertErrorMessageIsDisplayed(errorMessage)
+            assertRetryButtonIsDisplayed()
+        }
+    }
+
+    @Test
+    fun weatherScreen_errorStateWithoutRetry_doesNotDisplayRetryButton() {
+        val errorMessage = "No location available"
+
+        WeatherScreenRobot(composeTestRule).apply {
+            setErrorStateWithoutRetry(errorMessage)
+            assertErrorTextIsDisplayed()
+            assertErrorMessageIsDisplayed(errorMessage)
+            assertRetryButtonIsNotDisplayed()
+        }
+    }
+
+    @Test
+    fun weatherScreen_retryButtonClick_triggersRetryCallback() {
+        val errorMessage = "Network error occurred"
+
+        WeatherScreenRobot(composeTestRule).apply {
+            setErrorStateWithRetry(errorMessage)
+            clickRetryButton()
+            verifyRetryWasCalled()
+        }
+    }
 }
 
 class WeatherScreenRobot(
@@ -167,15 +203,14 @@ class WeatherScreenRobot(
         )
 
     private val onNavigateToSearch: () -> Unit = mockk(relaxed = true)
+    private val mockViewModel: WeatherViewModel = mockk(relaxed = true)
 
     private fun setupScreen(state: WeatherUiState): WeatherScreenRobot {
+        every { mockViewModel.uiState } returns MutableStateFlow(state)
         composeTestRule.setContent {
             MaterialTheme {
                 WeatherScreen(
-                    viewModel =
-                        mockk {
-                            every { uiState } returns MutableStateFlow(state)
-                        },
+                    viewModel = mockViewModel,
                     onNavigateToSearch = onNavigateToSearch,
                 )
             }
@@ -186,6 +221,12 @@ class WeatherScreenRobot(
     fun setLoadingState(): WeatherScreenRobot = setupScreen(WeatherUiState.Loading)
 
     fun setErrorState(message: String): WeatherScreenRobot = setupScreen(WeatherUiState.Error(message = message))
+
+    fun setErrorStateWithRetry(message: String): WeatherScreenRobot =
+        setupScreen(WeatherUiState.Error(message = message, canRetry = true))
+
+    fun setErrorStateWithoutRetry(message: String): WeatherScreenRobot =
+        setupScreen(WeatherUiState.Error(message = message, canRetry = false))
 
     fun setSuccessState(): WeatherScreenRobot = setupScreen(createMockSuccessState())
 
@@ -207,6 +248,10 @@ class WeatherScreenRobot(
 
     fun clickLocation() {
         composeTestRule.onNodeWithText("New York").performClick()
+    }
+
+    fun clickRetryButton() {
+        composeTestRule.onNodeWithText("Retry").performClick()
     }
 
     fun scrollToTodaysForecast() {
@@ -260,7 +305,19 @@ class WeatherScreenRobot(
         composeTestRule.onNodeWithText("Mon").performScrollTo().assertIsDisplayed()
     }
 
+    fun assertRetryButtonIsDisplayed() {
+        composeTestRule.onNodeWithText("Retry").assertIsDisplayed()
+    }
+
+    fun assertRetryButtonIsNotDisplayed() {
+        composeTestRule.onNodeWithText("Retry").assertDoesNotExist()
+    }
+
     fun verifyNavigationToSearchWasCalled() {
         verify { onNavigateToSearch() }
+    }
+
+    fun verifyRetryWasCalled() {
+        verify { mockViewModel.retry() }
     }
 }
