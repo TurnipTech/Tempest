@@ -9,7 +9,7 @@ class GetCurrentWeatherUseCase(
     suspend operator fun invoke(
         latitude: Double,
         longitude: Double,
-        units: String = "metric", //todo - add to consts
+        units: String = "metric", // todo - add to consts
         language: String = "en",
     ): Result<WeatherData> =
         repository.getCurrentWeatherAndForecasts(
