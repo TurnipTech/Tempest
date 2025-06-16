@@ -13,6 +13,7 @@ sealed class WeatherUiState {
         val weatherDescription: String,
         val lastUpdated: String,
         val todaysHourlyForecast: List<HourlyWeatherUiModel>,
+        val weeklyForecast: List<DailyWeatherUiModel>,
         val timeOfDay: TimeOfDay,
     ) : WeatherUiState()
 

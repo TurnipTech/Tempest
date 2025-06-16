@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -14,15 +16,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.harry.weather.R
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.components.CurrentWeather
 import com.harry.weather.ui.components.DynamicWeatherBackground
 import com.harry.weather.ui.components.TodaysForecast
+import com.harry.weather.ui.components.WeeklyForecast
+import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import org.koin.androidx.compose.koinViewModel
@@ -46,7 +52,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         Text(
-                            text = "Loading Weather",
+                            text = stringResource(R.string.loading_weather),
                             color = Color.White.copy(alpha = 0.9f),
                             style =
                                 MaterialTheme.typography.titleMedium.copy(
@@ -75,7 +81,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                         modifier = Modifier.padding(32.dp),
                     ) {
                         Text(
-                            text = "Unable to Load Weather",
+                            text = stringResource(R.string.unable_to_load_weather),
                             color = Color.White.copy(alpha = 0.9f),
                             style =
                                 MaterialTheme.typography.titleMedium.copy(
@@ -110,6 +116,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                     formattedLocation = currentState.formattedLocation,
                     formattedTemperature = currentState.formattedTemperature,
                     todaysHourlyForecast = currentState.todaysHourlyForecast,
+                    weeklyForecast = currentState.weeklyForecast,
                     onLocationClick = onNavigateToSearch,
                 )
             }
@@ -123,12 +130,14 @@ private fun WeatherContent(
     formattedLocation: String,
     formattedTemperature: String,
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
+    weeklyForecast: List<DailyWeatherUiModel>,
     onLocationClick: () -> Unit = {},
 ) {
     Column(
         modifier =
             Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -148,6 +157,15 @@ private fun WeatherContent(
                 hourlyForecast = todaysHourlyForecast,
             )
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        if (weeklyForecast.isNotEmpty()) {
+            WeeklyForecast(
+                weeklyForecast = weeklyForecast,
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
     }
 }

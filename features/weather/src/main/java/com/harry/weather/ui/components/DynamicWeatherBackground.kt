@@ -74,7 +74,7 @@ private fun createDayBrush(): Brush =
                 0.3f to Color(0xFF1976d2), // Rich blue
                 0.6f to Color(0xFF42a5f5), // Bright sky blue
                 0.8f to Color(0xFF81d4fa), // Light blue
-                1.0f to Color(0xFFe1f5fe), // Pale blue horizon
+                1.0f to Color(0xFF90caf9), // Medium blue horizon
             ),
     )
 
@@ -124,7 +124,7 @@ private fun createDayOverlay(): Brush =
     Brush.radialGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0x1ae3f2fd), // Very soft white center
+                0.0f to Color(0x10bbdefb), // Subtle blue center
                 0.8f to Color(0x0d81d4fa), // Subtle blue mid
                 1.0f to Color(0x00000000), // Transparent edge
             ),

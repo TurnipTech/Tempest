@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Weather Screen -->
+    <string name="loading_weather">Loading Weather</string>
+    <string name="unable_to_load_weather">Unable to Load Weather</string>
+    
+    <!-- Forecast Titles -->
+    <string name="twenty_four_hour_forecast">24 Hour Forecast</string>
+    <string name="seven_day_forecast">7-Day Forecast</string>
+    
+    <!-- Temperature Labels -->
+    <string name="temperature_high_icon">↑</string>
+    <string name="temperature_low_icon">↓</string>
+    <string name="temperature_high_description">High temperature</string>
+    <string name="temperature_low_description">Low temperature</string>
+</resources>
