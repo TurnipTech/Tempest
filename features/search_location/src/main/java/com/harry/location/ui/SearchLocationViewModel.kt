@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.harry.location.R
 import com.harry.location.domain.usecase.SearchLocationsUseCase
 import com.harry.location.domain.usecase.SetLocationUseCase
-import com.harry.location.ui.mapper.ResourceProvider
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
+import com.harry.utils.ResourceProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

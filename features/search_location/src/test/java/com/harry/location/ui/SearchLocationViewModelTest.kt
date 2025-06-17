@@ -7,10 +7,10 @@ import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.LocationSearchResult
 import com.harry.location.domain.usecase.SearchLocationsUseCase
 import com.harry.location.domain.usecase.SetLocationUseCase
-import com.harry.location.ui.mapper.ResourceProvider
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
+import com.harry.utils.ResourceProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

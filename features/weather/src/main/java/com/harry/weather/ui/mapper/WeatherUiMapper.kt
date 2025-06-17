@@ -1,5 +1,6 @@
 package com.harry.weather.ui.mapper
 
+import com.harry.utils.ResourceProvider
 import com.harry.weather.R
 import com.harry.weather.domain.WeatherConstants
 import com.harry.weather.domain.model.DailyWeather
@@ -27,7 +28,7 @@ private const val PERCENTAGE_SYMBOL = "%"
 
 // Time and date constants
 private const val TIME_FORMAT_PATTERN = "HH:mm"
-private const val DAY_FORMAT_PATTERN = "EEE"
+private const val DAY_FORMAT_PATTERN = "EEE" // todo - lets use this formatting for days of the week
 private const val SECONDS_IN_DAY = 24 * 60 * 60
 private const val MILLISECONDS_CONVERSION_FACTOR = 1000L
 

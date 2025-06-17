@@ -15,7 +15,7 @@ import org.junit.Test
 
 class WeatherUiMapperTest {
     private val mockResourceProvider =
-        mockk<ResourceProvider> {
+        mockk<com.harry.utils.ResourceProvider> {
             every { getString(R.string.no_data_available) } returns "No data available"
             every { getString(R.string.updated_prefix) } returns "Updated "
             every { getString(R.string.temperature_not_available) } returns "N/A"
