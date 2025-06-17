@@ -34,12 +34,7 @@ class WeatherViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    private val testLocationData =
-        com.harry.weather.domain.model.Location(
-            latitude = 0.10,
-            longitude = 1.10,
-            timezone = "Europe/London",
-        )
+    private val timezone = "Europe/London"
 
     private val testLocation =
         Location(
@@ -51,11 +46,10 @@ class WeatherViewModelTest {
 
     private val testWeatherData =
         WeatherData(
-            location = testLocationData,
+            timezone = timezone,
             currentWeather = mockk(),
             hourlyForecast = emptyList(),
             dailyForecast = emptyList(),
-            alerts = emptyList(),
         )
 
     private val testSuccessState =

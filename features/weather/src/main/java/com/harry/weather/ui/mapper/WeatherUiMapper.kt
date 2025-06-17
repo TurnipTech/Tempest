@@ -71,7 +71,7 @@ class WeatherUiMapper(
                 currentTime = currentTime,
                 sunrise = currentWeather?.sunrise?.let { Instant.fromEpochSeconds(it) },
                 sunset = currentWeather?.sunset?.let { Instant.fromEpochSeconds(it) },
-                timeZone = TimeZone.of(weatherData.location.timezone),
+                timeZone = TimeZone.of(weatherData.timezone),
             )
 
         return WeatherUiState.Success(
@@ -86,13 +86,13 @@ class WeatherUiMapper(
             todaysHourlyForecast =
                 mapTodaysHourlyForecast(
                     weatherData.hourlyForecast ?: emptyList(),
-                    weatherData.location.timezone,
+                    weatherData.timezone,
                 ),
             weeklyForecast =
                 mapWeeklyForecast(
                     weatherData.dailyForecast ?: emptyList(),
                     units,
-                    weatherData.location.timezone,
+                    weatherData.timezone,
                 ),
             timeOfDay = timeOfDay,
         )

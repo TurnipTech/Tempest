@@ -4,7 +4,7 @@ package com.harry.weather.domain.model
 // They are only referenced in the data layer (repositories, mappers, DTOs, tests).
 // Consider removing if these features are not planned for future implementation.
 data class HistoricalWeather(
-    val location: Location,
+    val timezone: String,
     val data: List<HistoricalWeatherData>,
 )
 
@@ -20,7 +20,7 @@ data class HistoricalWeatherData(
 )
 
 data class DailySummary(
-    val location: Location,
+    val timezone: String,
     val date: String,
     val temperatureRange: TemperatureRange,
     val humidity: Int,
@@ -40,7 +40,7 @@ data class TemperatureRange(
 )
 
 data class WeatherOverview(
-    val location: Location,
+    val timezone: String,
     val date: String,
     val overview: String,
 )
