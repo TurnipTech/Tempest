@@ -13,32 +13,25 @@ fun SearchContent(
     isExpanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    if (!isExpanded) return
+
     when (uiState) {
         is SearchLocationUiState.Loading -> {
-            if (isExpanded) {
-                SearchLoadingIndicator(modifier = modifier)
-            }
+            SearchLoadingIndicator(modifier = modifier)
         }
         is SearchLocationUiState.Success -> {
-            if (isExpanded) {
-                if (uiState.locations.isNotEmpty()) {
-                    SearchResultsList(
-                        searchResults = uiState.locations,
-                        onLocationSelected = onLocationSelected,
-                        modifier = modifier,
-                    )
-                } else if (query.isNotEmpty()) {
-                    SearchEmptyState(modifier = modifier)
-                }
-            }
-        }
-        is SearchLocationUiState.Error -> {
-            if (isExpanded && query.isNotEmpty()) {
+            if (uiState.locations.isNotEmpty()) {
+                SearchResultsList(
+                    searchResults = uiState.locations,
+                    onLocationSelected = onLocationSelected,
+                    modifier = modifier,
+                )
+            } else if (query.isNotEmpty()) {
                 SearchEmptyState(modifier = modifier)
             }
         }
         else -> {
-            if (isExpanded && query.isNotEmpty()) {
+            if (query.isNotEmpty()) {
                 SearchEmptyState(modifier = modifier)
             }
         }
