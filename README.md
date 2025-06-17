@@ -2,6 +2,14 @@
 
 A modern Android weather forecast application built with Kotlin and Jetpack Compose.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/images/tempest-app-screenshot.png" alt="Tempest Weather App Screenshot" width="300"/>
+</p>
+
+The app provides a clean, modern interface displaying current weather conditions and forecasts with beautiful visual design and smooth animations.
+
 ## Overview
 
 Tempest is a weather forecast app designed to showcase clean architecture principles and modern Android development practices. The app provides current weather conditions and weekly forecasts for your current location or any selected city.
