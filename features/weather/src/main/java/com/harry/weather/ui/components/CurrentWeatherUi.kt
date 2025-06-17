@@ -17,14 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.harry.design.TempestTheme
 
 @Composable
 fun CurrentWeather(
@@ -57,16 +56,13 @@ fun CurrentWeather(
 
         Text(
             text = currentTemp,
-            fontSize = 96.sp,
-            fontWeight = FontWeight.ExtraLight,
+            style = MaterialTheme.typography.displayLarge,
             color = Color.White,
-            lineHeight = 96.sp,
         )
 
         Text(
             text = description,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
+            style = MaterialTheme.typography.headlineMedium,
             color = Color.White.copy(alpha = 0.85f),
         )
     }
@@ -88,10 +84,11 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = locationName,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
+            style =
+                MaterialTheme.typography.titleMedium.copy(
+                    textDecoration = TextDecoration.Underline,
+                ),
             color = Color.White.copy(alpha = 0.8f),
-            textDecoration = TextDecoration.Underline,
         )
     }
 }
@@ -99,7 +96,7 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
 @Preview
 @Composable
 fun CurrentWeatherPreview() {
-    MaterialTheme {
+    TempestTheme {
         CurrentWeather(
             description = "broken clouds",
             locationName = "Bradford",

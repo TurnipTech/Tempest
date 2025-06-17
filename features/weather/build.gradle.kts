@@ -36,6 +36,7 @@ android {
 
 dependencies {
 
+    implementation(project(":core:design_system"))
     implementation(project(":core:navigation"))
     implementation(project(":core:network"))
     implementation(project(":core:location"))

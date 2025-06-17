@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.harry.design.TempestTheme
 import com.harry.weather.R
 import com.harry.weather.domain.model.TimeOfDay
 
@@ -91,7 +92,7 @@ fun WeatherErrorScreen(
 @Preview(name = "Weather Error Screen - With Retry")
 @Composable
 private fun WeatherErrorScreenWithRetryPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherErrorScreen(
             message = "Network error occurred. Please check your internet connection.",
             canRetry = true,
@@ -103,7 +104,7 @@ private fun WeatherErrorScreenWithRetryPreview() {
 @Preview(name = "Weather Error Screen - No Retry")
 @Composable
 private fun WeatherErrorScreenNoRetryPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherErrorScreen(
             message = "No location available. Please enable location services.",
             canRetry = false,
@@ -115,7 +116,7 @@ private fun WeatherErrorScreenNoRetryPreview() {
 @Preview(name = "Weather Error Screen - Short Message")
 @Composable
 private fun WeatherErrorScreenShortMessagePreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherErrorScreen(
             message = "Failed to load weather data",
             canRetry = true,

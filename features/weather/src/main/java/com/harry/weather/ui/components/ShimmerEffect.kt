@@ -20,7 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,6 +33,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.TempestTheme
 
 @Composable
 fun shimmerBrush(showShimmer: Boolean = true): Brush =
@@ -176,7 +176,7 @@ private fun ForecastSkeleton() {
 @Preview
 @Composable
 private fun WeatherLoadingSkeletonPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherLoadingSkeleton()
     }
 }

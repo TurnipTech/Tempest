@@ -60,6 +60,7 @@ android {
 dependencies {
     ktlintRuleset(libs.ktlint.compose)
 
+    implementation(project(":core:design_system"))
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
     implementation(project(":core:location"))

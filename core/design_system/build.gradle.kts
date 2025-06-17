@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.harry.location"
+    namespace = "com.harry.design_system"
     compileSdk = 35
 
     defaultConfig {
@@ -31,38 +31,23 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
 
-    implementation(project(":core:design_system"))
-    implementation(project(":core:navigation"))
-    implementation(project(":core:location"))
-    implementation(project(":core:utils"))
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.coil.compose)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
 
     testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.mockk.android) {
-        exclude(group = "org.junit.jupiter")
-    }
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.androidx.ui.tooling)
 }
