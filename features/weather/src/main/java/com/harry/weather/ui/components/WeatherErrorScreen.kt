@@ -13,13 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.harry.design.OverlayColors
 import com.harry.design.TempestTheme
 import com.harry.weather.R
 import com.harry.weather.domain.model.TimeOfDay
@@ -46,7 +46,7 @@ fun WeatherErrorScreen(
             ) {
                 Text(
                     text = stringResource(R.string.unable_to_load_weather),
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = OverlayColors.contentPrimary,
                     style =
                         MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold,
@@ -55,7 +55,7 @@ fun WeatherErrorScreen(
                 )
                 Text(
                     text = message,
-                    color = Color.White.copy(alpha = 0.7f),
+                    color = OverlayColors.contentTertiary,
                     style =
                         MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Medium,

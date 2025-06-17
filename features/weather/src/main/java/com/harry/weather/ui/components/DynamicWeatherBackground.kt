@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import com.harry.design.WeatherGradients
 import com.harry.weather.domain.model.TimeOfDay
 
 @Composable
@@ -45,11 +45,11 @@ private fun createDawnBrush(): Brush =
     Brush.verticalGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0xFF1a1a2e), // Dark pre-dawn sky
-                0.3f to Color(0xFF16213e), // Deep blue
-                0.6f to Color(0xFFffa726), // Warm orange horizon
-                0.8f to Color(0xFFffcc80), // Golden light
-                1.0f to Color(0xFFfff3e0), // Soft cream base
+                0.0f to WeatherGradients.Dawn.skyDark,
+                0.3f to WeatherGradients.Dawn.skyDeep,
+                0.6f to WeatherGradients.Dawn.horizonWarm,
+                0.8f to WeatherGradients.Dawn.lightGolden,
+                1.0f to WeatherGradients.Dawn.baseCream,
             ),
     )
 
@@ -57,12 +57,12 @@ private fun createDuskBrush(): Brush =
     Brush.verticalGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0xFF0d1421), // Dark evening sky
-                0.2f to Color(0xFF1a1a2e), // Deep blue-purple
-                0.5f to Color(0xFF3d2459), // Purple twilight
-                0.7f to Color(0xFFff7043), // Deep orange horizon
-                0.85f to Color(0xFFffab40), // Golden sunset
-                1.0f to Color(0xFFfff8e1), // Warm cream base
+                0.0f to WeatherGradients.Dusk.skyEvening,
+                0.2f to WeatherGradients.Dusk.skyBluePurple,
+                0.5f to WeatherGradients.Dusk.skyTwilight,
+                0.7f to WeatherGradients.Dusk.horizonDeep,
+                0.85f to WeatherGradients.Dusk.sunsetGolden,
+                1.0f to WeatherGradients.Dusk.baseWarm,
             ),
     )
 
@@ -70,11 +70,11 @@ private fun createDayBrush(): Brush =
     Brush.verticalGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0xFF0d47a1), // Deep sky blue
-                0.3f to Color(0xFF1976d2), // Rich blue
-                0.6f to Color(0xFF42a5f5), // Bright sky blue
-                0.8f to Color(0xFF81d4fa), // Light blue
-                1.0f to Color(0xFF90caf9), // Medium blue horizon
+                0.0f to WeatherGradients.Day.skyDeep,
+                0.3f to WeatherGradients.Day.skyRich,
+                0.6f to WeatherGradients.Day.skyBright,
+                0.8f to WeatherGradients.Day.skyLight,
+                1.0f to WeatherGradients.Day.horizonMedium,
             ),
     )
 
@@ -82,11 +82,11 @@ private fun createNightBrush(): Brush =
     Brush.verticalGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0xFF0a0a0f), // Deep space black
-                0.2f to Color(0xFF0d1421), // Dark night blue
-                0.5f to Color(0xFF1a1a2e), // Rich navy
-                0.8f to Color(0xFF16213e), // Lighter navy
-                1.0f to Color(0xFF263238), // Subtle blue-grey base
+                0.0f to WeatherGradients.Night.spaceBlack,
+                0.2f to WeatherGradients.Night.skyDark,
+                0.5f to WeatherGradients.Night.navyRich,
+                0.8f to WeatherGradients.Night.navyLight,
+                1.0f to WeatherGradients.Night.baseGrey,
             ),
     )
 
@@ -102,9 +102,9 @@ private fun createDawnOverlay(): Brush =
     Brush.radialGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0x33ffcc80), // Soft golden center
-                0.7f to Color(0x1affa726), // Warm orange mid
-                1.0f to Color(0x00000000), // Transparent edge
+                0.0f to WeatherGradients.Dawn.overlayGolden,
+                0.7f to WeatherGradients.Dawn.overlayOrange,
+                1.0f to WeatherGradients.Dawn.overlayTransparent,
             ),
         radius = 800f,
     )
@@ -113,9 +113,9 @@ private fun createDuskOverlay(): Brush =
     Brush.radialGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0x33ff8a65), // Soft coral center
-                0.6f to Color(0x1aff7043), // Orange mid
-                1.0f to Color(0x00000000), // Transparent edge
+                0.0f to WeatherGradients.Dusk.overlayCoral,
+                0.6f to WeatherGradients.Dusk.overlayOrange,
+                1.0f to WeatherGradients.Dusk.overlayTransparent,
             ),
         radius = 900f,
     )
@@ -124,9 +124,9 @@ private fun createDayOverlay(): Brush =
     Brush.radialGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0x10bbdefb), // Subtle blue center
-                0.8f to Color(0x0d81d4fa), // Subtle blue mid
-                1.0f to Color(0x00000000), // Transparent edge
+                0.0f to WeatherGradients.Day.overlayBlue,
+                0.8f to WeatherGradients.Day.overlayBlueMid,
+                1.0f to WeatherGradients.Day.overlayTransparent,
             ),
         radius = 1000f,
     )
@@ -135,9 +135,9 @@ private fun createNightOverlay(): Brush =
     Brush.radialGradient(
         colorStops =
             arrayOf(
-                0.0f to Color(0x1a3f51b5), // Subtle indigo center
-                0.7f to Color(0x0d1a1a2e), // Dark blue mid
-                1.0f to Color(0x00000000), // Transparent edge
+                0.0f to WeatherGradients.Night.overlayIndigo,
+                0.7f to WeatherGradients.Night.overlayDark,
+                1.0f to WeatherGradients.Night.overlayTransparent,
             ),
         radius = 700f,
     )

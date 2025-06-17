@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.OverlayColors
 import com.harry.design.TempestTheme
 
 @Composable
@@ -40,9 +41,9 @@ fun shimmerBrush(showShimmer: Boolean = true): Brush =
     if (showShimmer) {
         val shimmerColors =
             listOf(
-                Color.White.copy(alpha = 0.4f),
-                Color.White.copy(alpha = 0.8f),
-                Color.White.copy(alpha = 0.4f),
+                OverlayColors.shimmerStart,
+                OverlayColors.shimmerPeak,
+                OverlayColors.shimmerStart,
             )
 
         val transition = rememberInfiniteTransition(label = "shimmerTransition")
