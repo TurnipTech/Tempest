@@ -16,7 +16,7 @@ private const val PARAM_UNITS = "units"
 private const val PARAM_LANGUAGE = "lang"
 private const val PARAM_EXCLUDE = "exclude"
 
-internal class OpenWeatherMapRepository(
+internal class WeatherRepositoryImpl(
     private val client: HttpClient,
     private val mapper: WeatherMapper,
     private val apiKey: String,

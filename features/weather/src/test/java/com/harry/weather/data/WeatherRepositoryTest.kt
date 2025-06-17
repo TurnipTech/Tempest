@@ -15,13 +15,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class OpenWeatherMapRepositoryTest {
+class WeatherRepositoryTest {
     private val client: HttpClient = mockk(relaxed = true)
     private val mapper: WeatherMapper = mockk(relaxed = true)
     private val apiKey = "expectedApiKey"
 
-    private val repo: OpenWeatherMapRepository =
-        OpenWeatherMapRepository(
+    private val repo: WeatherRepositoryImpl =
+        WeatherRepositoryImpl(
             mapper = mapper,
             client = client,
             apiKey = apiKey,
