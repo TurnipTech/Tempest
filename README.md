@@ -143,6 +143,7 @@ app/                              # Main application module with MainActivity
 - **Dependency Injection**: Koin modules for each feature
 - **Navigation**: Type-safe navigation with NavigationDestination interface
 - **Data Flow**: DTOs → Domain Models → UI Models with dedicated mappers
+- **Use Cases**: Dedicated use case classes for business logic encapsulation, even for simple operations, to support future complexity and maintain consistent architecture patterns
 
 ## Tools Used
 - **Claude Code** (Terminal application) - Code scaffolding, code review, and debugging

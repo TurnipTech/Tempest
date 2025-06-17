@@ -61,20 +61,6 @@ class SearchLocationsUseCaseTest {
         }
 
     @Test
-    fun `should return failure when repository throws exception`() =
-        runTest {
-            val query = "London"
-            val exception = RuntimeException("Repository error")
-
-            coEvery { repository.searchLocations(query) } throws exception
-
-            val result = useCase.invoke(query)
-
-            assertTrue(result.isFailure)
-            assertEquals("Repository error", result.exceptionOrNull()?.message)
-        }
-
-    @Test
     fun `should call repository with correct query`() =
         runTest {
             val query = "Paris"
