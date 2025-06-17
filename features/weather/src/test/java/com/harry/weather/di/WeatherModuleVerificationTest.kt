@@ -10,11 +10,12 @@ class WeatherModuleVerificationTest {
     @Test
     fun `verify weather module`() {
         weatherModule("test-api-key").verify(
-            extraTypes = listOf(
-                Location::class,
-                GetStoredLocationUseCase::class,
-                ResourceProvider::class
-            )
+            extraTypes =
+                listOf(
+                    Location::class,
+                    GetStoredLocationUseCase::class,
+                    ResourceProvider::class,
+                ),
         )
     }
 }
