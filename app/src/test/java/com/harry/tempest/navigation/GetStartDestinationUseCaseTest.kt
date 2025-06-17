@@ -1,7 +1,6 @@
-package com.harry.location.domain.usecase
+package com.harry.tempest.navigation
 
 import com.harry.location.domain.model.Location
-import com.harry.location.domain.model.StartDestination
 import com.harry.location.domain.repository.LocationRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -11,7 +10,8 @@ import org.junit.Test
 
 class GetStartDestinationUseCaseTest {
     private val repository: LocationRepository = mockk()
-    private val useCase = GetStartDestinationUseCase(repository)
+    private val useCase =
+        GetStartDestinationUseCase(repository)
 
     private val testLocation =
         Location(

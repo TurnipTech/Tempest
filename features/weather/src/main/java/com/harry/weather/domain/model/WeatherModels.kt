@@ -1,6 +1,13 @@
 package com.harry.weather.domain.model
 
-// todo - shall we remove unused bits of data
+// Note: Analysis of UI usage shows several fields are currently unused but kept for future features:
+// - WeatherData.alerts: not displayed in UI
+// - Location.latitude/longitude: not used in UI mapper (location name comes from external source)
+// - CurrentWeather: only temperature, sunrise, sunset, condition are used; other fields unused
+// - HourlyWeather: only dateTime, temperature, probabilityOfPrecipitation, condition are used
+// - DailyWeather: only dateTime, temperatureHigh/Low, condition are used; summary, humidity, etc. unused
+// - WeatherCondition: only description and iconCode are used; id and main are unused
+// - WeatherAlert: entire class unused in UI
 data class WeatherData(
     val location: Location,
     val currentWeather: CurrentWeather?,

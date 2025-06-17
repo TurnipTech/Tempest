@@ -3,8 +3,8 @@
 package com.harry.tempest
 
 import com.harry.location.domain.model.Location
-import com.harry.location.domain.model.StartDestination
-import com.harry.location.domain.usecase.GetStartDestinationUseCase
+import com.harry.tempest.navigation.GetStartDestinationUseCase
+import com.harry.tempest.navigation.StartDestination
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

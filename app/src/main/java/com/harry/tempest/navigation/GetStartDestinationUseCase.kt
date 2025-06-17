@@ -1,6 +1,5 @@
-package com.harry.location.domain.usecase
+package com.harry.tempest.navigation
 
-import com.harry.location.domain.model.StartDestination
 import com.harry.location.domain.repository.LocationRepository
 
 class GetStartDestinationUseCase(

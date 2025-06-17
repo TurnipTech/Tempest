@@ -17,6 +17,7 @@
 
     <!-- Error -->
     <string name="error_unable_to_search">Unable to search locations: %1$s</string>
+    <string name="error_unknown">Unknown error occurred</string>
 
     <!-- Content Descriptions -->
     <string name="location_icon_description">Location</string>

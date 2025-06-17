@@ -2,10 +2,12 @@
 
 package com.harry.location.ui
 
+import com.harry.location.R
 import com.harry.location.domain.model.Location
 import com.harry.location.domain.model.LocationSearchResult
 import com.harry.location.domain.usecase.SearchLocationsUseCase
 import com.harry.location.domain.usecase.SetLocationUseCase
+import com.harry.location.ui.mapper.ResourceProvider
 import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
@@ -29,6 +31,10 @@ class SearchLocationViewModelTest {
     private val searchLocationsUseCase: SearchLocationsUseCase = mockk(relaxed = true)
     private val setLocationUseCase: SetLocationUseCase = mockk(relaxed = true)
     private val searchLocationUiMapper: SearchLocationUiMapper = mockk(relaxed = true)
+    private val mockResourceProvider =
+        mockk<ResourceProvider> {
+            every { getString(R.string.error_unknown) } returns "Unknown error occurred"
+        }
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -66,6 +72,7 @@ class SearchLocationViewModelTest {
             searchLocationsUseCase = searchLocationsUseCase,
             setLocationUseCase = setLocationUseCase,
             searchLocationUiMapper = searchLocationUiMapper,
+            resourceProvider = mockResourceProvider,
         )
 
     @Test

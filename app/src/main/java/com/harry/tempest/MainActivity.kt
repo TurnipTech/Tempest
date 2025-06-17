@@ -12,10 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.harry.location.SearchLocationNavigationDestination
-import com.harry.location.domain.model.StartDestination
+import com.harry.location.domain.model.Location
+import com.harry.tempest.navigation.StartDestination
 import com.harry.tempest.ui.theme.TempestTheme
 import com.harry.weather.WeatherNavigationDestination
 import com.harry.weather.WeatherRoute
@@ -41,7 +43,6 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
     val viewModel: TempestViewModel = koinViewModel()
     val startDestinationType by viewModel.startDestination.collectAsStateWithLifecycle()
 
-    // todo - look at this when statement, confusing and overly complicated
     when (startDestinationType) {
         null -> {
             Box(
@@ -51,49 +52,63 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
                 CircularProgressIndicator()
             }
         }
-        else -> {
-            val startDestination =
-                when (val destination = startDestinationType) {
-                    is StartDestination.Weather -> weatherDestination.route
-                    is StartDestination.SearchLocation -> searchLocationDestination.route
-                    null -> searchLocationDestination.route // This case won't be reached due to outer when
-                }
-
-            NavHost(
+        is StartDestination.SearchLocation -> {
+            TempestNavHost(
                 navController = navController,
-                startDestination = startDestination,
-            ) {
-                with(weatherDestination) {
-                    val location =
-                        when (val destination = startDestinationType) {
-                            is StartDestination.Weather -> destination.location
-                            else -> null
-                        }
-                    graph(
-                        location = location,
-                        onNavigateToSearch = {
-                            navController.navigate(searchLocationDestination.route)
-                        },
+                startDestination = searchLocationDestination.route,
+                weatherDestination = weatherDestination,
+                searchLocationDestination = searchLocationDestination,
+                initialLocation = null,
+            )
+        }
+        is StartDestination.Weather -> {
+            TempestNavHost(
+                navController = navController,
+                startDestination = weatherDestination.route,
+                weatherDestination = weatherDestination,
+                searchLocationDestination = searchLocationDestination,
+                initialLocation = (startDestinationType as StartDestination.Weather).location,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TempestNavHost(
+    navController: NavHostController,
+    startDestination: String,
+    weatherDestination: WeatherNavigationDestination,
+    searchLocationDestination: SearchLocationNavigationDestination,
+    initialLocation: Location?,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = startDestination,
+    ) {
+        with(weatherDestination) {
+            graph(
+                location = initialLocation,
+                onNavigateToSearch = {
+                    navController.navigate(searchLocationDestination.route)
+                },
+            )
+        }
+        with(searchLocationDestination) {
+            graph(onNavigateToWeather = { location ->
+                val weatherRoute =
+                    WeatherRoute(
+                        name = location.name,
+                        latitude = location.latitude,
+                        longitude = location.longitude,
+                        country = location.country,
+                        state = location.state,
                     )
+                navController.navigate(weatherRoute) {
+                    popUpTo(weatherDestination.route) {
+                        inclusive = true
+                    }
                 }
-                with(searchLocationDestination) {
-                    graph(onNavigateToWeather = { location ->
-                        val weatherRoute =
-                            WeatherRoute(
-                                name = location.name,
-                                latitude = location.latitude,
-                                longitude = location.longitude,
-                                country = location.country,
-                                state = location.state,
-                            )
-                        navController.navigate(weatherRoute) {
-                            popUpTo(weatherDestination.route) {
-                                inclusive = true
-                            }
-                        }
-                    })
-                }
-            }
+            })
         }
     }
 }

@@ -44,7 +44,7 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
             ),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(vertical = 24.dp),
         ) {
             Text(
                 text = stringResource(R.string.twenty_four_hour_forecast),
@@ -54,12 +54,12 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
                         fontSize = 18.sp,
                     ),
                 color = Color.White.copy(alpha = 0.9f),
-                modifier = Modifier.padding(bottom = 16.dp),
+                modifier = Modifier.padding(bottom = 16.dp, start = 20.dp),
             )
 
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(horizontal = 4.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
             ) {
                 items(hourlyForecast) { hourlyWeather ->
                     HourlyWeatherItem(hourlyWeather = hourlyWeather)
