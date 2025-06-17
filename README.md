@@ -29,17 +29,13 @@ Tempest is a weather forecast app designed to showcase clean architecture princi
 
 ### Prerequisites
 
-- Android Studio Flamingo or newer
-- JDK 11 or higher
-- Android SDK with API level 35
-- Git
 - OpenWeatherMap API key
 
 ### Setup Instructions
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:TurnipTech/Tempest.git
    cd Tempest
    ```
 
@@ -58,7 +54,6 @@ Tempest is a weather forecast app designed to showcase clean architecture princi
 
 4. **Install on device/emulator**
    ```bash
-   ./gradlew assembleDebug
    ./gradlew installDebug
    ```
 
