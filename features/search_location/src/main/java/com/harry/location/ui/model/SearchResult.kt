@@ -1,5 +1,8 @@
 package com.harry.location.ui.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class SearchResult(
     val displayName: String,
     val name: String,
