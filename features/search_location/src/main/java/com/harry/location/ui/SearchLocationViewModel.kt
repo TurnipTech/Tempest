@@ -54,7 +54,7 @@ class SearchLocationViewModel(
                                 query = searchResult.query,
                             )
                         } else {
-                            SearchLocationUiState.Error(
+                            SearchLocationUiState.Error( // todo - use android resources for this defaulted message
                                 message = result.exceptionOrNull()?.message ?: "Unknown error occurred",
                                 query = query,
                             )

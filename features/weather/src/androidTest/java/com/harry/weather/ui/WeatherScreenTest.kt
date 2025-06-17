@@ -1,11 +1,12 @@
 package com.harry.weather.ui
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -34,10 +35,10 @@ class WeatherScreenTest {
     }
 
     @Test
-    fun weatherScreen_loadingState_displaysLoadingText() {
+    fun weatherScreen_loadingState_displaysLoadingSkeleton() {
         WeatherScreenRobot(composeTestRule).apply {
             setLoadingState()
-            assertLoadingTextIsDisplayed()
+            assertLoadingSkeletonIsDisplayed()
         }
     }
 
@@ -262,8 +263,8 @@ class WeatherScreenRobot(
         composeTestRule.onNodeWithText("Mon").performScrollTo()
     }
 
-    fun assertLoadingTextIsDisplayed() {
-        composeTestRule.onNodeWithText("Loading Weather").assertIsDisplayed()
+    fun assertLoadingSkeletonIsDisplayed() {
+        composeTestRule.onNodeWithTag("weather_loading_skeleton").assertIsDisplayed()
     }
 
     fun assertErrorTextIsDisplayed() {
@@ -310,7 +311,7 @@ class WeatherScreenRobot(
     }
 
     fun assertRetryButtonIsNotDisplayed() {
-        composeTestRule.onNodeWithText("Retry").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Retry").assertIsNotDisplayed()
     }
 
     fun verifyNavigationToSearchWasCalled() {

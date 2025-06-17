@@ -48,23 +48,20 @@ class WeatherViewModel(
                 longitude = currentLocation.longitude,
                 units = units,
                 language = language,
-            ).fold(
-                onSuccess = { weatherData ->
-                    _uiState.value =
-                        weatherUiMapper.mapToSuccessState(
-                            weatherData = weatherData,
-                            units = units,
-                            locationName = currentLocation.name,
-                        )
-                },
-                onFailure = { error ->
-                    _uiState.value =
-                        WeatherUiState.Error(
-                            message = error.message ?: "Failed to load weather data",
-                            canRetry = true,
-                        )
-                },
-            )
+            ).onSuccess { weatherData ->
+                _uiState.value =
+                    weatherUiMapper.mapToSuccessState(
+                        weatherData = weatherData,
+                        units = units,
+                        locationName = currentLocation.name,
+                    )
+            }.onFailure { error ->
+                _uiState.value =
+                    WeatherUiState.Error(
+                        message = error.message ?: "Failed to load weather data",
+                        canRetry = true,
+                    )
+            }
         }
     }
 }

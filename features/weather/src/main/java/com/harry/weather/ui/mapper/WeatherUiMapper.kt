@@ -9,6 +9,8 @@ import com.harry.weather.ui.model.HourlyWeatherUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,7 +23,7 @@ private const val IMPERIAL_UNIT = "imperial"
 private const val STANDARD_UNIT = "standard"
 private const val METRIC_UNIT = "metric"
 
-// Text constants
+// Text constants //todo - use android resources for text constants
 private const val NO_DATA_AVAILABLE = "No data available"
 private const val UPDATED_PREFIX = "Updated "
 private const val PERCENTAGE_SYMBOL = "%"
@@ -70,6 +72,7 @@ class WeatherUiMapper {
                 currentTime = currentTime,
                 sunrise = currentWeather?.sunrise?.let { Instant.fromEpochSeconds(it) },
                 sunset = currentWeather?.sunset?.let { Instant.fromEpochSeconds(it) },
+                timeZone = TimeZone.of(weatherData.location.timezone),
             )
 
         return WeatherUiState.Success(
@@ -80,8 +83,17 @@ class WeatherUiMapper {
             currentWeatherIconUrl = createIconUrl(currentWeather?.condition?.iconCode ?: "", IconSize.LARGE),
             currentWeatherIconDescription = currentWeather?.condition?.description ?: NO_DATA_AVAILABLE,
             lastUpdated = formatLastUpdated(),
-            todaysHourlyForecast = mapTodaysHourlyForecast(weatherData.hourlyForecast ?: emptyList()),
-            weeklyForecast = mapWeeklyForecast(weatherData.dailyForecast ?: emptyList(), units),
+            todaysHourlyForecast =
+                mapTodaysHourlyForecast(
+                    weatherData.hourlyForecast ?: emptyList(),
+                    weatherData.location.timezone,
+                ),
+            weeklyForecast =
+                mapWeeklyForecast(
+                    weatherData.dailyForecast ?: emptyList(),
+                    units,
+                    weatherData.location.timezone,
+                ),
             timeOfDay = timeOfDay,
         )
     }
@@ -107,7 +119,10 @@ class WeatherUiMapper {
             ).format(Date())
         }"
 
-    private fun mapTodaysHourlyForecast(hourlyForecast: List<HourlyWeather>): List<HourlyWeatherUiModel> {
+    private fun mapTodaysHourlyForecast(
+        hourlyForecast: List<HourlyWeather>,
+        timezoneId: String,
+    ): List<HourlyWeatherUiModel> {
         val currentTime = System.currentTimeMillis() / MILLISECONDS_CONVERSION_FACTOR
         val endOfDay = currentTime + SECONDS_IN_DAY
 
@@ -116,46 +131,58 @@ class WeatherUiMapper {
                 weather.dateTime in currentTime..endOfDay
             }.take(MAX_HOURLY_FORECAST_ITEMS)
             .map { hourlyWeather ->
-                mapToHourlyWeatherUiModel(hourlyWeather)
+                mapToHourlyWeatherUiModel(hourlyWeather, timezoneId)
             }
     }
 
-    private fun mapToHourlyWeatherUiModel(hourlyWeather: HourlyWeather): HourlyWeatherUiModel =
+    private fun mapToHourlyWeatherUiModel(hourlyWeather: HourlyWeather, timezoneId: String): HourlyWeatherUiModel =
         HourlyWeatherUiModel(
-            formattedTime = formatTime(hourlyWeather.dateTime),
+            formattedTime = formatTime(hourlyWeather.dateTime, timezoneId),
             temperature = "${hourlyWeather.temperature.toInt()}°",
             iconUrl = createIconUrl(hourlyWeather.condition.iconCode, IconSize.MEDIUM),
             iconDescription = hourlyWeather.condition.description,
             precipitationProbability = "${hourlyWeather.probabilityOfPrecipitation.toInt()}$PERCENTAGE_SYMBOL",
         )
 
-    private fun formatTime(timestamp: Long): String {
-        val date = Date(timestamp * MILLISECONDS_CONVERSION_FACTOR)
-        val formatter = SimpleDateFormat(TIME_FORMAT_PATTERN, Locale.getDefault())
-        return formatter.format(date)
+    private fun formatTime(timestamp: Long, timezoneId: String): String {
+        val instant = Instant.fromEpochSeconds(timestamp)
+        val timezone = TimeZone.of(timezoneId)
+        val localDateTime = instant.toLocalDateTime(timezone)
+        return String.format("%02d:%02d", localDateTime.hour, localDateTime.minute)
     }
 
     private fun createIconUrl(iconCode: String, size: IconSize): String = "$ICON_BASE_URL$iconCode${size.suffix}"
 
-    private fun mapWeeklyForecast(dailyForecast: List<DailyWeather>, units: String): List<DailyWeatherUiModel> =
+    private fun mapWeeklyForecast(
+        dailyForecast: List<DailyWeather>,
+        units: String,
+        timezoneId: String,
+    ): List<DailyWeatherUiModel> =
         dailyForecast
             .take(MAX_DAILY_FORECAST_ITEMS)
             .map { dailyWeather ->
-                mapToDailyWeatherUiModel(dailyWeather, units)
+                mapToDailyWeatherUiModel(dailyWeather, units, timezoneId)
             }
 
-    private fun mapToDailyWeatherUiModel(dailyWeather: DailyWeather, units: String): DailyWeatherUiModel =
+    private fun mapToDailyWeatherUiModel(
+        dailyWeather: DailyWeather,
+        units: String,
+        timezoneId: String,
+    ): DailyWeatherUiModel =
         DailyWeatherUiModel(
-            formattedDay = formatDay(dailyWeather.dateTime),
+            formattedDay = formatDay(dailyWeather.dateTime, timezoneId),
             temperatureHigh = formatTemperature(dailyWeather.temperatureHigh, units),
             temperatureLow = formatTemperature(dailyWeather.temperatureLow, units),
             iconUrl = createIconUrl(dailyWeather.condition.iconCode, IconSize.MEDIUM),
             iconDescription = dailyWeather.condition.description,
         )
 
-    private fun formatDay(timestamp: Long): String {
-        val date = Date(timestamp * MILLISECONDS_CONVERSION_FACTOR)
-        val formatter = SimpleDateFormat(DAY_FORMAT_PATTERN, Locale.getDefault())
-        return formatter.format(date)
+    private fun formatDay(timestamp: Long, timezoneId: String): String {
+        val instant = Instant.fromEpochSeconds(timestamp)
+        val timezone = TimeZone.of(timezoneId)
+        val localDateTime = instant.toLocalDateTime(timezone)
+        return localDateTime.dayOfWeek.name
+            .lowercase()
+            .replaceFirstChar { it.uppercase() }
     }
 }

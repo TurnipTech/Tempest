@@ -1,5 +1,6 @@
 package com.harry.weather.domain.model
 
+// todo - shall we remove unused bits of data
 data class WeatherData(
     val location: Location,
     val currentWeather: CurrentWeather?,

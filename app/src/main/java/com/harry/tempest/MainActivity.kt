@@ -41,6 +41,7 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
     val viewModel: TempestViewModel = koinViewModel()
     val startDestinationType by viewModel.startDestination.collectAsStateWithLifecycle()
 
+    // todo - look at this when statement, confusing and overly complicated
     when (startDestinationType) {
         null -> {
             Box(
