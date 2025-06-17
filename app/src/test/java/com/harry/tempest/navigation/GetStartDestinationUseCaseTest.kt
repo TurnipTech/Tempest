@@ -11,8 +11,7 @@ import org.junit.Test
 class GetStartDestinationUseCaseTest {
     private val repository: LocationRepository = mockk()
     private val useCase =
-        com.harry.tempest.navigation
-            .GetStartDestinationUseCase(repository)
+        GetStartDestinationUseCase(repository)
 
     private val testLocation =
         Location(
