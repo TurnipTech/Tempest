@@ -62,7 +62,6 @@ dependencies {
 
     implementation(project(":core:design_system"))
     implementation(project(":core:network"))
-    implementation(project(":core:navigation"))
     implementation(project(":core:location"))
     implementation(project(":core:storage"))
     implementation(project(":core:utils"))
@@ -79,6 +78,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.compose.navigation)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

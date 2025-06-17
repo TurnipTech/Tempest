@@ -16,11 +16,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.harry.design.TempestTheme
-import com.harry.location.SearchLocationNavigationDestination
-import com.harry.location.domain.model.Location
+import com.harry.location.SearchLocationDestination
+import com.harry.location.addSearchLocation
 import com.harry.tempest.navigation.StartDestination
-import com.harry.weather.WeatherNavigationDestination
-import com.harry.weather.WeatherRoute
+import com.harry.weather.WeatherDestination
+import com.harry.weather.addWeatherDestination
+import com.harry.weather.toWeatherDestination
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -38,8 +39,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TempestNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    val weatherDestination = WeatherNavigationDestination()
-    val searchLocationDestination = SearchLocationNavigationDestination()
     val viewModel: TempestViewModel = koinViewModel()
     val startDestinationType by viewModel.startDestination.collectAsStateWithLifecycle()
 
@@ -52,63 +51,40 @@ fun TempestNavigation(modifier: Modifier = Modifier) {
                 CircularProgressIndicator()
             }
         }
+
         is StartDestination.SearchLocation -> {
             TempestNavHost(
                 navController = navController,
-                startDestination = searchLocationDestination.route,
-                weatherDestination = weatherDestination,
-                searchLocationDestination = searchLocationDestination,
-                initialLocation = null,
+                startDestination = SearchLocationDestination,
             )
         }
+
         is StartDestination.Weather -> {
             TempestNavHost(
                 navController = navController,
-                startDestination = weatherDestination.route,
-                weatherDestination = weatherDestination,
-                searchLocationDestination = searchLocationDestination,
-                initialLocation = (startDestinationType as StartDestination.Weather).location,
+                startDestination = WeatherDestination(),
             )
         }
     }
 }
 
 @Composable
-private fun TempestNavHost(
-    navController: NavHostController,
-    startDestination: String,
-    weatherDestination: WeatherNavigationDestination,
-    searchLocationDestination: SearchLocationNavigationDestination,
-    initialLocation: Location?,
-) {
+private fun TempestNavHost(navController: NavHostController, startDestination: Any) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
-        with(weatherDestination) {
-            graph(
-                location = initialLocation,
-                onNavigateToSearch = {
-                    navController.navigate(searchLocationDestination.route)
-                },
-            )
+        addWeatherDestination {
+            navController.navigate(SearchLocationDestination)
         }
-        with(searchLocationDestination) {
-            graph(onNavigateToWeather = { location ->
-                val weatherRoute =
-                    WeatherRoute(
-                        name = location.name,
-                        latitude = location.latitude,
-                        longitude = location.longitude,
-                        country = location.country,
-                        state = location.state,
-                    )
-                navController.navigate(weatherRoute) {
-                    popUpTo(weatherDestination.route) {
-                        inclusive = true
-                    }
+        addSearchLocation { location ->
+            navController.navigate(
+                location.toWeatherDestination(),
+            ) {
+                popUpTo<WeatherDestination> {
+                    inclusive = true
                 }
-            })
+            }
         }
     }
 }

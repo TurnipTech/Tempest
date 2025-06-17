@@ -2,6 +2,7 @@ package com.harry.weather.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.harry.location.domain.model.Location
 import com.harry.location.domain.usecase.GetStoredLocationUseCase
 import com.harry.utils.ResourceProvider
 import com.harry.weather.R
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(
-    private val location: com.harry.location.domain.model.Location?,
+    private val location: Location? = null,
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
     private val weatherUiMapper: WeatherUiMapper,
     private val getStoredLocationUseCase: GetStoredLocationUseCase,
