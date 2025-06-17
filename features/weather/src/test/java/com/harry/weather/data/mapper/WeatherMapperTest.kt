@@ -58,62 +58,6 @@ class WeatherMapperTest {
     }
 
     @Test
-    fun `mapToHistoricalWeather maps correctly`() {
-        val historicalWeatherResponseDto = WeatherMapperTestDataFactory.createHistoricalWeatherResponseDto()
-
-        val result = WeatherMapper.mapToHistoricalWeather(historicalWeatherResponseDto)
-
-        assertEquals("Europe/Paris", result.timezone)
-
-        assertEquals(1, result.data.size)
-        val historicalData = result.data.first()
-        assertEquals(1609459200L, historicalData.dateTime)
-        assertEquals(18.5, historicalData.temperature, 0.0001)
-        assertEquals(16.2, historicalData.feelsLike, 0.0001)
-        assertEquals(75, historicalData.humidity)
-        assertEquals(1010, historicalData.pressure)
-        assertEquals(3.8, historicalData.windSpeed, 0.0001)
-        assertEquals(4.5, historicalData.uvIndex, 0.0001)
-        assertEquals("few clouds", historicalData.condition.description)
-        assertEquals("02d", historicalData.condition.iconCode)
-    }
-
-    @Test
-    fun `mapToDailySummary maps correctly`() {
-        val dailySummaryResponseDto = WeatherMapperTestDataFactory.createDailySummaryResponseDto()
-
-        val result = WeatherMapper.mapToDailySummary(dailySummaryResponseDto)
-
-        assertEquals("Asia/Tokyo", result.timezone)
-        assertEquals("2024-06-14", result.date)
-
-        val temperatureRange = result.temperatureRange
-        assertEquals(12.0, temperatureRange.min, 0.0001)
-        assertEquals(28.0, temperatureRange.max, 0.0001)
-        assertEquals(16.0, temperatureRange.morning, 0.0001)
-        assertEquals(24.0, temperatureRange.afternoon, 0.0001)
-        assertEquals(20.0, temperatureRange.evening, 0.0001)
-        assertEquals(14.0, temperatureRange.night, 0.0001)
-
-        assertEquals(55, result.humidity)
-        assertEquals(1018, result.pressure)
-        assertEquals(8.5, result.maxWindSpeed, 0.0001)
-        assertEquals(2.5, result.totalPrecipitation, 0.0001)
-        assertEquals(30, result.cloudCover)
-    }
-
-    @Test
-    fun `mapToWeatherOverview maps correctly`() {
-        val weatherOverviewResponseDto = WeatherMapperTestDataFactory.createWeatherOverviewResponseDto()
-
-        val result = WeatherMapper.mapToWeatherOverview(weatherOverviewResponseDto)
-
-        assertEquals("America/Los_Angeles", result.timezone)
-        assertEquals("2024-06-14", result.date)
-        assertEquals("Sunny with clear skies throughout the day. Light winds from the west.", result.overview)
-    }
-
-    @Test
     fun `mapToWeatherData with custom weather condition verifies condition mapping`() {
         val customCondition =
             WeatherMapperTestDataFactory.createWeatherConditionDto(
@@ -280,47 +224,6 @@ class WeatherMapperTest {
     }
 
     @Test
-    fun `mapToHistoricalWeather with custom data verifies historical data mapping`() {
-        val customHistoricalData =
-            WeatherMapperTestDataFactory.createHistoricalWeatherDto(
-                dateTime = 1609372800L,
-                temperature = 5.2,
-                feelsLike = 2.1,
-                humidity = 95,
-                pressure = 1002,
-                windSpeed = 2.1,
-                uvIndex = 1.5,
-                weather =
-                    listOf(
-                        WeatherMapperTestDataFactory.createWeatherConditionDto(
-                            id = 701,
-                            main = "Mist",
-                            description = "mist",
-                            icon = "50d",
-                        ),
-                    ),
-            )
-        val historicalWeatherResponseDto =
-            WeatherMapperTestDataFactory.createHistoricalWeatherResponseDto(
-                data = listOf(customHistoricalData),
-            )
-
-        val result = WeatherMapper.mapToHistoricalWeather(historicalWeatherResponseDto)
-
-        assertEquals(1, result.data.size)
-        val historicalData = result.data.first()
-        assertEquals(1609372800L, historicalData.dateTime)
-        assertEquals(5.2, historicalData.temperature, 0.0001)
-        assertEquals(2.1, historicalData.feelsLike, 0.0001)
-        assertEquals(95, historicalData.humidity)
-        assertEquals(1002, historicalData.pressure)
-        assertEquals(2.1, historicalData.windSpeed, 0.0001)
-        assertEquals(1.5, historicalData.uvIndex, 0.0001)
-        assertEquals("mist", historicalData.condition.description)
-        assertEquals("50d", historicalData.condition.iconCode)
-    }
-
-    @Test
     fun `mapToWeatherData with empty lists maps correctly`() {
         val weatherResponseDto =
             WeatherMapperTestDataFactory.createWeatherResponseDto(
@@ -342,66 +245,6 @@ class WeatherMapperTest {
         assertEquals(0, result.hourlyForecast!!.size)
         assertNotNull(result.dailyForecast)
         assertEquals(0, result.dailyForecast!!.size)
-    }
-
-    @Test
-    fun `mapToHistoricalWeather with multiple data entries maps correctly`() {
-        val historicalData1 =
-            WeatherMapperTestDataFactory.createHistoricalWeatherDto(
-                dateTime = 1609459200L,
-                temperature = 20.0,
-                weather =
-                    listOf(
-                        WeatherMapperTestDataFactory.createWeatherConditionDto(
-                            id = 800,
-                            main = "Clear",
-                            description = "clear sky",
-                            icon = "01d",
-                        ),
-                    ),
-            )
-
-        val historicalData2 =
-            WeatherMapperTestDataFactory.createHistoricalWeatherDto(
-                dateTime = 1609462800L,
-                temperature = 18.5,
-                weather =
-                    listOf(
-                        WeatherMapperTestDataFactory.createWeatherConditionDto(
-                            id = 801,
-                            main = "Clouds",
-                            description = "few clouds",
-                            icon = "02n",
-                        ),
-                    ),
-            )
-
-        val historicalWeatherResponseDto =
-            WeatherMapperTestDataFactory.createHistoricalWeatherResponseDto(
-                latitude = 55.7558,
-                longitude = 37.6176,
-                timezone = "Europe/Moscow",
-                timezoneOffset = 10800,
-                data = listOf(historicalData1, historicalData2),
-            )
-
-        val result = WeatherMapper.mapToHistoricalWeather(historicalWeatherResponseDto)
-
-        assertEquals("Europe/Moscow", result.timezone)
-
-        assertEquals(2, result.data.size)
-
-        val firstData = result.data[0]
-        assertEquals(1609459200L, firstData.dateTime)
-        assertEquals(20.0, firstData.temperature, 0.0001)
-        assertEquals("clear sky", firstData.condition.description)
-        assertEquals("01d", firstData.condition.iconCode)
-
-        val secondData = result.data[1]
-        assertEquals(1609462800L, secondData.dateTime)
-        assertEquals(18.5, secondData.temperature, 0.0001)
-        assertEquals("few clouds", secondData.condition.description)
-        assertEquals("02n", secondData.condition.iconCode)
     }
 
     @Test

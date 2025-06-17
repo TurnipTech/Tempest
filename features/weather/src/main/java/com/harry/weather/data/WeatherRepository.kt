@@ -1,10 +1,7 @@
 package com.harry.weather.data
 
 import com.harry.weather.domain.WeatherConstants
-import com.harry.weather.domain.model.DailySummary
-import com.harry.weather.domain.model.HistoricalWeather
 import com.harry.weather.domain.model.WeatherData
-import com.harry.weather.domain.model.WeatherOverview
 
 interface WeatherRepository {
     /**
@@ -22,50 +19,4 @@ interface WeatherRepository {
         units: String = WeatherConstants.METRIC_UNIT,
         language: String = WeatherConstants.DEFAULT_LANGUAGE,
     ): Result<WeatherData>
-
-    /**
-     * Get historical weather data for a specific timestamp
-     * @param latitude Latitude of the location
-     * @param longitude Longitude of the location
-     * @param timestamp Unix timestamp for the date
-     * @param units Temperature units (standard, metric, imperial)
-     * @param language Language for weather descriptions
-     */
-    suspend fun getHistoricalWeather(
-        latitude: Double,
-        longitude: Double,
-        timestamp: Long,
-        units: String = WeatherConstants.METRIC_UNIT,
-        language: String = WeatherConstants.DEFAULT_LANGUAGE,
-    ): Result<HistoricalWeather>
-
-    /**
-     * Get daily weather summary for a specific date
-     * @param latitude Latitude of the location
-     * @param longitude Longitude of the location
-     * @param date Date in YYYY-MM-DD format
-     * @param units Temperature units (standard, metric, imperial)
-     * @param timezone Timezone offset in ±XX:XX format
-     */
-    suspend fun getDailyWeatherSummary(
-        latitude: Double,
-        longitude: Double,
-        date: String,
-        units: String = WeatherConstants.METRIC_UNIT,
-        timezone: String? = null,
-    ): Result<DailySummary>
-
-    /**
-     * Get AI-generated weather overview
-     * @param latitude Latitude of the location
-     * @param longitude Longitude of the location
-     * @param date Date in YYYY-MM-DD format (optional, defaults to today)
-     * @param units Temperature units (standard, metric, imperial)
-     */
-    suspend fun getWeatherOverview(
-        latitude: Double,
-        longitude: Double,
-        date: String? = null,
-        units: String = WeatherConstants.METRIC_UNIT,
-    ): Result<WeatherOverview>
 }
