@@ -1,24 +1,13 @@
 package com.harry.weather.data.mapper
 
 import com.harry.weather.data.dto.AlertDto
-import com.harry.weather.data.dto.CloudCoverDto
 import com.harry.weather.data.dto.CurrentWeatherDto
 import com.harry.weather.data.dto.DailyDto
 import com.harry.weather.data.dto.DailyFeelsLikeDto
-import com.harry.weather.data.dto.DailySummaryResponseDto
 import com.harry.weather.data.dto.DailyTemperatureDto
-import com.harry.weather.data.dto.HistoricalWeatherDto
-import com.harry.weather.data.dto.HistoricalWeatherResponseDto
 import com.harry.weather.data.dto.HourlyDto
-import com.harry.weather.data.dto.HumidityDto
-import com.harry.weather.data.dto.MaxWindDto
-import com.harry.weather.data.dto.PrecipitationSummaryDto
-import com.harry.weather.data.dto.PressureDto
-import com.harry.weather.data.dto.TemperatureSummaryDto
 import com.harry.weather.data.dto.WeatherConditionDto
-import com.harry.weather.data.dto.WeatherOverviewResponseDto
 import com.harry.weather.data.dto.WeatherResponseDto
-import com.harry.weather.data.dto.WindSummaryDto
 
 /**
  * Factory for creating test data objects with sensible defaults.
@@ -189,115 +178,5 @@ object WeatherMapperTestDataFactory {
         hourly = hourly,
         daily = daily,
         alerts = alerts,
-    )
-
-    fun createHistoricalWeatherDto(
-        dateTime: Long = 1609459200L,
-        temperature: Double = 18.5,
-        feelsLike: Double = 16.2,
-        humidity: Int = 75,
-        pressure: Int = 1010,
-        windSpeed: Double = 3.8,
-        uvIndex: Double = 4.5,
-        weather: List<WeatherConditionDto> =
-            listOf(createWeatherConditionDto(id = 801, main = "Clouds", description = "few clouds", icon = "02d")),
-        dewPoint: Double = 13.5,
-        cloudiness: Int = 20,
-        visibility: Int = 8000,
-        windDirection: Int = 150,
-    ) = HistoricalWeatherDto(
-        dateTime = dateTime,
-        temperature = temperature,
-        feelsLike = feelsLike,
-        humidity = humidity,
-        pressure = pressure,
-        windSpeed = windSpeed,
-        uvIndex = uvIndex,
-        weather = weather,
-        dewPoint = dewPoint,
-        cloudiness = cloudiness,
-        visibility = visibility,
-        windDirection = windDirection,
-    )
-
-    fun createHistoricalWeatherResponseDto(
-        latitude: Double = 48.8566,
-        longitude: Double = 2.3522,
-        timezone: String = "Europe/Paris",
-        timezoneOffset: Int = 3600,
-        data: List<HistoricalWeatherDto> = listOf(createHistoricalWeatherDto()),
-    ) = HistoricalWeatherResponseDto(
-        latitude = latitude,
-        longitude = longitude,
-        timezone = timezone,
-        timezoneOffset = timezoneOffset,
-        data = data,
-    )
-
-    fun createTemperatureSummaryDto(
-        min: Double = 12.0,
-        max: Double = 28.0,
-        afternoon: Double = 24.0,
-        night: Double = 14.0,
-        evening: Double = 20.0,
-        morning: Double = 16.0,
-    ) = TemperatureSummaryDto(
-        min = min,
-        max = max,
-        afternoon = afternoon,
-        night = night,
-        evening = evening,
-        morning = morning,
-    )
-
-    fun createWindSummaryDto(maxSpeed: Double = 8.5, maxDirection: Int = 225) =
-        WindSummaryDto(
-            max =
-                MaxWindDto(
-                    speed = maxSpeed,
-                    direction = maxDirection,
-                ),
-        )
-
-    fun createDailySummaryResponseDto(
-        latitude: Double = 35.6762,
-        longitude: Double = 139.6503,
-        timezone: String = "Asia/Tokyo",
-        date: String = "2024-06-14",
-        units: String = "metric",
-        cloudCover: CloudCoverDto = CloudCoverDto(afternoon = 30),
-        humidity: HumidityDto = HumidityDto(afternoon = 55),
-        precipitation: PrecipitationSummaryDto = PrecipitationSummaryDto(total = 2.5),
-        temperature: TemperatureSummaryDto = createTemperatureSummaryDto(),
-        pressure: PressureDto = PressureDto(afternoon = 1018),
-        wind: WindSummaryDto = createWindSummaryDto(),
-    ) = DailySummaryResponseDto(
-        latitude = latitude,
-        longitude = longitude,
-        timezone = timezone,
-        date = date,
-        units = units,
-        cloudCover = cloudCover,
-        humidity = humidity,
-        precipitation = precipitation,
-        temperature = temperature,
-        pressure = pressure,
-        wind = wind,
-    )
-
-    fun createWeatherOverviewResponseDto(
-        latitude: Double = 37.7749,
-        longitude: Double = -122.4194,
-        timezone: String = "America/Los_Angeles",
-        date: String = "2024-06-14",
-        units: String = "imperial",
-        weatherOverview: String = "Sunny with clear skies throughout the day. Light winds from the west.",
-    ) = WeatherOverviewResponseDto(
-        latitude = latitude,
-        longitude = longitude,
-        timezone = timezone,
-        date = date,
-        units = units,
-        weatherOverview = weatherOverview,
     )
 }

@@ -4,7 +4,6 @@ import com.harry.weather.R
 import com.harry.weather.domain.model.CurrentWeather
 import com.harry.weather.domain.model.DailyWeather
 import com.harry.weather.domain.model.HourlyWeather
-import com.harry.weather.domain.model.Location
 import com.harry.weather.domain.model.WeatherCondition
 import com.harry.weather.domain.model.WeatherData
 import io.mockk.every
@@ -124,7 +123,7 @@ class WeatherUiMapperTest {
 
     @Test
     fun `weather description is capitalized correctly`() {
-        val condition = WeatherCondition(800, "Clear", "clear sky", "01d")
+        val condition = WeatherCondition("clear sky", "01d")
         val currentWeather = createCurrentWeather(condition = condition)
         val weatherData = createWeatherData(currentWeather = currentWeather)
         val units = "metric"
@@ -136,7 +135,7 @@ class WeatherUiMapperTest {
 
     @Test
     fun `current weather icon URL is generated correctly for different icon codes`() {
-        val condition = WeatherCondition(200, "Thunderstorm", "thunderstorm with light rain", "11d")
+        val condition = WeatherCondition("thunderstorm with light rain", "11d")
         val currentWeather = createCurrentWeather(condition = condition)
         val weatherData = createWeatherData(currentWeather = currentWeather)
         val units = "metric"
@@ -464,30 +463,20 @@ class WeatherUiMapperTest {
         timezone: String = "America/New_York",
     ): WeatherData =
         WeatherData(
-            location = Location(40.7128, -74.0060, timezone),
+            timezone = timezone,
             currentWeather = currentWeather,
             hourlyForecast = hourlyForecast,
             dailyForecast = dailyForecast,
-            alerts = emptyList(),
         )
 
     private fun createCurrentWeather(
         temperature: Double = 22.0,
-        condition: WeatherCondition = WeatherCondition(800, "Clear", "clear sky", "01d"),
+        condition: WeatherCondition = WeatherCondition("clear sky", "01d"),
     ): CurrentWeather =
         CurrentWeather(
-            dateTime = System.currentTimeMillis() / 1000,
             sunrise = 1640678400L,
             sunset = 1640714400L,
             temperature = temperature,
-            feelsLike = 24.0,
-            humidity = 65,
-            pressure = 1013,
-            windSpeed = 3.2,
-            windDirection = 180,
-            uvIndex = 5.0,
-            cloudiness = 0,
-            visibility = 10,
             condition = condition,
         )
 
@@ -495,13 +484,8 @@ class WeatherUiMapperTest {
         HourlyWeather(
             dateTime = dateTime,
             temperature = 20.0,
-            feelsLike = 22.0,
-            humidity = 60,
-            pressure = 1015,
-            windSpeed = 2.8,
-            uvIndex = 4.0,
             probabilityOfPrecipitation = 30.0,
-            condition = WeatherCondition(800, "Clear", "clear sky", "01d"),
+            condition = WeatherCondition("clear sky", "01d"),
         )
 
     private fun createDefaultHourlyForecast(): List<HourlyWeather> {
@@ -517,13 +501,7 @@ class WeatherUiMapperTest {
             dateTime = dateTime,
             temperatureHigh = 25.0,
             temperatureLow = 15.0,
-            humidity = 65,
-            pressure = 1015,
-            windSpeed = 3.5,
-            uvIndex = 6.0,
-            probabilityOfPrecipitation = 20.0,
-            condition = WeatherCondition(800, "Clear", "clear sky", "01d"),
-            summary = "Clear skies throughout the day",
+            condition = WeatherCondition("clear sky", "01d"),
         )
 
     private fun createDefaultDailyForecast(): List<DailyWeather> {
