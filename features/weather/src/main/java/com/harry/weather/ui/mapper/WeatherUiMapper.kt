@@ -28,7 +28,6 @@ private const val PERCENTAGE_SYMBOL = "%"
 
 // Time and date constants
 private const val TIME_FORMAT_PATTERN = "HH:mm"
-private const val DAY_FORMAT_PATTERN = "EEE" // todo - lets use this formatting for days of the week
 private const val SECONDS_IN_DAY = 24 * 60 * 60
 private const val MILLISECONDS_CONVERSION_FACTOR = 1000L
 
