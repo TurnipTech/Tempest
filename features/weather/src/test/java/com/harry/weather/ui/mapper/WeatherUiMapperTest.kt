@@ -123,7 +123,7 @@ class WeatherUiMapperTest {
 
     @Test
     fun `weather description is capitalized correctly`() {
-        val condition = WeatherCondition( "clear sky", "01d")
+        val condition = WeatherCondition("clear sky", "01d")
         val currentWeather = createCurrentWeather(condition = condition)
         val weatherData = createWeatherData(currentWeather = currentWeather)
         val units = "metric"
@@ -135,7 +135,7 @@ class WeatherUiMapperTest {
 
     @Test
     fun `current weather icon URL is generated correctly for different icon codes`() {
-        val condition = WeatherCondition( "thunderstorm with light rain", "11d")
+        val condition = WeatherCondition("thunderstorm with light rain", "11d")
         val currentWeather = createCurrentWeather(condition = condition)
         val weatherData = createWeatherData(currentWeather = currentWeather)
         val units = "metric"
@@ -471,7 +471,7 @@ class WeatherUiMapperTest {
 
     private fun createCurrentWeather(
         temperature: Double = 22.0,
-        condition: WeatherCondition = WeatherCondition( "clear sky", "01d"),
+        condition: WeatherCondition = WeatherCondition("clear sky", "01d"),
     ): CurrentWeather =
         CurrentWeather(
             sunrise = 1640678400L,
@@ -485,7 +485,7 @@ class WeatherUiMapperTest {
             dateTime = dateTime,
             temperature = 20.0,
             probabilityOfPrecipitation = 30.0,
-            condition = WeatherCondition( "clear sky", "01d"),
+            condition = WeatherCondition("clear sky", "01d"),
         )
 
     private fun createDefaultHourlyForecast(): List<HourlyWeather> {

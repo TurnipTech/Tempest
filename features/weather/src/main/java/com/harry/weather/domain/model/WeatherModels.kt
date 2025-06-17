@@ -7,7 +7,6 @@ data class WeatherData(
     val dailyForecast: List<DailyWeather>?,
 )
 
-
 data class CurrentWeather(
     val temperature: Double,
     val sunrise: Long?,

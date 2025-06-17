@@ -41,7 +41,7 @@ object WeatherMapper {
         HourlyWeather(
             dateTime = dto.dateTime,
             temperature = dto.temperature,
-            probabilityOfPrecipitation = dto.probabilityOfPrecipitation,
+            probabilityOfPrecipitation = dto.probabilityOfPrecipitation ?: 0.0,
             condition = mapToWeatherCondition(dto.weather.first()),
         )
 
@@ -70,10 +70,10 @@ object WeatherMapper {
             dateTime = dto.dateTime,
             temperature = dto.temperature,
             feelsLike = dto.feelsLike,
-            humidity = dto.humidity,
-            pressure = dto.pressure,
-            windSpeed = dto.windSpeed,
-            uvIndex = dto.uvIndex,
+            humidity = dto.humidity ?: 0,
+            pressure = dto.pressure ?: 0,
+            windSpeed = dto.windSpeed ?: 0.0,
+            uvIndex = dto.uvIndex ?: 0.0,
             condition = mapToWeatherCondition(dto.weather.first()),
         )
 

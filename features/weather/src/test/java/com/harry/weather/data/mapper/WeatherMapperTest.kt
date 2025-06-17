@@ -33,7 +33,6 @@ class WeatherMapperTest {
         assertEquals(1609459200L, dailyWeather.dateTime)
         assertEquals(25.0, dailyWeather.temperatureHigh, 0.0001)
         assertEquals(15.0, dailyWeather.temperatureLow, 0.0001)
-
     }
 
     @Test
@@ -156,7 +155,6 @@ class WeatherMapperTest {
             )
 
         val result = WeatherMapper.mapToWeatherData(weatherResponseDto)
-
     }
 
     @Test
