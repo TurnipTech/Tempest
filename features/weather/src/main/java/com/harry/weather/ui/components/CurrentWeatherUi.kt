@@ -15,16 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.harry.design.OverlayColors
+import com.harry.design.TempestTheme
 
 @Composable
 fun CurrentWeather(
@@ -57,17 +56,14 @@ fun CurrentWeather(
 
         Text(
             text = currentTemp,
-            fontSize = 96.sp,
-            fontWeight = FontWeight.ExtraLight,
-            color = Color.White,
-            lineHeight = 96.sp,
+            style = MaterialTheme.typography.displayLarge,
+            color = OverlayColors.contentPrimary,
         )
 
         Text(
             text = description,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.White.copy(alpha = 0.85f),
+            style = MaterialTheme.typography.headlineMedium,
+            color = OverlayColors.contentSecondary,
         )
     }
 }
@@ -83,15 +79,16 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
             imageVector = Icons.Default.LocationOn,
             contentDescription = "Location",
             modifier = Modifier.size(16.dp),
-            tint = Color.White.copy(alpha = 0.8f),
+            tint = OverlayColors.contentInteractive,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = locationName,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.White.copy(alpha = 0.8f),
-            textDecoration = TextDecoration.Underline,
+            style =
+                MaterialTheme.typography.titleMedium.copy(
+                    textDecoration = TextDecoration.Underline,
+                ),
+            color = OverlayColors.contentInteractive,
         )
     }
 }
@@ -99,7 +96,7 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
 @Preview
 @Composable
 fun CurrentWeatherPreview() {
-    MaterialTheme {
+    TempestTheme {
         CurrentWeather(
             description = "broken clouds",
             locationName = "Bradford",

@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.TempestTheme
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
@@ -100,7 +100,7 @@ private fun WeatherContent(
 @Preview(name = "Weather Success Screen - Day")
 @Composable
 private fun WeatherSuccessScreenDayPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherSuccessScreen(
             weatherDescription = "Clear sky",
             formattedLocation = "London, UK",
@@ -164,7 +164,7 @@ private fun WeatherSuccessScreenDayPreview() {
 @Preview(name = "Weather Success Screen - Night")
 @Composable
 private fun WeatherSuccessScreenNightPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherSuccessScreen(
             weatherDescription = "Clear sky",
             formattedLocation = "Paris, FR",
@@ -207,7 +207,7 @@ private fun WeatherSuccessScreenNightPreview() {
 @Preview(name = "Weather Success Screen - No Forecasts")
 @Composable
 private fun WeatherSuccessScreenNoForecastsPreview() {
-    MaterialTheme {
+    TempestTheme {
         WeatherSuccessScreen(
             weatherDescription = "Partly cloudy",
             formattedLocation = "Tokyo, JP",

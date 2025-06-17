@@ -15,10 +15,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.harry.design.TempestTheme
 import com.harry.location.SearchLocationNavigationDestination
 import com.harry.location.domain.model.Location
 import com.harry.tempest.navigation.StartDestination
-import com.harry.tempest.ui.theme.TempestTheme
 import com.harry.weather.WeatherNavigationDestination
 import com.harry.weather.WeatherRoute
 import org.koin.androidx.compose.koinViewModel

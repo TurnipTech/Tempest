@@ -14,12 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.harry.design.OverlayColors
+import com.harry.design.TempestTheme
 import com.harry.weather.R
 import com.harry.weather.ui.model.DailyWeatherUiModel
 
@@ -29,7 +28,7 @@ fun WeeklyForecast(weeklyForecast: List<DailyWeatherUiModel>, modifier: Modifier
         modifier = modifier.fillMaxWidth(),
         colors =
             CardDefaults.cardColors(
-                containerColor = Color.White.copy(alpha = 0.15f),
+                containerColor = OverlayColors.surfaceTranslucent,
             ),
         shape = RoundedCornerShape(16.dp),
         elevation =
@@ -42,12 +41,8 @@ fun WeeklyForecast(weeklyForecast: List<DailyWeatherUiModel>, modifier: Modifier
         ) {
             Text(
                 text = stringResource(R.string.seven_day_forecast),
-                style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
-                    ),
-                color = Color.White.copy(alpha = 0.9f),
+                style = MaterialTheme.typography.titleLarge,
+                color = OverlayColors.contentPrimary,
                 modifier = Modifier.padding(bottom = 16.dp),
             )
 
@@ -71,12 +66,8 @@ fun DailyWeatherItem(dailyWeather: DailyWeatherUiModel, modifier: Modifier = Mod
     ) {
         Text(
             text = dailyWeather.formattedDay,
-            style =
-                MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 16.sp,
-                ),
-            color = Color.White.copy(alpha = 0.9f),
+            style = MaterialTheme.typography.titleMedium,
+            color = OverlayColors.contentPrimary,
             modifier = Modifier.weight(1f),
         )
 
@@ -97,21 +88,13 @@ fun DailyWeatherItem(dailyWeather: DailyWeatherUiModel, modifier: Modifier = Mod
             ) {
                 Text(
                     text = stringResource(R.string.temperature_high_icon),
-                    style =
-                        MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                        ),
-                    color = Color.White.copy(alpha = 0.8f),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = OverlayColors.contentInteractive,
                 )
                 Text(
                     text = dailyWeather.temperatureHigh,
-                    style =
-                        MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp,
-                        ),
-                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = OverlayColors.contentPrimary,
                 )
             }
 
@@ -121,21 +104,13 @@ fun DailyWeatherItem(dailyWeather: DailyWeatherUiModel, modifier: Modifier = Mod
             ) {
                 Text(
                     text = stringResource(R.string.temperature_low_icon),
-                    style =
-                        MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp,
-                        ),
-                    color = Color.White.copy(alpha = 0.6f),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = OverlayColors.contentDisabled,
                 )
                 Text(
                     text = dailyWeather.temperatureLow,
-                    style =
-                        MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 16.sp,
-                        ),
-                    color = Color.White.copy(alpha = 0.7f),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = OverlayColors.contentTertiary,
                 )
             }
         }
@@ -184,7 +159,7 @@ fun WeeklyForecastPreview() {
             ),
         )
 
-    MaterialTheme {
+    TempestTheme {
         WeeklyForecast(weeklyForecast = sampleWeeklyData)
     }
 }
@@ -201,7 +176,7 @@ fun DailyWeatherItemPreview() {
             iconDescription = "clear sky",
         )
 
-    MaterialTheme {
+    TempestTheme {
         DailyWeatherItem(dailyWeather = sampleDailyWeather)
     }
 }

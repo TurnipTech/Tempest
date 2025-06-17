@@ -16,16 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.harry.design.OverlayColors
+import com.harry.design.TempestTheme
 import com.harry.weather.R
 import com.harry.weather.ui.model.HourlyWeatherUiModel
 
@@ -35,7 +34,7 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
         modifier = modifier.fillMaxWidth(),
         colors =
             CardDefaults.cardColors(
-                containerColor = Color.White.copy(alpha = 0.15f),
+                containerColor = OverlayColors.surfaceTranslucent,
             ),
         shape = RoundedCornerShape(16.dp),
         elevation =
@@ -48,12 +47,8 @@ fun TodaysForecast(hourlyForecast: List<HourlyWeatherUiModel>, modifier: Modifie
         ) {
             Text(
                 text = stringResource(R.string.twenty_four_hour_forecast),
-                style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
-                    ),
-                color = Color.White.copy(alpha = 0.9f),
+                style = MaterialTheme.typography.titleLarge,
+                color = OverlayColors.contentPrimary,
                 modifier = Modifier.padding(bottom = 16.dp, start = 20.dp),
             )
 
@@ -78,12 +73,8 @@ fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = 
     ) {
         Text(
             text = hourlyWeather.formattedTime,
-            style =
-                MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp,
-                ),
-            color = Color.White.copy(alpha = 0.7f),
+            style = MaterialTheme.typography.labelMedium,
+            color = OverlayColors.contentTertiary,
         )
 
         WeatherIcon(
@@ -94,22 +85,14 @@ fun HourlyWeatherItem(hourlyWeather: HourlyWeatherUiModel, modifier: Modifier = 
 
         Text(
             text = hourlyWeather.temperature,
-            style =
-                MaterialTheme.typography.bodyMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                ),
-            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium,
+            color = OverlayColors.contentPrimary,
         )
 
         Text(
             text = hourlyWeather.precipitationProbability,
-            style =
-                MaterialTheme.typography.bodySmall.copy(
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 12.sp,
-                ),
-            color = Color.White.copy(alpha = 0.6f),
+            style = MaterialTheme.typography.labelMedium,
+            color = OverlayColors.contentDisabled,
         )
     }
 }
@@ -156,7 +139,7 @@ fun TodaysForecastPreview() {
             ),
         )
 
-    MaterialTheme {
+    TempestTheme {
         TodaysForecast(hourlyForecast = sampleHourlyData)
     }
 }
@@ -173,7 +156,7 @@ fun HourlyWeatherItemPreview() {
             precipitationProbability = "20%",
         )
 
-    MaterialTheme {
+    TempestTheme {
         HourlyWeatherItem(hourlyWeather = sampleHourlyWeather)
     }
 }
