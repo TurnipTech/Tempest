@@ -34,6 +34,7 @@ fun weatherModule(apiKey: String) =
                 getCurrentWeatherUseCase = get(),
                 weatherUiMapper = get(),
                 getStoredLocationUseCase = get(),
+                resourceProvider = get(),
             )
         }
     }

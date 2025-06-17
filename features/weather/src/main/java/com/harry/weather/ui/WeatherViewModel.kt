@@ -3,6 +3,9 @@ package com.harry.weather.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harry.location.domain.usecase.GetStoredLocationUseCase
+import com.harry.utils.ResourceProvider
+import com.harry.weather.R
+import com.harry.weather.domain.WeatherConstants
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
 import com.harry.weather.ui.mapper.WeatherUiMapper
 import com.harry.weather.ui.model.WeatherUiState
@@ -16,6 +19,7 @@ class WeatherViewModel(
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase,
     private val weatherUiMapper: WeatherUiMapper,
     private val getStoredLocationUseCase: GetStoredLocationUseCase,
+    private val resourceProvider: ResourceProvider,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
@@ -28,7 +32,7 @@ class WeatherViewModel(
         loadWeather()
     }
 
-    private fun loadWeather(units: String = "metric", language: String = "en") {
+    private fun loadWeather() {
         viewModelScope.launch {
             _uiState.value = WeatherUiState.Loading
 
@@ -37,7 +41,7 @@ class WeatherViewModel(
             if (currentLocation == null) {
                 _uiState.value =
                     WeatherUiState.Error(
-                        message = "No location available",
+                        message = resourceProvider.getString(R.string.error_no_location_available),
                         canRetry = false,
                     )
                 return@launch
@@ -46,19 +50,17 @@ class WeatherViewModel(
             getCurrentWeatherUseCase(
                 latitude = currentLocation.latitude,
                 longitude = currentLocation.longitude,
-                units = units,
-                language = language,
             ).onSuccess { weatherData ->
                 _uiState.value =
                     weatherUiMapper.mapToSuccessState(
                         weatherData = weatherData,
-                        units = units,
+                        units = WeatherConstants.METRIC_UNIT,
                         locationName = currentLocation.name,
                     )
             }.onFailure { error ->
                 _uiState.value =
                     WeatherUiState.Error(
-                        message = error.message ?: "Failed to load weather data",
+                        message = error.message ?: resourceProvider.getString(R.string.error_failed_to_load_weather),
                         canRetry = true,
                     )
             }
