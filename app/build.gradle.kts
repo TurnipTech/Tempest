@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:location"))
     implementation(project(":core:storage"))
+    implementation(project(":core:utils"))
     implementation(project(":features:weather"))
     implementation(project(":features:search_location"))
 
@@ -81,6 +82,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.koin.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

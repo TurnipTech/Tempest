@@ -1,4 +1,4 @@
-package com.harry.location.ui.mapper
+package com.harry.utils
 
 interface ResourceProvider {
     fun getString(resId: Int): String
