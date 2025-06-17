@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -36,7 +37,6 @@ android {
 dependencies {
 
     implementation(project(":core:design_system"))
-    implementation(project(":core:navigation"))
     implementation(project(":core:location"))
     implementation(project(":core:utils"))
 
@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.coil.compose)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.compose.navigation)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

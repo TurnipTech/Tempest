@@ -7,6 +7,7 @@ import com.harry.weather.data.mapper.WeatherMapper
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
 import com.harry.weather.ui.WeatherViewModel
 import com.harry.weather.ui.mapper.WeatherUiMapper
+import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,6 +18,7 @@ fun weatherModule(apiKey: String) =
                 client = get(),
                 mapper = get(),
                 apiKey = apiKey,
+                ioDispatcher = Dispatchers.IO,
             )
         }
 
@@ -32,6 +34,7 @@ fun weatherModule(apiKey: String) =
                 getCurrentWeatherUseCase = get(),
                 weatherUiMapper = get(),
                 getStoredLocationUseCase = get(),
+                resourceProvider = get(),
             )
         }
     }

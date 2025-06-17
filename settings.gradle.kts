@@ -22,7 +22,6 @@ dependencyResolutionManagement {
 rootProject.name = "Tempest"
 include(":app")
 include(":core:network")
-include(":core:navigation")
 include(":features:weather")
 include(":features:search_location")
 include(":core:location")

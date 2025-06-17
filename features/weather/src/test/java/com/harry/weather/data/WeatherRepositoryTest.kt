@@ -9,6 +9,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.KSerializer
 import org.junit.Assert.assertEquals
@@ -18,6 +19,7 @@ import org.junit.Test
 class WeatherRepositoryTest {
     private val client: HttpClient = mockk(relaxed = true)
     private val mapper: WeatherMapper = mockk(relaxed = true)
+    private val testDispatcher = UnconfinedTestDispatcher()
     private val apiKey = "expectedApiKey"
 
     private val repo: WeatherRepositoryImpl =
@@ -25,6 +27,7 @@ class WeatherRepositoryTest {
             mapper = mapper,
             client = client,
             apiKey = apiKey,
+            ioDispatcher = testDispatcher,
         )
 
     private val testLatitude = 40.7128

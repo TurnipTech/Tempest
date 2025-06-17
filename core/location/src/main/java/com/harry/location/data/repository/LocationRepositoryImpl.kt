@@ -11,7 +11,9 @@ import com.harry.storage.Storage
 import com.harry.storage.get
 import com.harry.storage.getNullable
 import com.harry.storage.put
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
 private const val GEOCODING_BASE_URL = "https://api.openweathermap.org/geo/1.0"
 private const val DIRECT_GEOCODING_ENDPOINT = "$GEOCODING_BASE_URL/direct"
@@ -30,52 +32,58 @@ internal class LocationRepositoryImpl(
     private val mapper: LocationMapper,
     private val apiKey: String,
     private val storage: Storage,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : LocationRepository {
-    override suspend fun searchLocations(query: String, limit: Int): Result<LocationSearchResult> {
-        val params =
-            mapOf(
-                PARAM_QUERY to query,
-                PARAM_LIMIT to limit.toString(),
-                PARAM_APP_ID to apiKey,
-            )
+    override suspend fun searchLocations(query: String, limit: Int): Result<LocationSearchResult> =
+        withContext(ioDispatcher) {
+            val params =
+                mapOf(
+                    PARAM_QUERY to query,
+                    PARAM_LIMIT to limit.toString(),
+                    PARAM_APP_ID to apiKey,
+                )
 
-        return client
-            .get<List<GeocodingLocationDto>>(
-                endpoint = DIRECT_GEOCODING_ENDPOINT,
-                params = params,
-            ).map { dtos ->
-                mapper.mapToLocationSearchResult(dtos, query)
-            }
-    }
+            client
+                .get<List<GeocodingLocationDto>>(
+                    endpoint = DIRECT_GEOCODING_ENDPOINT,
+                    params = params,
+                ).map { dtos ->
+                    mapper.mapToLocationSearchResult(dtos, query)
+                }
+        }
 
     override suspend fun getLocationByCoordinates(
         latitude: Double,
         longitude: Double,
         limit: Int,
-    ): Result<LocationSearchResult> {
-        val params =
-            mapOf(
-                PARAM_LATITUDE to latitude.toString(),
-                PARAM_LONGITUDE to longitude.toString(),
-                PARAM_LIMIT to limit.toString(),
-                PARAM_APP_ID to apiKey,
-            )
+    ): Result<LocationSearchResult> =
+        withContext(ioDispatcher) {
+            val params =
+                mapOf(
+                    PARAM_LATITUDE to latitude.toString(),
+                    PARAM_LONGITUDE to longitude.toString(),
+                    PARAM_LIMIT to limit.toString(),
+                    PARAM_APP_ID to apiKey,
+                )
 
-        val coordinateQuery = "$latitude,$longitude"
+            val coordinateQuery = "$latitude,$longitude"
 
-        return client
-            .get<List<GeocodingLocationDto>>(
-                endpoint = REVERSE_GEOCODING_ENDPOINT,
-                params = params,
-            ).map { dtos ->
-                mapper.mapToLocationSearchResult(dtos, coordinateQuery)
-            }
-    }
+            client
+                .get<List<GeocodingLocationDto>>(
+                    endpoint = REVERSE_GEOCODING_ENDPOINT,
+                    params = params,
+                ).map { dtos ->
+                    mapper.mapToLocationSearchResult(dtos, coordinateQuery)
+                }
+        }
 
     override suspend fun getStoredLocation(): Location? =
-        storage.getNullable<Location>(key = STORED_LOCATION_KEY).first()
+        withContext(ioDispatcher) {
+            storage.getNullable<Location>(key = STORED_LOCATION_KEY).first()
+        }
 
-    override suspend fun setLocation(location: Location) {
-        storage.put(key = STORED_LOCATION_KEY, location)
-    }
+    override suspend fun setLocation(location: Location) =
+        withContext(ioDispatcher) {
+            storage.put(key = STORED_LOCATION_KEY, location)
+        }
 }

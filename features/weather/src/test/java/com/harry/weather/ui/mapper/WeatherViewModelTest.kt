@@ -4,6 +4,8 @@ package com.harry.weather.ui.mapper
 
 import com.harry.location.domain.model.Location
 import com.harry.location.domain.usecase.GetStoredLocationUseCase
+import com.harry.utils.ResourceProvider
+import com.harry.weather.R
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.domain.usecase.GetCurrentWeatherUseCase
@@ -11,6 +13,7 @@ import com.harry.weather.ui.WeatherViewModel
 import com.harry.weather.ui.model.WeatherUiState
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,11 +30,17 @@ class WeatherViewModelTest {
     private val getCurrentWeatherUseCase: GetCurrentWeatherUseCase = mockk(relaxed = true)
     private val weatherUiMapper: WeatherUiMapper = mockk(relaxed = true)
     private val getStoredLocationUseCase: GetStoredLocationUseCase = mockk(relaxed = true)
+    private val resourceProvider: ResourceProvider = mockk(relaxed = true)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
+
+        // Setup ResourceProvider mock responses
+        every { resourceProvider.getString(R.string.error_no_location_available) } returns "No location available"
+        every { resourceProvider.getString(R.string.error_failed_to_load_weather) } returns
+            "Failed to load weather data"
     }
 
     private val timezone = "Europe/London"
@@ -76,13 +85,7 @@ class WeatherViewModelTest {
                 Result.success(mockk())
             }
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceTimeBy(100)
 
             assertEquals(expected, viewModel.uiState.value)
@@ -101,13 +104,7 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception(errorMessage))
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             assertEquals(expected, viewModel.uiState.value)
@@ -125,13 +122,7 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception())
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             assertEquals(expected, viewModel.uiState.value)
@@ -145,13 +136,7 @@ class WeatherViewModelTest {
             coEvery { weatherUiMapper.mapToSuccessState(testWeatherData, "metric", testLocation.name) } returns
                 testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             assertEquals(testSuccessState, viewModel.uiState.value)
@@ -164,13 +149,7 @@ class WeatherViewModelTest {
                 Result.success(testWeatherData)
             coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             coVerify(exactly = 1) {
@@ -190,13 +169,7 @@ class WeatherViewModelTest {
                 Result.success(testWeatherData)
             coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             coVerify(exactly = 1) {
@@ -210,13 +183,7 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception("Error"))
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             coVerify(exactly = 0) {
@@ -234,13 +201,7 @@ class WeatherViewModelTest {
             coEvery { weatherUiMapper.mapToSuccessState(testWeatherData, "metric", storedLocation.name) } returns
                 testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = null,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel(location = null)
             advanceUntilIdle()
 
             assertEquals(testSuccessState, viewModel.uiState.value)
@@ -268,13 +229,7 @@ class WeatherViewModelTest {
 
             coEvery { getStoredLocationUseCase.invoke() } returns null
 
-            val viewModel =
-                WeatherViewModel(
-                    location = null,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel(location = null)
             advanceUntilIdle()
 
             assertEquals(expected, viewModel.uiState.value)
@@ -296,13 +251,7 @@ class WeatherViewModelTest {
                 Result.success(testWeatherData)
             coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             assertEquals(testSuccessState, viewModel.uiState.value)
@@ -318,13 +267,7 @@ class WeatherViewModelTest {
                 Result.success(testWeatherData)
             coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             // Call retry
@@ -355,13 +298,7 @@ class WeatherViewModelTest {
                 )
             coEvery { weatherUiMapper.mapToSuccessState(any(), any(), any()) } returns testSuccessState
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             // Should be in error state after initial load
@@ -386,13 +323,7 @@ class WeatherViewModelTest {
             coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
                 Result.failure(Exception(errorMessage))
 
-            val viewModel =
-                WeatherViewModel(
-                    location = testLocation,
-                    getCurrentWeatherUseCase = getCurrentWeatherUseCase,
-                    weatherUiMapper = weatherUiMapper,
-                    getStoredLocationUseCase = getStoredLocationUseCase,
-                )
+            val viewModel = createViewModel()
             advanceUntilIdle()
 
             // Should be in error state after initial load
@@ -411,4 +342,70 @@ class WeatherViewModelTest {
                 viewModel.uiState.value,
             )
         }
+
+    @Test
+    fun `should use ResourceProvider for no location available error message`() =
+        runTest {
+            val expectedErrorMessage = "No location available"
+            every { resourceProvider.getString(R.string.error_no_location_available) } returns expectedErrorMessage
+            coEvery { getStoredLocationUseCase.invoke() } returns null
+
+            val viewModel = createViewModel(location = null)
+            advanceUntilIdle()
+
+            assertEquals(
+                WeatherUiState.Error(message = expectedErrorMessage, canRetry = false),
+                viewModel.uiState.value,
+            )
+        }
+
+    @Test
+    fun `should use ResourceProvider for failed to load weather error message when exception has no message`() =
+        runTest {
+            val expectedErrorMessage = "Failed to load weather data"
+            every { resourceProvider.getString(R.string.error_failed_to_load_weather) } returns expectedErrorMessage
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.failure(Exception())
+
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+
+            assertEquals(
+                WeatherUiState.Error(message = expectedErrorMessage, canRetry = true),
+                viewModel.uiState.value,
+            )
+        }
+
+    @Test
+    fun `should prefer exception message over ResourceProvider when exception has message`() =
+        runTest {
+            val exceptionMessage = "Network connection failed"
+            val resourceProviderMessage = "Failed to load weather data"
+            every { resourceProvider.getString(R.string.error_failed_to_load_weather) } returns resourceProviderMessage
+            coEvery { getCurrentWeatherUseCase.invoke(any(), any(), any(), any()) } returns
+                Result.failure(Exception(exceptionMessage))
+
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+
+            assertEquals(
+                WeatherUiState.Error(message = exceptionMessage, canRetry = true),
+                viewModel.uiState.value,
+            )
+        }
+
+    private fun createViewModel(
+        location: Location? = this.testLocation,
+        getCurrentWeatherUseCase: GetCurrentWeatherUseCase = this.getCurrentWeatherUseCase,
+        weatherUiMapper: WeatherUiMapper = this.weatherUiMapper,
+        getStoredLocationUseCase: GetStoredLocationUseCase = this.getStoredLocationUseCase,
+        resourceProvider: ResourceProvider = this.resourceProvider,
+    ): WeatherViewModel =
+        WeatherViewModel(
+            location = location,
+            getCurrentWeatherUseCase = getCurrentWeatherUseCase,
+            weatherUiMapper = weatherUiMapper,
+            getStoredLocationUseCase = getStoredLocationUseCase,
+            resourceProvider = resourceProvider,
+        )
 }

@@ -37,7 +37,6 @@ android {
 dependencies {
 
     implementation(project(":core:design_system"))
-    implementation(project(":core:navigation"))
     implementation(project(":core:network"))
     implementation(project(":core:location"))
     implementation(project(":core:utils"))
@@ -57,6 +56,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation(libs.compose.navigation)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.tooling.preview)

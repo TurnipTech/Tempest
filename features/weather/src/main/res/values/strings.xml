@@ -19,4 +19,8 @@
     <string name="no_data_available">No data available</string>
     <string name="updated_prefix">Updated </string>
     <string name="temperature_not_available">N/A</string>
+    
+    <!-- Error Messages -->
+    <string name="error_no_location_available">No location available</string>
+    <string name="error_failed_to_load_weather">Failed to load weather data</string>
 </resources>
