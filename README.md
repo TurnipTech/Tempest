@@ -10,7 +10,9 @@ Tempest is a weather forecast app designed to showcase clean architecture princi
 
 - **Language**: Kotlin
 - **UI Framework**: Jetpack Compose
-- **Architecture**: Clean Architecture with MVVM
+- **Architecture**: Clean Architecture with MVVM pattern
+- **Dependency Injection**: Koin
+- **Networking**: Ktor HTTP client with Kotlinx Serialization
 - **Async Programming**: Kotlin Coroutines
 - **Android SDK**: Target 35, Min 24
 - **Build System**: Gradle with Kotlin DSL
@@ -23,8 +25,9 @@ Tempest is a weather forecast app designed to showcase clean architecture princi
 - JDK 11 or higher
 - Android SDK with API level 35
 - Git
+- OpenWeatherMap API key
 
-### Building the Project
+### Setup Instructions
 
 1. **Clone the repository**
    ```bash
@@ -32,12 +35,20 @@ Tempest is a weather forecast app designed to showcase clean architecture princi
    cd Tempest
    ```
 
-2. **Build the project**
+2. **Configure API Key**
+   - Sign up for a free API key at [OpenWeatherMap](https://openweathermap.org/api)
+   - Create a `local.properties` file in the project root (if it doesn't exist)
+   - Add your API key to `local.properties`:
+   ```properties
+   OPEN_WEATHER_API_KEY=your_api_key_here
+   ```
+
+3. **Build the project**
    ```bash
    ./gradlew build
    ```
 
-3. **Install on device/emulator**
+4. **Install on device/emulator**
    ```bash
    ./gradlew assembleDebug
    ./gradlew installDebug
@@ -99,3 +110,45 @@ Style is automatically checked in CI and should be verified before committing:
 ```bash
 ./gradlew ktlintFormat
 ```
+
+## Architecture
+
+### Module Structure
+The project follows a multi-module clean architecture:
+
+```
+app/                              # Main application module with MainActivity
+├── core/
+│   ├── design_system/           # UI theming, colours, typography
+│   ├── location/                # Location domain logic and data handling
+│   ├── navigation/              # Navigation destinations interface
+│   ├── network/                 # HTTP client abstraction with Ktor
+│   ├── storage/                 # Data persistence abstraction with DataStore
+│   └── utils/                   # Shared utility functions and resource providers
+└── features/
+    ├── search_location/         # Location search and selection feature
+    │   ├── domain/              # Location search use cases
+    │   └── ui/                  # Search screens, ViewModels, UI components
+    └── weather/                 # Weather forecast feature
+        ├── data/                # Repository, DTOs, mappers
+        ├── domain/              # Use cases, domain models, constants
+        └── ui/                  # Weather screens, ViewModels, UI components
+```
+
+### Key Patterns
+- **Repository Pattern**: Clean separation between data and domain layers
+- **Dependency Injection**: Koin modules for each feature
+- **Navigation**: Type-safe navigation with NavigationDestination interface
+- **Data Flow**: DTOs → Domain Models → UI Models with dedicated mappers
+
+## Tools Used
+- **Claude Code** (Terminal application) - Code scaffolding, code review, and debugging
+- **Claude** - App analysis and design decisions
+- **ChatGPT** - App icon generation and design analysis
+
+## Future Improvements
+- **Snapshot Testing** - Add comprehensive snapshot tests for UI components
+- **Localisation** - OpenWeatherMap offers good support for localisation (the location object in domain retains additional parameters to make this easier to implement)
+- **Network Resilience** - Expand network module with caching, auto-retry, and backoff strategies
+- **CI/CD Enhancement** - Add code coverage checks, automation tests, and Play Store deployment pipeline
+
