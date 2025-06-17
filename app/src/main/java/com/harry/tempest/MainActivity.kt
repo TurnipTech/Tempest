@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.harry.location.SearchLocationNavigationDestination
-import com.harry.location.domain.model.StartDestination
+import com.harry.tempest.navigation.StartDestination
 import com.harry.tempest.ui.theme.TempestTheme
 import com.harry.weather.WeatherNavigationDestination
 import com.harry.weather.WeatherRoute

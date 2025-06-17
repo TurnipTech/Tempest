@@ -1,6 +1,5 @@
 package com.harry.location.di
 
-import com.harry.location.domain.usecase.GetStartDestinationUseCase
 import com.harry.location.domain.usecase.SearchLocationsUseCase
 import com.harry.location.domain.usecase.SetLocationUseCase
 import com.harry.location.ui.SearchLocationViewModel
@@ -15,8 +14,6 @@ val searchLocationModule =
         factory { SearchLocationsUseCase(locationRepository = get()) }
 
         factory { SetLocationUseCase(locationRepository = get()) }
-
-        factory { GetStartDestinationUseCase(locationRepository = get()) }
 
         viewModel {
             SearchLocationViewModel(

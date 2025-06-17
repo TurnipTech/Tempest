@@ -11,4 +11,9 @@ val appModule =
                 getStartDestinationUseCase = get(),
             )
         }
+
+        factory {
+            com.harry.tempest.navigation
+                .GetStartDestinationUseCase(locationRepository = get())
+        }
     }

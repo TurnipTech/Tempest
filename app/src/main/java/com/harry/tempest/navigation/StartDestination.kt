@@ -1,6 +1,7 @@
-package com.harry.location.domain.model
+package com.harry.tempest.navigation
 
-// todo - this should be in the main app, NOT in search_location module
+import com.harry.location.domain.model.Location
+
 sealed interface StartDestination {
     data object SearchLocation : StartDestination
 
