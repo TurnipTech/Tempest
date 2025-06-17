@@ -35,6 +35,7 @@ android {
 dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:storage"))
+    implementation(project(":core:utils"))
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)

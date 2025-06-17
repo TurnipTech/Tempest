@@ -4,6 +4,7 @@ import com.harry.location.data.mapper.LocationMapper
 import com.harry.location.data.repository.LocationRepositoryImpl
 import com.harry.location.domain.repository.LocationRepository
 import com.harry.location.domain.usecase.GetStoredLocationUseCase
+import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
 fun locationModule(apiKey: String) =
@@ -14,6 +15,7 @@ fun locationModule(apiKey: String) =
                 mapper = get(),
                 apiKey = apiKey,
                 storage = get(),
+                ioDispatcher = Dispatchers.IO,
             )
         }
 

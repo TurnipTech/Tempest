@@ -7,10 +7,9 @@ class GetStartDestinationUseCase(
 ) {
     suspend operator fun invoke(): StartDestination {
         val storedLocation = locationRepository.getStoredLocation()
-        return if (storedLocation != null) {
-            StartDestination.Weather(storedLocation)
-        } else {
-            StartDestination.SearchLocation
+        return when {
+            storedLocation != null -> StartDestination.Weather(storedLocation)
+            else -> StartDestination.SearchLocation
         }
     }
 }

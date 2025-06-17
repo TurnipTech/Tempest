@@ -10,6 +10,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.KSerializer
 import org.junit.Assert.assertEquals
@@ -20,6 +21,7 @@ class LocationRepositoryImplTest {
     private val client: HttpClient = mockk(relaxed = true)
     private val mapper: LocationMapper = mockk(relaxed = true)
     private val storage: Storage = mockk(relaxed = true)
+    private val testDispatcher = UnconfinedTestDispatcher()
     private val apiKey = "test_api_key"
 
     private val repository =
@@ -28,6 +30,7 @@ class LocationRepositoryImplTest {
             mapper = mapper,
             apiKey = apiKey,
             storage = storage,
+            ioDispatcher = testDispatcher,
         )
 
     private val testQuery = "London"
