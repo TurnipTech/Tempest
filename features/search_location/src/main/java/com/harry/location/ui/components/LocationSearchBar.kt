@@ -90,7 +90,9 @@ fun LocationSearchBarComponent(
                 .fillMaxWidth()
                 .padding(horizontal = animatedPadding),
         windowInsets = SearchBarDefaults.windowInsets,
-        colors = SearchBarDefaults.colors(),
+        colors = SearchBarDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        ),
         content = content,
     )
 }

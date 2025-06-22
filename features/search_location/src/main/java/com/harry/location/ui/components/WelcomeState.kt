@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.TempestTheme
 import com.harry.location.R
 
 @Composable
@@ -51,48 +52,9 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
                     Icon(
                         Icons.Default.TravelExplore,
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(88.dp),
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.LocationOn,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.secondary,
-                        )
-                    }
-                }
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.Language,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
                 }
             }
         }
@@ -103,7 +65,7 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
         ) {
             Text(
                 text = stringResource(R.string.welcome_title),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
             )
@@ -117,8 +79,10 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun WelcomeStatePreview() {
-    WelcomeMessage()
+    TempestTheme {
+        WelcomeMessage()
+    }
 }
