@@ -2,14 +2,11 @@ package com.harry.location.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.OverlayColors
 import com.harry.design.TempestTheme
 import com.harry.location.R
 
@@ -53,7 +51,7 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
                         Icons.Default.TravelExplore,
                         contentDescription = null,
                         modifier = Modifier.size(88.dp),
-                        tint = MaterialTheme.colorScheme.onSurface,
+                        tint = OverlayColors.contentPrimary,
                     )
                 }
             }
@@ -66,20 +64,20 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(R.string.welcome_title),
                 style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = OverlayColors.contentPrimary,
                 textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.welcome_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = OverlayColors.contentPrimary,
                 textAlign = TextAlign.Center,
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 private fun WelcomeStatePreview() {
     TempestTheme {
