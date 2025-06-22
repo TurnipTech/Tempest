@@ -73,7 +73,7 @@ class WeatherViewModelTest {
             todaysHourlyForecast = emptyList(),
             weeklyForecast = emptyList(),
             timeOfDay = TimeOfDay.DAY,
-            uvi = currentWeather?.uvi,
+            uvIndex = null,
         )
 
     @Test

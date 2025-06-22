@@ -22,6 +22,14 @@ object OverlayColors {
     val shimmerPeak = Color.White.copy(alpha = 0.8f)
 }
 
+object UvColors {
+    val low = Color(0xFF4CAF50) // Green
+    val moderate = Color(0xFFFFEB3B) // Yellow
+    val high = Color(0xFFFF9800) // Orange
+    val veryHigh = Color(0xFFf44336) // Red
+    val extreme = Color(0xFF9C27B0) // Purple
+}
+
 object WeatherGradients {
     object Dawn {
         val skyDark = Color(0xFF1a1a2e)

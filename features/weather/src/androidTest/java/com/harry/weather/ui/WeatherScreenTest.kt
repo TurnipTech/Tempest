@@ -154,7 +154,7 @@ class WeatherScreenRobot(
         iconDescription: String = "clear sky",
         hourlyForecast: List<HourlyWeatherUiModel> = emptyList(),
         weeklyForecast: List<DailyWeatherUiModel> = emptyList(),
-        uvi: Double = 50.0
+        uvi: Double = 50.0,
     ) = WeatherUiState.Success(
         weatherData = mockk(),
         formattedTemperature = temperature,

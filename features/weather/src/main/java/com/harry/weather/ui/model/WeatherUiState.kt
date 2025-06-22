@@ -3,6 +3,13 @@ package com.harry.weather.ui.model
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 
+data class UvUiModel(
+    val index: Int,
+    val level: String,
+    val description: String,
+    val uvPercentage: Float,
+)
+
 sealed class WeatherUiState {
     data object Loading : WeatherUiState()
 
@@ -17,7 +24,7 @@ sealed class WeatherUiState {
         val todaysHourlyForecast: List<HourlyWeatherUiModel>,
         val weeklyForecast: List<DailyWeatherUiModel>,
         val timeOfDay: TimeOfDay,
-        val uvi: Double?,
+        val uvIndex: UvUiModel?,
     ) : WeatherUiState()
 
     data class Error(

@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -19,6 +20,16 @@ class WeatherUiMapperTest {
             every { getString(R.string.no_data_available) } returns "No data available"
             every { getString(R.string.updated_prefix) } returns "Updated "
             every { getString(R.string.temperature_not_available) } returns "N/A"
+            every { getString(R.string.uv_level_low) } returns "Low"
+            every { getString(R.string.uv_level_moderate) } returns "Moderate"
+            every { getString(R.string.uv_level_high) } returns "High"
+            every { getString(R.string.uv_level_very_high) } returns "Very High"
+            every { getString(R.string.uv_level_extreme) } returns "Extreme"
+            every { getString(R.string.uv_description_low) } returns "Minimal protection required"
+            every { getString(R.string.uv_description_moderate) } returns "Seek shade during midday"
+            every { getString(R.string.uv_description_high) } returns "Protection essential"
+            every { getString(R.string.uv_description_very_high) } returns "Extra protection required"
+            every { getString(R.string.uv_description_extreme) } returns "Avoid sun exposure"
         }
     private val mapper = WeatherUiMapper(mockResourceProvider)
 
@@ -472,13 +483,14 @@ class WeatherUiMapperTest {
     private fun createCurrentWeather(
         temperature: Double = 22.0,
         condition: WeatherCondition = WeatherCondition("clear sky", "01d"),
+        uvi: Double? = 5.0,
     ): CurrentWeather =
         CurrentWeather(
             temperature = temperature,
             sunrise = 1640678400L,
             sunset = 1640714400L,
             condition = condition,
-            uvi = dto.uvIndex,
+            uvi = uvi,
         )
 
     private fun createHourlyWeather(dateTime: Long): HourlyWeather =
@@ -512,5 +524,169 @@ class WeatherUiMapperTest {
             createDailyWeather(currentTime + (2 * 24 * 60 * 60)),
             createDailyWeather(currentTime + (3 * 24 * 60 * 60)),
         )
+    }
+
+    // UV Index Tests
+    @Test
+    fun `mapToSuccessState with null UV index returns null uvIndex`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = null),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNull(result.uvIndex)
+    }
+
+    @Test
+    fun `mapToSuccessState with low UV index maps correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 1.5),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNotNull(result.uvIndex)
+        assertEquals(1, result.uvIndex!!.index)
+        assertEquals("Low", result.uvIndex!!.level)
+        assertEquals("Minimal protection required", result.uvIndex!!.description)
+        assertEquals(0.136f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `mapToSuccessState with moderate UV index maps correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 4.0),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNotNull(result.uvIndex)
+        assertEquals(4, result.uvIndex!!.index)
+        assertEquals("Moderate", result.uvIndex!!.level)
+        assertEquals("Seek shade during midday", result.uvIndex!!.description)
+        assertEquals(0.364f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `mapToSuccessState with high UV index maps correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 6.5),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNotNull(result.uvIndex)
+        assertEquals(6, result.uvIndex!!.index)
+        assertEquals("High", result.uvIndex!!.level)
+        assertEquals("Protection essential", result.uvIndex!!.description)
+        assertEquals(0.591f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `mapToSuccessState with very high UV index maps correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 9.0),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNotNull(result.uvIndex)
+        assertEquals(9, result.uvIndex!!.index)
+        assertEquals("Very High", result.uvIndex!!.level)
+        assertEquals("Extra protection required", result.uvIndex!!.description)
+        assertEquals(0.818f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `mapToSuccessState with extreme UV index maps correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 12.0),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertNotNull(result.uvIndex)
+        assertEquals(12, result.uvIndex!!.index)
+        assertEquals("Extreme", result.uvIndex!!.level)
+        assertEquals("Avoid sun exposure", result.uvIndex!!.description)
+        assertEquals(1.0f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `UV level boundary testing - exact threshold values`() {
+        // Test boundary values for each UV level
+        val testCases =
+            listOf(
+                2.0 to "Low",
+                2.1 to "Moderate",
+                5.0 to "Moderate",
+                5.1 to "High",
+                7.0 to "High",
+                7.1 to "Very High",
+                10.0 to "Very High",
+                10.1 to "Extreme",
+            )
+
+        testCases.forEach { (uvValue, expectedLevel) ->
+            val weatherData =
+                createWeatherData(
+                    currentWeather = createCurrentWeather(uvi = uvValue),
+                )
+
+            val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+            assertEquals(
+                "UV index $uvValue should map to $expectedLevel",
+                expectedLevel,
+                result.uvIndex!!.level,
+            )
+        }
+    }
+
+    @Test
+    fun `UV index rounds down correctly`() {
+        val weatherData =
+            createWeatherData(
+                currentWeather = createCurrentWeather(uvi = 8.9),
+            )
+
+        val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+        assertEquals(8, result.uvIndex!!.index)
+        assertEquals(0.809f, result.uvIndex!!.uvPercentage, 0.001f)
+    }
+
+    @Test
+    fun `UV percentage calculation handles edge cases correctly`() {
+        val testCases =
+            listOf(
+                0.0 to 0.0f,
+                11.0 to 1.0f,
+                15.0 to 1.0f, // Should be capped at 1.0
+                5.5 to 0.5f,
+            )
+
+        testCases.forEach { (uvValue, expectedPercentage) ->
+            val weatherData =
+                createWeatherData(
+                    currentWeather = createCurrentWeather(uvi = uvValue),
+                )
+
+            val result = mapper.mapToSuccessState(weatherData, "metric", "Test Location")
+
+            assertEquals(
+                "UV $uvValue should map to $expectedPercentage percentage",
+                expectedPercentage,
+                result.uvIndex!!.uvPercentage,
+                0.001f,
+            )
+        }
     }
 }
