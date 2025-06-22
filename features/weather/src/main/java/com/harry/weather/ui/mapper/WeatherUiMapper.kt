@@ -95,6 +95,7 @@ class WeatherUiMapper(
                     weatherData.timezone,
                 ),
             timeOfDay = timeOfDay,
+            uvi = currentWeather?.uvi,
         )
     }
 

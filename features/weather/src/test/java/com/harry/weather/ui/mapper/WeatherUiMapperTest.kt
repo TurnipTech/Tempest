@@ -474,10 +474,11 @@ class WeatherUiMapperTest {
         condition: WeatherCondition = WeatherCondition("clear sky", "01d"),
     ): CurrentWeather =
         CurrentWeather(
+            temperature = temperature,
             sunrise = 1640678400L,
             sunset = 1640714400L,
-            temperature = temperature,
             condition = condition,
+            uvi = dto.uvIndex,
         )
 
     private fun createHourlyWeather(dateTime: Long): HourlyWeather =

@@ -12,6 +12,7 @@ data class CurrentWeather(
     val sunrise: Long?,
     val sunset: Long?,
     val condition: WeatherCondition,
+    val uvi: Double?,
 )
 
 data class HourlyWeather(

@@ -17,6 +17,7 @@ sealed class WeatherUiState {
         val todaysHourlyForecast: List<HourlyWeatherUiModel>,
         val weeklyForecast: List<DailyWeatherUiModel>,
         val timeOfDay: TimeOfDay,
+        val uvi: Double?,
     ) : WeatherUiState()
 
     data class Error(
