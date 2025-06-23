@@ -1,8 +1,11 @@
 package com.harry.weather.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +19,7 @@ import com.harry.design.TempestTheme
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
+import com.harry.weather.ui.model.UvUiModel
 
 @Composable
 fun WeatherSuccessScreen(
@@ -27,6 +31,7 @@ fun WeatherSuccessScreen(
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
     weeklyForecast: List<DailyWeatherUiModel>,
     timeOfDay: TimeOfDay,
+    uvIndex: UvUiModel?,
     onLocationClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,6 +47,7 @@ fun WeatherSuccessScreen(
             currentWeatherIconDescription = currentWeatherIconDescription,
             todaysHourlyForecast = todaysHourlyForecast,
             weeklyForecast = weeklyForecast,
+            uvIndex = uvIndex,
             onLocationClick = onLocationClick,
         )
     }
@@ -56,6 +62,7 @@ private fun WeatherContent(
     currentWeatherIconDescription: String,
     todaysHourlyForecast: List<HourlyWeatherUiModel>,
     weeklyForecast: List<DailyWeatherUiModel>,
+    uvIndex: UvUiModel?,
     onLocationClick: () -> Unit = {},
 ) {
     Column(
@@ -94,6 +101,28 @@ private fun WeatherContent(
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+
+        ExtraInfoCards(uvIndex = uvIndex)
+
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun ExtraInfoCards(uvIndex: UvUiModel?) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        if (uvIndex != null) {
+            UvCard(
+                uvModel = uvIndex,
+                modifier = Modifier.weight(1f),
+            )
+        }
+
+        // Placeholder for second card - will be filled later
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -156,6 +185,7 @@ private fun WeatherSuccessScreenDayPreview() {
                     ),
                 ),
             timeOfDay = TimeOfDay.DAY,
+            uvIndex = UvUiModel(6, "High", "Protection essential", 0.55f),
             onLocationClick = {},
         )
     }
@@ -199,6 +229,7 @@ private fun WeatherSuccessScreenNightPreview() {
                     ),
                 ),
             timeOfDay = TimeOfDay.NIGHT,
+            uvIndex = UvUiModel(1, "Low", "Minimal protection required", 0.09f),
             onLocationClick = {},
         )
     }
@@ -217,6 +248,7 @@ private fun WeatherSuccessScreenNoForecastsPreview() {
             todaysHourlyForecast = emptyList(),
             weeklyForecast = emptyList(),
             timeOfDay = TimeOfDay.DAY,
+            uvIndex = null,
             onLocationClick = {},
         )
     }

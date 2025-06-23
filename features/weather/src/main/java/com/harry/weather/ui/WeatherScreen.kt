@@ -36,6 +36,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel(), onNavigateToSea
                 todaysHourlyForecast = (state as WeatherUiState.Success).todaysHourlyForecast,
                 weeklyForecast = (state as WeatherUiState.Success).weeklyForecast,
                 timeOfDay = (state as WeatherUiState.Success).timeOfDay,
+                uvIndex = (state as WeatherUiState.Success).uvIndex,
                 onLocationClick = onNavigateToSearch,
             )
         }
