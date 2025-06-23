@@ -6,16 +6,26 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,13 +36,13 @@ import androidx.compose.ui.unit.dp
 import com.harry.design.OverlayColors
 import com.harry.design.UvColors
 import com.harry.weather.ui.model.UvUiModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun UvCard(uvModel: UvUiModel?, modifier: Modifier = Modifier) {
     Card(
         modifier =
-            modifier
-                .fillMaxWidth(),
+            modifier.fillMaxWidth(),
         colors =
             CardDefaults.cardColors(
                 containerColor = OverlayColors.surfaceTranslucent,
@@ -44,8 +54,9 @@ fun UvCard(uvModel: UvUiModel?, modifier: Modifier = Modifier) {
             ),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(20.dp).fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "UV Index",
@@ -54,55 +65,82 @@ fun UvCard(uvModel: UvUiModel?, modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Medium,
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
+            if (uvModel != null) {
                 Box(contentAlignment = Alignment.Center) {
-                    if (uvModel != null) {
-                        CircularProgressIndicator(
-                            progress = { uvModel.uvPercentage },
-                            modifier = Modifier.size(64.dp),
-                            trackColor = OverlayColors.contentDisabled.copy(alpha = 0.3f),
-                            color = getUvColor(uvModel.index.toDouble()),
-                            strokeWidth = 6.dp,
-                            strokeCap = StrokeCap.Round,
-                        )
+                    CircularProgressIndicator(
+                        progress = { uvModel.uvPercentage },
+                        modifier = Modifier.size(64.dp),
+                        trackColor = OverlayColors.contentDisabled.copy(alpha = 0.3f),
+                        color = getUvColor(uvModel.index.toDouble()),
+                        strokeWidth = 6.dp,
+                        strokeCap = StrokeCap.Round,
+                    )
 
-                        Text(
-                            text = uvModel.index.toString(),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = OverlayColors.contentPrimary,
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                }
-
-                if (uvModel != null) {
-                    Column {
-                        Text(
-                            text = uvModel.level,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = OverlayColors.contentPrimary,
-                            fontWeight = FontWeight.Medium,
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Text(
-                            text = uvModel.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = OverlayColors.contentSecondary,
-                        )
-                    }
-                } else {
                     Text(
-                        text = "No UV data available",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = OverlayColors.contentSecondary,
+                        text = uvModel.index.toString(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = OverlayColors.contentPrimary,
+                        fontWeight = FontWeight.Bold,
                     )
                 }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Text(
+                        text = uvModel.level,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = OverlayColors.contentPrimary,
+                        fontWeight = FontWeight.Medium,
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    IndexToolTip(uvModel.description)
+                }
+            } else {
+                Text(
+                    text = "No UV data available",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = OverlayColors.contentSecondary,
+                )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun IndexToolTip(text: String) {
+    val tooltipState = rememberTooltipState()
+    val coroutineScope = rememberCoroutineScope()
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = {
+            PlainTooltip {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        },
+        state = tooltipState,
+    ) {
+        IconButton(
+            onClick = {
+                coroutineScope.launch {
+                    tooltipState.show()
+                }
+            },
+            modifier = Modifier.size(20.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Info,
+                contentDescription = "UV info",
+                tint = OverlayColors.contentSecondary,
+                modifier = Modifier.size(16.dp),
+            )
         }
     }
 }
