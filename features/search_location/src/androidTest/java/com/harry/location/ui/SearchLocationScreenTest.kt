@@ -104,6 +104,37 @@ class SearchLocationScreenTest {
             assertSearchPlaceholderIsDisplayed()
         }
     }
+
+    @Test
+    fun searchLocationScreen_errorState_displaysErrorMessage() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            assertErrorStateIsDisplayed()
+        }
+    }
+
+    @Test
+    fun searchLocationScreen_errorState_displaysRetryButton() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            assertRetryButtonIsDisplayed()
+        }
+    }
+
+    @Test
+    fun searchLocationScreen_errorState_retryButtonClick_triggersRetry() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            clickRetryButton()
+            verifyRetryWasCalled()
+        }
+    }
 }
 
 class SearchLocationScreenRobot(
@@ -178,6 +209,10 @@ class SearchLocationScreenRobot(
         composeTestRule.onNodeWithText("London, UK").performClick()
     }
 
+    fun clickRetryButton() {
+        composeTestRule.onNodeWithText("Retry").performClick()
+    }
+
     fun assertWelcomeMessageIsDisplayed() {
         composeTestRule.onNodeWithText("Find Location").assertIsDisplayed()
         composeTestRule.onNodeWithText("Search for cities worldwide").assertIsDisplayed()
@@ -204,11 +239,26 @@ class SearchLocationScreenRobot(
         composeTestRule.onNodeWithText("Search for a location…").assertIsDisplayed()
     }
 
+    fun assertErrorStateIsDisplayed() {
+        composeTestRule
+            .onNodeWithText(
+                "Unable to search for locations. Please check your connection and try again.",
+            ).assertIsDisplayed()
+    }
+
+    fun assertRetryButtonIsDisplayed() {
+        composeTestRule.onNodeWithText("Retry").assertIsDisplayed()
+    }
+
     fun verifySearchWasCalled(query: String) {
         verify { mockViewModel.searchLocations(query) }
     }
 
     fun verifyLocationSelectionWasCalled() {
         verify { mockViewModel.onLocationSelected(any()) }
+    }
+
+    fun verifyRetryWasCalled() {
+        verify { mockViewModel.retrySearch() }
     }
 }

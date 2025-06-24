@@ -70,6 +70,7 @@ fun SearchLocationScreen(
                     expanded = false
                     viewModel.onLocationSelected(location)
                 },
+                onRetry = viewModel::retrySearch,
             )
         }
 

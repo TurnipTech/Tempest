@@ -10,6 +10,7 @@ fun SearchContent(
     uiState: SearchLocationUiState,
     query: String,
     onLocationSelected: (SearchResult) -> Unit,
+    onRetry: () -> Unit,
     isExpanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -29,6 +30,12 @@ fun SearchContent(
             } else if (query.isNotEmpty()) {
                 SearchEmptyState(modifier = modifier)
             }
+        }
+        is SearchLocationUiState.Error -> {
+            SearchErrorState(
+                onRetry = onRetry,
+                modifier = modifier,
+            )
         }
         else -> {
         }

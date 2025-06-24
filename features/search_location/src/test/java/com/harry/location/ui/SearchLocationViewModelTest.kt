@@ -343,4 +343,99 @@ class SearchLocationViewModelTest {
             assertEquals(initialState, viewModel.uiState.value)
             coVerify(exactly = 1) { setLocationUseCase(testLocation) }
         }
+
+    @Test
+    fun `retrySearch should call searchLocations with current query when in Error state`() =
+        runTest {
+            val query = "London"
+            val errorMessage = "Network error"
+
+            // First search fails
+            coEvery { searchLocationsUseCase.invoke(query) } returns Result.failure(Exception(errorMessage))
+            viewModel.searchLocations(query)
+            advanceUntilIdle()
+
+            // Verify we're in error state
+            val errorState = viewModel.uiState.value as SearchLocationUiState.Error
+            assertEquals(query, errorState.query)
+            assertEquals(errorMessage, errorState.message)
+
+            // Setup mock for retry
+            coEvery { searchLocationsUseCase.invoke(query) } returns Result.success(testLocationSearchResult)
+            every { searchLocationUiMapper.mapToSearchResults(listOf(testLocation)) } returns listOf(testSearchResult)
+
+            // Perform retry
+            viewModel.retrySearch()
+            advanceUntilIdle()
+
+            // Verify use case was called with the correct query (should be 2 total: original + retry)
+            coVerify(exactly = 2) {
+                searchLocationsUseCase.invoke(query)
+            }
+        }
+
+    @Test
+    fun `retrySearch should do nothing when not in Error state`() =
+        runTest {
+            val query = "London"
+
+            // Set up successful search
+            coEvery { searchLocationsUseCase.invoke(query) } returns Result.success(testLocationSearchResult)
+            every { searchLocationUiMapper.mapToSearchResults(any()) } returns listOf(testSearchResult)
+
+            viewModel.searchLocations(query)
+            advanceUntilIdle()
+
+            // Verify we're in success state
+            assertEquals(SearchLocationUiState.Success::class, viewModel.uiState.value::class)
+
+            // Call retry when not in error state
+            viewModel.retrySearch()
+            advanceUntilIdle()
+
+            // State should remain unchanged
+            assertEquals(SearchLocationUiState.Success::class, viewModel.uiState.value::class)
+
+            // Use case should only have been called once (no retry)
+            coVerify(exactly = 1) {
+                searchLocationsUseCase.invoke(query)
+            }
+        }
+
+    @Test
+    fun `retrySearch should handle retry failure correctly`() =
+        runTest {
+            val query = "London"
+            val originalError = "Network error"
+            val retryError = "Retry failed"
+
+            // Setup sequential mock responses: first fail, then fail again with different error
+            coEvery { searchLocationsUseCase.invoke(query) } returnsMany
+                listOf(
+                    Result.failure(Exception(originalError)),
+                    Result.failure(Exception(retryError)),
+                )
+
+            // First search fails
+            viewModel.searchLocations(query)
+            advanceUntilIdle()
+
+            // Verify we're in error state
+            val errorState = viewModel.uiState.value as SearchLocationUiState.Error
+            assertEquals(originalError, errorState.message)
+
+            // Perform retry
+            viewModel.retrySearch()
+            advanceUntilIdle()
+
+            // Verify retry failed with new error message
+            val retryErrorState = viewModel.uiState.value as SearchLocationUiState.Error
+            assertEquals(query, retryErrorState.query)
+            assertEquals(retryError, retryErrorState.message)
+
+            // Verify use case was called twice (original + retry)
+            coVerify(exactly = 2) {
+                searchLocationsUseCase.invoke(query)
+            }
+        }
 }

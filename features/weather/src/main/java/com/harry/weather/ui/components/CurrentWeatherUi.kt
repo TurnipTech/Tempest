@@ -89,11 +89,12 @@ private fun ExpandedCurrentWeather(
     val blurRadius = (1f - expandedFraction) * MAX_BLUR_RADIUS
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .scale(scale)
-            .blur(blurRadius.dp)
-            .alpha(alpha),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .scale(scale)
+                .blur(blurRadius.dp)
+                .alpha(alpha),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
