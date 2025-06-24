@@ -1,13 +1,14 @@
 package com.harry.location.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.harry.design.TempestTheme
 import com.harry.location.domain.model.Location
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
@@ -58,12 +59,12 @@ class SearchLocationScreenTest {
     }
 
     @Test
-    fun searchLocationScreen_errorState_afterTyping_displaysEmptyState() {
+    fun searchLocationScreen_errorState_afterTyping_doesNotDisplayEmptyState() {
         val errorMessage = "Network connection failed"
         SearchLocationScreenRobot(composeTestRule).apply {
             setErrorState(errorMessage)
             typeInSearchField("test")
-            assertEmptyStateIsDisplayed()
+            assertEmptyStateIsNotDisplayed()
         }
     }
 
@@ -139,7 +140,7 @@ class SearchLocationScreenRobot(
         every { mockViewModel.uiState } returns MutableStateFlow(state)
 
         composeTestRule.setContent {
-            MaterialTheme {
+            TempestTheme {
                 SearchLocationScreen(
                     viewModel = mockViewModel,
                     onNavigateToWeather = onNavigateToWeather,
@@ -193,6 +194,10 @@ class SearchLocationScreenRobot(
 
     fun assertEmptyStateIsDisplayed() {
         composeTestRule.onNodeWithText("No locations found").assertIsDisplayed()
+    }
+
+    fun assertEmptyStateIsNotDisplayed() {
+        composeTestRule.onNodeWithText("No locations found").assertIsNotDisplayed()
     }
 
     fun assertSearchPlaceholderIsDisplayed() {

@@ -31,9 +31,6 @@ fun SearchContent(
             }
         }
         else -> {
-//            if (query.isNotEmpty()) {
-//                SearchEmptyState(modifier = modifier)
-//            }
         }
     }
 }
