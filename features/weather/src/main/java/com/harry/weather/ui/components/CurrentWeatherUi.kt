@@ -50,7 +50,7 @@ fun CurrentWeather(
 ) {
     val collapseFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
 
-    if (collapseFraction > 0.9f) {
+    if (collapseFraction > 0.8f) {
         CollapsedCurrentWeather(
             locationName = locationName,
             currentTemp = currentTemp,
@@ -83,6 +83,7 @@ private fun ExpandedCurrentWeather(
 ) {
     // Calculate zoom out effect: scale from 1.0 to MIN_SCALE as we collapse
     val scale = MIN_SCALE + ((1f - MIN_SCALE) * expandedFraction)
+    val alpha = 1f * expandedFraction
 
     // Calculate blur effect: blur from 0dp to MAX_BLUR_RADIUS as we collapse
     val blurRadius = (1f - expandedFraction) * MAX_BLUR_RADIUS
@@ -91,7 +92,8 @@ private fun ExpandedCurrentWeather(
         modifier = Modifier
             .fillMaxWidth()
             .scale(scale)
-            .blur(blurRadius.dp),
+            .blur(blurRadius.dp)
+            .alpha(alpha),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -204,7 +206,7 @@ fun ExpandedCurrentWeatherPreview() {
             iconUrl = "https://openweathermap.org/img/wn/04d@2x.png",
             iconDescription = "broken clouds",
             onLocationClick = { },
-            expandedFraction = 100f,
+            expandedFraction = 1f,
         )
     }
 }
