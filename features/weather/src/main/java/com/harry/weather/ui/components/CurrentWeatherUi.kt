@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -119,7 +120,7 @@ private fun CollapsedCurrentWeather(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Location(
@@ -127,27 +128,26 @@ private fun CollapsedCurrentWeather(
             onLocationClick = onLocationClick,
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            AsyncImage(
-                model =
-                    ImageRequest
-                        .Builder(LocalContext.current)
-                        .data(iconUrl)
-                        .crossfade(true)
-                        .build(),
-                contentDescription = iconDescription,
-                modifier = Modifier.size(24.dp),
-            )
+        Spacer(Modifier.padding(8.dp))
 
-            Text(
-                text = currentTemp,
-                style = MaterialTheme.typography.titleMedium,
-                color = OverlayColors.contentPrimary,
-            )
-        }
+        AsyncImage(
+            model =
+                ImageRequest
+                    .Builder(LocalContext.current)
+                    .data(iconUrl)
+                    .crossfade(true)
+                    .build(),
+            contentDescription = iconDescription,
+            modifier = Modifier.size(24.dp),
+        )
+
+        Spacer(Modifier.padding(8.dp))
+
+        Text(
+            text = currentTemp,
+            style = MaterialTheme.typography.titleMedium,
+            color = OverlayColors.contentPrimary,
+        )
     }
 }
 
@@ -179,14 +179,30 @@ fun Location(modifier: Modifier = Modifier, locationName: String, onLocationClic
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun CurrentWeatherPreview() {
+fun ExpandedCurrentWeatherPreview() {
     TempestTheme {
-        CurrentWeather(
+        ExpandedCurrentWeather(
             description = "broken clouds",
             locationName = "Bradford",
             currentTemp = "22°",
             iconUrl = "https://openweathermap.org/img/wn/04d@2x.png",
             iconDescription = "broken clouds",
+            onLocationClick = { },
+            expandedFraction = 100f,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CollapsedCurrentWeatherPreview() {
+    TempestTheme {
+        CollapsedCurrentWeather(
+            locationName = "Bradford",
+            currentTemp = "22°",
+            iconUrl = "https://openweathermap.org/img/wn/04d@2x.png",
+            iconDescription = "broken clouds",
+            onLocationClick = { },
         )
     }
 }
