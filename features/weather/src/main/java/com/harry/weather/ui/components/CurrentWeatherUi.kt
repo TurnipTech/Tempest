@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +31,11 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.harry.design.OverlayColors
 import com.harry.design.TempestTheme
+
+private const val MIN_SCALE = 0.8f
+private const val MAX_BLUR_RADIUS = 8f
+private const val TRANSITION_START = 0.3f
+private const val COLLAPSED_START_SCALE = 0.7f
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +50,7 @@ fun CurrentWeather(
 ) {
     val collapseFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
 
-    if (collapseFraction > 0.7f) {
+    if (collapseFraction > 0.9f) {
         CollapsedCurrentWeather(
             locationName = locationName,
             currentTemp = currentTemp,
@@ -74,8 +81,17 @@ private fun ExpandedCurrentWeather(
     onLocationClick: () -> Unit,
     expandedFraction: Float,
 ) {
+    // Calculate zoom out effect: scale from 1.0 to MIN_SCALE as we collapse
+    val scale = MIN_SCALE + ((1f - MIN_SCALE) * expandedFraction)
+
+    // Calculate blur effect: blur from 0dp to MAX_BLUR_RADIUS as we collapse
+    val blurRadius = (1f - expandedFraction) * MAX_BLUR_RADIUS
+
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .blur(blurRadius.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
