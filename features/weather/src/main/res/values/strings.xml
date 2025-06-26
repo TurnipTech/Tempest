@@ -20,6 +20,18 @@
     <string name="updated_prefix">Updated </string>
     <string name="temperature_not_available">N/A</string>
     
+    <!-- UV Index -->
+    <string name="uv_level_low">Low</string>
+    <string name="uv_level_moderate">Moderate</string>
+    <string name="uv_level_high">High</string>
+    <string name="uv_level_very_high">Very High</string>
+    <string name="uv_level_extreme">Extreme</string>
+    <string name="uv_description_low">Minimal protection required</string>
+    <string name="uv_description_moderate">Seek shade during midday</string>
+    <string name="uv_description_high">Protection essential</string>
+    <string name="uv_description_very_high">Extra protection required</string>
+    <string name="uv_description_extreme">Avoid sun exposure</string>
+    
     <!-- Error Messages -->
     <string name="error_no_location_available">No location available</string>
     <string name="error_failed_to_load_weather">Failed to load weather data</string>

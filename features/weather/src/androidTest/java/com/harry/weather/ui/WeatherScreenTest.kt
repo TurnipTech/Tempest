@@ -1,6 +1,5 @@
 package com.harry.weather.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
@@ -11,9 +10,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.platform.app.InstrumentationRegistry
+import com.harry.design.TempestTheme
 import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
+import com.harry.weather.ui.model.UvUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import com.harry.weather.util.ImageLoadingTestUtil
 import io.mockk.every
@@ -154,6 +155,13 @@ class WeatherScreenRobot(
         iconDescription: String = "clear sky",
         hourlyForecast: List<HourlyWeatherUiModel> = emptyList(),
         weeklyForecast: List<DailyWeatherUiModel> = emptyList(),
+        uvIndex: UvUiModel? =
+            UvUiModel(
+                index = 5,
+                level = "Moderate",
+                description = "Moderate UV risk",
+                uvPercentage = 0.45f,
+            ),
     ) = WeatherUiState.Success(
         weatherData = mockk(),
         formattedTemperature = temperature,
@@ -165,6 +173,7 @@ class WeatherScreenRobot(
         todaysHourlyForecast = hourlyForecast,
         weeklyForecast = weeklyForecast,
         timeOfDay = TimeOfDay.DAY,
+        uvIndex = uvIndex,
     )
 
     private fun createMockHourlyForecast() =
@@ -209,7 +218,7 @@ class WeatherScreenRobot(
     private fun setupScreen(state: WeatherUiState): WeatherScreenRobot {
         every { mockViewModel.uiState } returns MutableStateFlow(state)
         composeTestRule.setContent {
-            MaterialTheme {
+            TempestTheme {
                 WeatherScreen(
                     viewModel = mockViewModel,
                     onNavigateToSearch = onNavigateToSearch,

@@ -2,14 +2,11 @@ package com.harry.location.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.TravelExplore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.OverlayColors
+import com.harry.design.TempestTheme
 import com.harry.location.R
 
 @Composable
@@ -51,48 +50,9 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
                     Icon(
                         Icons.Default.TravelExplore,
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp),
-                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(88.dp),
+                        tint = OverlayColors.contentPrimary,
                     )
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-            ) {
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.LocationOn,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.secondary,
-                        )
-                    }
-                }
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f),
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            Icons.Default.Language,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
                 }
             }
         }
@@ -103,22 +63,24 @@ fun WelcomeMessage(modifier: Modifier = Modifier) {
         ) {
             Text(
                 text = stringResource(R.string.welcome_title),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.headlineLarge,
+                color = OverlayColors.contentPrimary,
                 textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.welcome_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = OverlayColors.contentPrimary,
                 textAlign = TextAlign.Center,
             )
         }
     }
 }
 
-@Preview
+@Preview()
 @Composable
 private fun WelcomeStatePreview() {
-    WelcomeMessage()
+    TempestTheme {
+        WelcomeMessage()
+    }
 }

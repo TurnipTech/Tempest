@@ -26,6 +26,7 @@ object WeatherMapper {
             sunrise = dto.sunrise,
             sunset = dto.sunset,
             condition = mapToWeatherCondition(dto.weather.first()),
+            uvi = dto.uvIndex,
         )
 
     private fun mapToHourlyWeather(dto: HourlyDto): HourlyWeather =

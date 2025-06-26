@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.harry.design.OverlayColors
 import com.harry.location.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,14 +54,14 @@ fun LocationSearchBarComponent(
                     Text(
                         stringResource(R.string.search_placeholder),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = OverlayColors.contentPrimary,
                     )
                 },
                 leadingIcon = {
                     Icon(
                         Icons.Default.Search,
                         contentDescription = stringResource(R.string.search_content_description),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        tint = OverlayColors.contentPrimary,
                     )
                 },
                 trailingIcon = {
@@ -75,12 +76,18 @@ fun LocationSearchBarComponent(
                                 Icon(
                                     Icons.Default.Clear,
                                     contentDescription = stringResource(R.string.clear_content_description),
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    tint = OverlayColors.contentPrimary,
                                 )
                             }
                         }
                     }
                 },
+                colors =
+                    SearchBarDefaults.inputFieldColors(
+                        focusedTextColor = OverlayColors.contentPrimary,
+                        unfocusedTextColor = OverlayColors.contentPrimary,
+                        cursorColor = OverlayColors.contentPrimary,
+                    ),
             )
         },
         expanded = expanded,
@@ -90,7 +97,11 @@ fun LocationSearchBarComponent(
                 .fillMaxWidth()
                 .padding(horizontal = animatedPadding),
         windowInsets = SearchBarDefaults.windowInsets,
-        colors = SearchBarDefaults.colors(),
+        colors =
+            SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                dividerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+            ),
         content = content,
     )
 }

@@ -9,6 +9,7 @@ import com.harry.weather.domain.model.TimeOfDay
 import com.harry.weather.domain.model.WeatherData
 import com.harry.weather.ui.model.DailyWeatherUiModel
 import com.harry.weather.ui.model.HourlyWeatherUiModel
+import com.harry.weather.ui.model.UvUiModel
 import com.harry.weather.ui.model.WeatherUiState
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -34,6 +35,9 @@ private const val MILLISECONDS_CONVERSION_FACTOR = 1000L
 // Forecast constants
 private const val MAX_HOURLY_FORECAST_ITEMS = 24
 private const val MAX_DAILY_FORECAST_ITEMS = 7
+
+// UV Index constants
+private const val MAX_UV_INDEX = 11.0
 
 // Icon URL constants
 private const val ICON_BASE_URL = "https://openweathermap.org/img/wn/"
@@ -95,6 +99,7 @@ class WeatherUiMapper(
                     weatherData.timezone,
                 ),
             timeOfDay = timeOfDay,
+            uvIndex = mapUvIndex(currentWeather?.uvi),
         )
     }
 
@@ -185,4 +190,34 @@ class WeatherUiMapper(
             .lowercase()
             .replaceFirstChar { it.uppercase() }
     }
+
+    enum class UvLevel(
+        val maxIndex: Double,
+        val levelStringRes: Int,
+        val descriptionStringRes: Int,
+    ) {
+        LOW(2.0, R.string.uv_level_low, R.string.uv_description_low),
+        MODERATE(5.0, R.string.uv_level_moderate, R.string.uv_description_moderate),
+        HIGH(7.0, R.string.uv_level_high, R.string.uv_description_high),
+        VERY_HIGH(10.0, R.string.uv_level_very_high, R.string.uv_description_very_high),
+        EXTREME(Double.MAX_VALUE, R.string.uv_level_extreme, R.string.uv_description_extreme),
+        ;
+
+        companion object {
+            fun fromUvIndex(uvi: Double): UvLevel = entries.first { uvi <= it.maxIndex }
+        }
+    }
+
+    private fun mapUvIndex(uvi: Double?): UvUiModel? =
+        uvi?.let { index ->
+            val uvLevel = UvLevel.fromUvIndex(index)
+            UvUiModel(
+                index = index.toInt(),
+                level = resourceProvider.getString(uvLevel.levelStringRes),
+                description = resourceProvider.getString(uvLevel.descriptionStringRes),
+                uvPercentage = calculateUvPercentage(index),
+            )
+        }
+
+    private fun calculateUvPercentage(uvIndex: Double): Float = (uvIndex / MAX_UV_INDEX).toFloat().coerceAtMost(1f)
 }

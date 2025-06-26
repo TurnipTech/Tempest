@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.harry.design.Tempest
 import com.harry.location.domain.model.Location
 import com.harry.location.ui.components.LocationSearchBarComponent
 import com.harry.location.ui.components.SearchContent
@@ -40,7 +40,7 @@ fun SearchLocationScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Tempest.colors.backgroundGradient)
                 .padding(),
     ) {
         LocationSearchBarComponent(
@@ -70,6 +70,7 @@ fun SearchLocationScreen(
                     expanded = false
                     viewModel.onLocationSelected(location)
                 },
+                onRetry = viewModel::retrySearch,
             )
         }
 

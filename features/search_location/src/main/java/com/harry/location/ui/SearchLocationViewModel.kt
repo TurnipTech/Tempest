@@ -11,12 +11,10 @@ import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
 import com.harry.utils.ResourceProvider
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -36,40 +34,40 @@ class SearchLocationViewModel(
     private val _uiState = MutableStateFlow<SearchLocationUiState>(SearchLocationUiState.Idle)
     val uiState: StateFlow<SearchLocationUiState> = _uiState.asStateFlow()
 
-    private val searchQueryFlow = MutableSharedFlow<String>(replay = 1)
+    private val searchQueryFlow = MutableStateFlow("")
 
     init {
         searchQueryFlow
-            .distinctUntilChanged()
             .debounce(SEARCH_DEBOUNCE_MS)
             .filter { query -> query.isNotBlank() && query.length >= MIN_QUERY_SIZE }
-            .flatMapLatest { query ->
-                flow {
-                    emit(SearchLocationUiState.Loading)
+            .flatMapLatest { query -> performSearch(query) }
+            .onEach { uiState -> _uiState.value = uiState }
+            .launchIn(viewModelScope)
+    }
 
-                    val result = searchLocationsUseCase(query)
+    private fun performSearch(query: String) =
+        flow {
+            emit(SearchLocationUiState.Loading)
+            emit(executeSearch(query))
+        }
 
-                    val uiState =
-                        if (result.isSuccess) {
-                            val searchResult = result.getOrThrow()
-                            SearchLocationUiState.Success(
-                                locations = searchLocationUiMapper.mapToSearchResults(searchResult.locations),
-                                query = searchResult.query,
-                            )
-                        } else {
-                            SearchLocationUiState.Error(
-                                message =
-                                    result.exceptionOrNull()?.message
-                                        ?: resourceProvider.getString(R.string.error_unknown),
-                                query = query,
-                            )
-                        }
+    private suspend fun executeSearch(query: String): SearchLocationUiState {
+        val result = searchLocationsUseCase(query)
 
-                    emit(uiState)
-                }
-            }.onEach { uiState ->
-                _uiState.value = uiState
-            }.launchIn(viewModelScope)
+        return if (result.isSuccess) {
+            val searchResult = result.getOrThrow()
+            SearchLocationUiState.Success(
+                locations = searchLocationUiMapper.mapToSearchResults(searchResult.locations),
+                query = searchResult.query,
+            )
+        } else {
+            SearchLocationUiState.Error(
+                message =
+                    result.exceptionOrNull()?.message
+                        ?: resourceProvider.getString(R.string.error_unknown),
+                query = query,
+            )
+        }
     }
 
     fun searchLocations(query: String) {
@@ -92,6 +90,16 @@ class SearchLocationViewModel(
 
             if (result.isSuccess) {
                 _uiState.value = SearchLocationUiState.NavigateToWeather(location)
+            }
+        }
+    }
+
+    fun retrySearch() {
+        val currentState = _uiState.value
+        if (currentState is SearchLocationUiState.Error) {
+            viewModelScope.launch {
+                _uiState.value = SearchLocationUiState.Loading
+                _uiState.value = executeSearch(currentState.query)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.harry.design
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -19,6 +20,14 @@ object OverlayColors {
     val surfaceTranslucent = Color.DarkGray.copy(alpha = 0.2f)
     val shimmerStart = Color.White.copy(alpha = 0.4f)
     val shimmerPeak = Color.White.copy(alpha = 0.8f)
+}
+
+object UvColors {
+    val low = Color(0xFF4CAF50) // Green
+    val moderate = Color(0xFFFFEB3B) // Yellow
+    val high = Color(0xFFFF9800) // Orange
+    val veryHigh = Color(0xFFf44336) // Red
+    val extreme = Color(0xFF9C27B0) // Purple
 }
 
 object WeatherGradients {
@@ -67,3 +76,96 @@ object WeatherGradients {
         val overlayTransparent = Color(0x00000000)
     }
 }
+
+fun createDawnBrush(): Brush =
+    Brush.verticalGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Dawn.skyDark,
+                0.3f to WeatherGradients.Dawn.skyDeep,
+                0.6f to WeatherGradients.Dawn.horizonWarm,
+                0.8f to WeatherGradients.Dawn.lightGolden,
+                1.0f to WeatherGradients.Dawn.baseCream,
+            ),
+    )
+
+fun createDuskBrush(): Brush =
+    Brush.verticalGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Dusk.skyEvening,
+                0.2f to WeatherGradients.Dusk.skyBluePurple,
+                0.5f to WeatherGradients.Dusk.skyTwilight,
+                0.7f to WeatherGradients.Dusk.horizonDeep,
+                0.85f to WeatherGradients.Dusk.sunsetGolden,
+                1.0f to WeatherGradients.Dusk.baseWarm,
+            ),
+    )
+
+fun createDayBrush(): Brush =
+    Brush.verticalGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Day.skyDeep,
+                0.3f to WeatherGradients.Day.skyRich,
+                0.6f to WeatherGradients.Day.skyBright,
+                0.8f to WeatherGradients.Day.skyLight,
+                1.0f to WeatherGradients.Day.horizonMedium,
+            ),
+    )
+
+fun createNightBrush(): Brush =
+    Brush.verticalGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Night.spaceBlack,
+                0.2f to WeatherGradients.Night.skyDark,
+                0.5f to WeatherGradients.Night.navyRich,
+                0.8f to WeatherGradients.Night.navyLight,
+                1.0f to WeatherGradients.Night.baseGrey,
+            ),
+    )
+
+fun createDawnOverlay(): Brush =
+    Brush.radialGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Dawn.overlayGolden,
+                0.7f to WeatherGradients.Dawn.overlayOrange,
+                1.0f to WeatherGradients.Dawn.overlayTransparent,
+            ),
+        radius = 800f,
+    )
+
+fun createDuskOverlay(): Brush =
+    Brush.radialGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Dusk.overlayCoral,
+                0.6f to WeatherGradients.Dusk.overlayOrange,
+                1.0f to WeatherGradients.Dusk.overlayTransparent,
+            ),
+        radius = 900f,
+    )
+
+fun createDayOverlay(): Brush =
+    Brush.radialGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Day.overlayBlue,
+                0.8f to WeatherGradients.Day.overlayBlueMid,
+                1.0f to WeatherGradients.Day.overlayTransparent,
+            ),
+        radius = 1000f,
+    )
+
+fun createNightOverlay(): Brush =
+    Brush.radialGradient(
+        colorStops =
+            arrayOf(
+                0.0f to WeatherGradients.Night.overlayIndigo,
+                0.7f to WeatherGradients.Night.overlayDark,
+                1.0f to WeatherGradients.Night.overlayTransparent,
+            ),
+        radius = 700f,
+    )

@@ -1,13 +1,14 @@
 package com.harry.location.ui
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.harry.design.TempestTheme
 import com.harry.location.domain.model.Location
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
@@ -58,12 +59,12 @@ class SearchLocationScreenTest {
     }
 
     @Test
-    fun searchLocationScreen_errorState_afterTyping_displaysEmptyState() {
+    fun searchLocationScreen_errorState_afterTyping_doesNotDisplayEmptyState() {
         val errorMessage = "Network connection failed"
         SearchLocationScreenRobot(composeTestRule).apply {
             setErrorState(errorMessage)
             typeInSearchField("test")
-            assertEmptyStateIsDisplayed()
+            assertEmptyStateIsNotDisplayed()
         }
     }
 
@@ -103,6 +104,37 @@ class SearchLocationScreenTest {
             assertSearchPlaceholderIsDisplayed()
         }
     }
+
+    @Test
+    fun searchLocationScreen_errorState_displaysErrorMessage() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            assertErrorStateIsDisplayed()
+        }
+    }
+
+    @Test
+    fun searchLocationScreen_errorState_displaysRetryButton() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            assertRetryButtonIsDisplayed()
+        }
+    }
+
+    @Test
+    fun searchLocationScreen_errorState_retryButtonClick_triggersRetry() {
+        val errorMessage = "Network connection failed"
+        SearchLocationScreenRobot(composeTestRule).apply {
+            setErrorState(errorMessage)
+            typeInSearchField("test")
+            clickRetryButton()
+            verifyRetryWasCalled()
+        }
+    }
 }
 
 class SearchLocationScreenRobot(
@@ -139,7 +171,7 @@ class SearchLocationScreenRobot(
         every { mockViewModel.uiState } returns MutableStateFlow(state)
 
         composeTestRule.setContent {
-            MaterialTheme {
+            TempestTheme {
                 SearchLocationScreen(
                     viewModel = mockViewModel,
                     onNavigateToWeather = onNavigateToWeather,
@@ -177,6 +209,10 @@ class SearchLocationScreenRobot(
         composeTestRule.onNodeWithText("London, UK").performClick()
     }
 
+    fun clickRetryButton() {
+        composeTestRule.onNodeWithText("Retry").performClick()
+    }
+
     fun assertWelcomeMessageIsDisplayed() {
         composeTestRule.onNodeWithText("Find Location").assertIsDisplayed()
         composeTestRule.onNodeWithText("Search for cities worldwide").assertIsDisplayed()
@@ -195,8 +231,23 @@ class SearchLocationScreenRobot(
         composeTestRule.onNodeWithText("No locations found").assertIsDisplayed()
     }
 
+    fun assertEmptyStateIsNotDisplayed() {
+        composeTestRule.onNodeWithText("No locations found").assertIsNotDisplayed()
+    }
+
     fun assertSearchPlaceholderIsDisplayed() {
         composeTestRule.onNodeWithText("Search for a location…").assertIsDisplayed()
+    }
+
+    fun assertErrorStateIsDisplayed() {
+        composeTestRule
+            .onNodeWithText(
+                "Unable to search for locations. Please check your connection and try again.",
+            ).assertIsDisplayed()
+    }
+
+    fun assertRetryButtonIsDisplayed() {
+        composeTestRule.onNodeWithText("Retry").assertIsDisplayed()
     }
 
     fun verifySearchWasCalled(query: String) {
@@ -205,5 +256,9 @@ class SearchLocationScreenRobot(
 
     fun verifyLocationSelectionWasCalled() {
         verify { mockViewModel.onLocationSelected(any()) }
+    }
+
+    fun verifyRetryWasCalled() {
+        verify { mockViewModel.retrySearch() }
     }
 }
