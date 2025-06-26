@@ -11,12 +11,10 @@ import com.harry.location.ui.mapper.SearchLocationUiMapper
 import com.harry.location.ui.model.SearchLocationUiState
 import com.harry.location.ui.model.SearchResult
 import com.harry.utils.ResourceProvider
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -36,11 +34,10 @@ class SearchLocationViewModel(
     private val _uiState = MutableStateFlow<SearchLocationUiState>(SearchLocationUiState.Idle)
     val uiState: StateFlow<SearchLocationUiState> = _uiState.asStateFlow()
 
-    private val searchQueryFlow = MutableSharedFlow<String>(replay = 1)
+    private val searchQueryFlow = MutableStateFlow("")
 
     init {
         searchQueryFlow
-            .distinctUntilChanged()
             .debounce(SEARCH_DEBOUNCE_MS)
             .filter { query -> query.isNotBlank() && query.length >= MIN_QUERY_SIZE }
             .flatMapLatest { query -> performSearch(query) }
